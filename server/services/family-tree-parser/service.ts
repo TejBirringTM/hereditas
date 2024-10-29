@@ -1,0 +1,32 @@
+
+import * as v from "@valibot/valibot";
+import parseFamilyTree from "./model/main.ts";
+import { RuntimeError } from "../../common/runtime-error.ts";
+import { Status } from "@oak/oak";
+import { declareJsonApi, declareErrorResponse, declareSuccessResponse } from "../../framework/main.ts";
+
+const familyTreeParserService = declareJsonApi("family-tree-parser");
+
+familyTreeParserService.declareRequest(
+    ["parse"], 1, 
+    v.strictObject({text: v.string()}), 
+    // deno-lint-ignore require-await
+    async (request)=>{
+        let inputText;
+        try {
+            inputText = request.text;
+            const graph = parseFamilyTree(inputText);
+            return declareSuccessResponse({
+                graph
+            });
+        } catch (e) {
+            if (e instanceof RuntimeError) {
+                return declareErrorResponse(Status.BadRequest, e.message);
+            } else {
+                return declareErrorResponse(Status.InternalServerError, "An unknown error occurred.");
+            }
+        }
+    }
+)
+
+export default familyTreeParserService;

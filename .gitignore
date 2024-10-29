@@ -1,0 +1,7 @@
+# environment files
+.env
+.env.*
+
+# family tree text files (for testing)
+family-tree.txt
+family-tree-*.txt

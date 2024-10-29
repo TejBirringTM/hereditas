@@ -1,0 +1,933 @@
+Listening on 0.0.0.0:9190
+Input received:
+ [1:"Test" ]
+(2:"Test" )
+(2:"Test" )
+<ref *21> {
+  type: "FILE_GRAMMAR",
+  text: '[1:"Test" ]\n(2:"Test" )\n(2:"Test" )',
+  children: [
+    <ref *18> {
+      type: "STATEMENT_LINE",
+      text: '[1:"Test" ]\n',
+      children: [
+        <ref *17> {
+          type: "STATEMENT",
+          text: '[1:"Test" ]',
+          children: [
+            <ref *2> {
+              type: "MALE_DECLARATION",
+              text: '[1:"Test" ]',
+              children: [
+                <ref *1> {
+                  type: "DECLARATION_KEY",
+                  text: "1",
+                  children: [
+                    {
+                      type: "NON_ZERO_DIGIT",
+                      text: "1",
+                      children: [],
+                      end: 2,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *1],
+                      start: 1,
+                      rest: ""
+                    }
+                  ],
+                  end: 2,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *2],
+                  start: 1,
+                  rest: ""
+                },
+                <ref *6> {
+                  type: "STRING",
+                  text: '"Test"',
+                  children: [
+                    <ref *5> {
+                      type: "CHAR",
+                      text: "T",
+                      children: [
+                        <ref *4> {
+                          type: "ALPHANUMERIC",
+                          text: "T",
+                          children: [
+                            <ref *3> {
+                              type: "ALPHABET",
+                              text: "T",
+                              children: [
+                                {
+                                  type: "ALPHABET_UPPERCASE",
+                                  text: "T",
+                                  children: [],
+                                  end: 5,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *3],
+                                  start: 4,
+                                  rest: ""
+                                }
+                              ],
+                              end: 5,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *4],
+                              start: 4,
+                              rest: ""
+                            }
+                          ],
+                          end: 5,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *5],
+                          start: 4,
+                          rest: ""
+                        }
+                      ],
+                      end: 5,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *6],
+                      start: 4,
+                      rest: ""
+                    },
+                    <ref *9> {
+                      type: "CHAR",
+                      text: "e",
+                      children: [
+                        <ref *8> {
+                          type: "ALPHANUMERIC",
+                          text: "e",
+                          children: [
+                            <ref *7> {
+                              type: "ALPHABET",
+                              text: "e",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "e",
+                                  children: [],
+                                  end: 6,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *7],
+                                  start: 5,
+                                  rest: ""
+                                }
+                              ],
+                              end: 6,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *8],
+                              start: 5,
+                              rest: ""
+                            }
+                          ],
+                          end: 6,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *9],
+                          start: 5,
+                          rest: ""
+                        }
+                      ],
+                      end: 6,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *6],
+                      start: 5,
+                      rest: ""
+                    },
+                    <ref *12> {
+                      type: "CHAR",
+                      text: "s",
+                      children: [
+                        <ref *11> {
+                          type: "ALPHANUMERIC",
+                          text: "s",
+                          children: [
+                            <ref *10> {
+                              type: "ALPHABET",
+                              text: "s",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "s",
+                                  children: [],
+                                  end: 7,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *10],
+                                  start: 6,
+                                  rest: ""
+                                }
+                              ],
+                              end: 7,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *11],
+                              start: 6,
+                              rest: ""
+                            }
+                          ],
+                          end: 7,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *12],
+                          start: 6,
+                          rest: ""
+                        }
+                      ],
+                      end: 7,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *6],
+                      start: 6,
+                      rest: ""
+                    },
+                    <ref *15> {
+                      type: "CHAR",
+                      text: "t",
+                      children: [
+                        <ref *14> {
+                          type: "ALPHANUMERIC",
+                          text: "t",
+                          children: [
+                            <ref *13> {
+                              type: "ALPHABET",
+                              text: "t",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "t",
+                                  children: [],
+                                  end: 8,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *13],
+                                  start: 7,
+                                  rest: ""
+                                }
+                              ],
+                              end: 8,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *14],
+                              start: 7,
+                              rest: ""
+                            }
+                          ],
+                          end: 8,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *15],
+                          start: 7,
+                          rest: ""
+                        }
+                      ],
+                      end: 8,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *6],
+                      start: 7,
+                      rest: ""
+                    }
+                  ],
+                  end: 9,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *2],
+                  start: 3,
+                  rest: ""
+                },
+                <ref *16> {
+                  type: "SPACE_TAB",
+                  text: " ",
+                  children: [
+                    {
+                      type: "SPACE",
+                      text: " ",
+                      children: [],
+                      end: 10,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *16],
+                      start: 9,
+                      rest: ""
+                    }
+                  ],
+                  end: 10,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *2],
+                  start: 9,
+                  rest: ""
+                }
+              ],
+              end: 11,
+              errors: [],
+              fullText: "",
+              parent: [Circular *17],
+              start: 0,
+              rest: ""
+            }
+          ],
+          end: 11,
+          errors: [],
+          fullText: "",
+          parent: [Circular *18],
+          start: 0,
+          rest: ""
+        },
+        <ref *20> {
+          type: "WHITESPACE",
+          text: "\n",
+          children: [
+            <ref *19> {
+              type: "NEWLINE",
+              text: "\n",
+              children: [
+                {
+                  type: "LF",
+                  text: "\n",
+                  children: [],
+                  end: 12,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *19],
+                  start: 11,
+                  rest: ""
+                }
+              ],
+              end: 12,
+              errors: [],
+              fullText: "",
+              parent: [Circular *20],
+              start: 11,
+              rest: ""
+            }
+          ],
+          end: 12,
+          errors: [],
+          fullText: "",
+          parent: [Circular *18],
+          start: 11,
+          rest: ""
+        }
+      ],
+      end: 12,
+      errors: [],
+      fullText: "",
+      parent: [Circular *21],
+      start: 0,
+      rest: ""
+    },
+    <ref *39> {
+      type: "STATEMENT_LINE",
+      text: '(2:"Test" )\n',
+      children: [
+        <ref *38> {
+          type: "STATEMENT",
+          text: '(2:"Test" )',
+          children: [
+            <ref *23> {
+              type: "FEMALE_DECLARATION",
+              text: '(2:"Test" )',
+              children: [
+                <ref *22> {
+                  type: "DECLARATION_KEY",
+                  text: "2",
+                  children: [
+                    {
+                      type: "NON_ZERO_DIGIT",
+                      text: "2",
+                      children: [],
+                      end: 14,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *22],
+                      start: 13,
+                      rest: ""
+                    }
+                  ],
+                  end: 14,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *23],
+                  start: 13,
+                  rest: ""
+                },
+                <ref *27> {
+                  type: "STRING",
+                  text: '"Test"',
+                  children: [
+                    <ref *26> {
+                      type: "CHAR",
+                      text: "T",
+                      children: [
+                        <ref *25> {
+                          type: "ALPHANUMERIC",
+                          text: "T",
+                          children: [
+                            <ref *24> {
+                              type: "ALPHABET",
+                              text: "T",
+                              children: [
+                                {
+                                  type: "ALPHABET_UPPERCASE",
+                                  text: "T",
+                                  children: [],
+                                  end: 17,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *24],
+                                  start: 16,
+                                  rest: ""
+                                }
+                              ],
+                              end: 17,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *25],
+                              start: 16,
+                              rest: ""
+                            }
+                          ],
+                          end: 17,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *26],
+                          start: 16,
+                          rest: ""
+                        }
+                      ],
+                      end: 17,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *27],
+                      start: 16,
+                      rest: ""
+                    },
+                    <ref *30> {
+                      type: "CHAR",
+                      text: "e",
+                      children: [
+                        <ref *29> {
+                          type: "ALPHANUMERIC",
+                          text: "e",
+                          children: [
+                            <ref *28> {
+                              type: "ALPHABET",
+                              text: "e",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "e",
+                                  children: [],
+                                  end: 18,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *28],
+                                  start: 17,
+                                  rest: ""
+                                }
+                              ],
+                              end: 18,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *29],
+                              start: 17,
+                              rest: ""
+                            }
+                          ],
+                          end: 18,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *30],
+                          start: 17,
+                          rest: ""
+                        }
+                      ],
+                      end: 18,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *27],
+                      start: 17,
+                      rest: ""
+                    },
+                    <ref *33> {
+                      type: "CHAR",
+                      text: "s",
+                      children: [
+                        <ref *32> {
+                          type: "ALPHANUMERIC",
+                          text: "s",
+                          children: [
+                            <ref *31> {
+                              type: "ALPHABET",
+                              text: "s",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "s",
+                                  children: [],
+                                  end: 19,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *31],
+                                  start: 18,
+                                  rest: ""
+                                }
+                              ],
+                              end: 19,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *32],
+                              start: 18,
+                              rest: ""
+                            }
+                          ],
+                          end: 19,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *33],
+                          start: 18,
+                          rest: ""
+                        }
+                      ],
+                      end: 19,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *27],
+                      start: 18,
+                      rest: ""
+                    },
+                    <ref *36> {
+                      type: "CHAR",
+                      text: "t",
+                      children: [
+                        <ref *35> {
+                          type: "ALPHANUMERIC",
+                          text: "t",
+                          children: [
+                            <ref *34> {
+                              type: "ALPHABET",
+                              text: "t",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "t",
+                                  children: [],
+                                  end: 20,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *34],
+                                  start: 19,
+                                  rest: ""
+                                }
+                              ],
+                              end: 20,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *35],
+                              start: 19,
+                              rest: ""
+                            }
+                          ],
+                          end: 20,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *36],
+                          start: 19,
+                          rest: ""
+                        }
+                      ],
+                      end: 20,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *27],
+                      start: 19,
+                      rest: ""
+                    }
+                  ],
+                  end: 21,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *23],
+                  start: 15,
+                  rest: ""
+                },
+                <ref *37> {
+                  type: "SPACE_TAB",
+                  text: " ",
+                  children: [
+                    {
+                      type: "SPACE",
+                      text: " ",
+                      children: [],
+                      end: 22,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *37],
+                      start: 21,
+                      rest: ""
+                    }
+                  ],
+                  end: 22,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *23],
+                  start: 21,
+                  rest: ""
+                }
+              ],
+              end: 23,
+              errors: [],
+              fullText: "",
+              parent: [Circular *38],
+              start: 12,
+              rest: ""
+            }
+          ],
+          end: 23,
+          errors: [],
+          fullText: "",
+          parent: [Circular *39],
+          start: 12,
+          rest: ""
+        },
+        <ref *41> {
+          type: "WHITESPACE",
+          text: "\n",
+          children: [
+            <ref *40> {
+              type: "NEWLINE",
+              text: "\n",
+              children: [
+                {
+                  type: "LF",
+                  text: "\n",
+                  children: [],
+                  end: 24,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *40],
+                  start: 23,
+                  rest: ""
+                }
+              ],
+              end: 24,
+              errors: [],
+              fullText: "",
+              parent: [Circular *41],
+              start: 23,
+              rest: ""
+            }
+          ],
+          end: 24,
+          errors: [],
+          fullText: "",
+          parent: [Circular *39],
+          start: 23,
+          rest: ""
+        }
+      ],
+      end: 24,
+      errors: [],
+      fullText: "",
+      parent: [Circular *21],
+      start: 12,
+      rest: ""
+    },
+    <ref *59> {
+      type: "STATEMENT_LINE",
+      text: '(2:"Test" )',
+      children: [
+        <ref *58> {
+          type: "STATEMENT",
+          text: '(2:"Test" )',
+          children: [
+            <ref *43> {
+              type: "FEMALE_DECLARATION",
+              text: '(2:"Test" )',
+              children: [
+                <ref *42> {
+                  type: "DECLARATION_KEY",
+                  text: "2",
+                  children: [
+                    {
+                      type: "NON_ZERO_DIGIT",
+                      text: "2",
+                      children: [],
+                      end: 26,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *42],
+                      start: 25,
+                      rest: ""
+                    }
+                  ],
+                  end: 26,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *43],
+                  start: 25,
+                  rest: ""
+                },
+                <ref *47> {
+                  type: "STRING",
+                  text: '"Test"',
+                  children: [
+                    <ref *46> {
+                      type: "CHAR",
+                      text: "T",
+                      children: [
+                        <ref *45> {
+                          type: "ALPHANUMERIC",
+                          text: "T",
+                          children: [
+                            <ref *44> {
+                              type: "ALPHABET",
+                              text: "T",
+                              children: [
+                                {
+                                  type: "ALPHABET_UPPERCASE",
+                                  text: "T",
+                                  children: [],
+                                  end: 29,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *44],
+                                  start: 28,
+                                  rest: ""
+                                }
+                              ],
+                              end: 29,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *45],
+                              start: 28,
+                              rest: ""
+                            }
+                          ],
+                          end: 29,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *46],
+                          start: 28,
+                          rest: ""
+                        }
+                      ],
+                      end: 29,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *47],
+                      start: 28,
+                      rest: ""
+                    },
+                    <ref *50> {
+                      type: "CHAR",
+                      text: "e",
+                      children: [
+                        <ref *49> {
+                          type: "ALPHANUMERIC",
+                          text: "e",
+                          children: [
+                            <ref *48> {
+                              type: "ALPHABET",
+                              text: "e",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "e",
+                                  children: [],
+                                  end: 30,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *48],
+                                  start: 29,
+                                  rest: ""
+                                }
+                              ],
+                              end: 30,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *49],
+                              start: 29,
+                              rest: ""
+                            }
+                          ],
+                          end: 30,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *50],
+                          start: 29,
+                          rest: ""
+                        }
+                      ],
+                      end: 30,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *47],
+                      start: 29,
+                      rest: ""
+                    },
+                    <ref *53> {
+                      type: "CHAR",
+                      text: "s",
+                      children: [
+                        <ref *52> {
+                          type: "ALPHANUMERIC",
+                          text: "s",
+                          children: [
+                            <ref *51> {
+                              type: "ALPHABET",
+                              text: "s",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "s",
+                                  children: [],
+                                  end: 31,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *51],
+                                  start: 30,
+                                  rest: ""
+                                }
+                              ],
+                              end: 31,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *52],
+                              start: 30,
+                              rest: ""
+                            }
+                          ],
+                          end: 31,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *53],
+                          start: 30,
+                          rest: ""
+                        }
+                      ],
+                      end: 31,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *47],
+                      start: 30,
+                      rest: ""
+                    },
+                    <ref *56> {
+                      type: "CHAR",
+                      text: "t",
+                      children: [
+                        <ref *55> {
+                          type: "ALPHANUMERIC",
+                          text: "t",
+                          children: [
+                            <ref *54> {
+                              type: "ALPHABET",
+                              text: "t",
+                              children: [
+                                {
+                                  type: "ALPHABET_LOWERCASE",
+                                  text: "t",
+                                  children: [],
+                                  end: 32,
+                                  errors: [],
+                                  fullText: "",
+                                  parent: [Circular *54],
+                                  start: 31,
+                                  rest: ""
+                                }
+                              ],
+                              end: 32,
+                              errors: [],
+                              fullText: "",
+                              parent: [Circular *55],
+                              start: 31,
+                              rest: ""
+                            }
+                          ],
+                          end: 32,
+                          errors: [],
+                          fullText: "",
+                          parent: [Circular *56],
+                          start: 31,
+                          rest: ""
+                        }
+                      ],
+                      end: 32,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *47],
+                      start: 31,
+                      rest: ""
+                    }
+                  ],
+                  end: 33,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *43],
+                  start: 27,
+                  rest: ""
+                },
+                <ref *57> {
+                  type: "SPACE_TAB",
+                  text: " ",
+                  children: [
+                    {
+                      type: "SPACE",
+                      text: " ",
+                      children: [],
+                      end: 34,
+                      errors: [],
+                      fullText: "",
+                      parent: [Circular *57],
+                      start: 33,
+                      rest: ""
+                    }
+                  ],
+                  end: 34,
+                  errors: [],
+                  fullText: "",
+                  parent: [Circular *43],
+                  start: 33,
+                  rest: ""
+                }
+              ],
+              end: 35,
+              errors: [],
+              fullText: "",
+              parent: [Circular *58],
+              start: 24,
+              rest: ""
+            }
+          ],
+          end: 35,
+          errors: [],
+          fullText: "",
+          parent: [Circular *59],
+          start: 24,
+          rest: ""
+        }
+      ],
+      end: 35,
+      errors: [],
+      fullText: "",
+      parent: [Circular *21],
+      start: 24,
+      rest: ""
+    }
+  ],
+  end: 35,
+  errors: [],
+  fullText: "",
+  parent: null,
+  start: 0,
+  rest: ""
+}

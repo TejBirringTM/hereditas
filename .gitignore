@@ -5,3 +5,6 @@
 # family tree text files (for testing)
 family-tree.txt
 family-tree-*.txt
+
+# IDE-generated files
+.vscode/

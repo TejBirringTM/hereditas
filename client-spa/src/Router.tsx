@@ -2,9 +2,9 @@ import {
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
-import Root from "./routes/root";
-import Home from "./routes/Home";
-import UsersGuide from "./routes/UsersGuide";
+import Root from "./routes/Root";
+import Home from "./routes/FamilyTreeEntry/Home";
+import UsersGuide from "./routes/FamilyTreeEntry/UsersGuide";
 import Error from "./routes/Error";
 
   const router = createBrowserRouter([

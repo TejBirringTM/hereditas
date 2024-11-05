@@ -1,9 +1,9 @@
 import { type IToken } from "ebnf";
-import { recursivelyFindOfType } from "../../../libs/grammar-parser/main.ts";
-import { processStatement } from "./ast-sequence-parsers.ts";
+import { recursivelyFindOfType } from "../../../../../libs/grammar-parser/main.ts";
 import { type Graph } from "./graph.ts";
+import processStatement from "./process-statement.ts";
 
-export default function transformAst(ast: IToken) {
+export default function astToNodeLinkGraph(ast: IToken) {
     // create an empty graph to populate
     const graph : Graph = {
         nodes: [],

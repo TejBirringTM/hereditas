@@ -1,9 +1,9 @@
 import assert from "node:assert";
 import type { IToken } from "ebnf";
 import type { AdoptedHeirLink, FemaleNode, Graph, MaleNode, MarriageBrideLink, MarriageGroomLink, MarriageNode, ProgenyLink } from "./graph.ts";
-import { ADOPTED_HEIR_DECLARATION, MALE_DECLARATION, MARRIAGE_DECLARATION, PROGENY_DECLARATION, type inferToken, MALE_REFERENCE, FEMALE_REFERENCE, MARRIAGE_REFERENCE, MALE_EXPRESSION, FEMALE_EXPRESSION, PERSON_EXPRESSION } from "./ast-token-parsers.ts";
-import { FEMALE_DECLARATION } from "./ast-token-parsers.ts";
-import familyTreeParserErrors from "./errors.ts";
+import { ADOPTED_HEIR_DECLARATION, MALE_DECLARATION, MARRIAGE_DECLARATION, PROGENY_DECLARATION, type inferToken, MALE_REFERENCE, FEMALE_REFERENCE, MARRIAGE_REFERENCE, MALE_EXPRESSION, FEMALE_EXPRESSION, PERSON_EXPRESSION } from "../../ast-token-parsers.ts";
+import { FEMALE_DECLARATION } from "../../ast-token-parsers.ts";
+import familyTreeParserErrors from "../../errors.ts";
 
 type StatementParser = (graph: Graph, token: IToken) => void;
 const declareStatementParser = <T>(parser: StatementParser) => parser;
@@ -12,7 +12,7 @@ type Reference = inferToken<typeof MALE_REFERENCE> | inferToken<typeof FEMALE_RE
 // export function resolveReference(graph: Graph, reference: inferToken<typeof MALE_REFERENCE>) : MaleNode;
 // export function resolveReference(graph: Graph, reference: inferToken<typeof FEMALE_REFERENCE>) : FemaleNode;
 // export function resolveReference(graph: Graph, reference: inferToken<typeof MARRIAGE_REFERENCE>) : MarriageNode;
-export function resolveReference<T extends Reference>(graph: Graph, reference: T) :
+function resolveReference<T extends Reference>(graph: Graph, reference: T) :
     T extends inferToken<typeof MALE_REFERENCE> ? MaleNode :
     T extends inferToken<typeof FEMALE_REFERENCE> ? FemaleNode :
     T extends inferToken<typeof MARRIAGE_REFERENCE> ? MarriageNode : never
@@ -37,7 +37,7 @@ export function resolveReference<T extends Reference>(graph: Graph, reference: T
 }
 
 type Expression = inferToken<typeof MALE_EXPRESSION> | inferToken<typeof FEMALE_EXPRESSION> | inferToken<typeof PERSON_EXPRESSION>;
-export function resolveExpression<T extends Expression>(graph: Graph, expression: T) : 
+function resolveExpression<T extends Expression>(graph: Graph, expression: T) : 
     T extends inferToken<typeof MALE_EXPRESSION> ? MaleNode :
     T extends inferToken<typeof FEMALE_EXPRESSION> ? FemaleNode :
     T extends inferToken<typeof PERSON_EXPRESSION> ? MaleNode | FemaleNode : never
@@ -134,7 +134,7 @@ const statementParsers = {
 
 const statementParserKeys = Object.keys(statementParsers);
 
-export function processStatement(graph: Graph, token: IToken) {
+export default function processStatement(graph: Graph, token: IToken) {
     assert(token.type === "STATEMENT");
     const statement = token.children[0];
     assert(!!statement);

@@ -15,9 +15,9 @@ familyTreeParserService.declareRequest(
         let inputText;
         try {
             inputText = request.text;
-            const graph = parseFamilyTree(inputText);
+            const output = parseFamilyTree(inputText, "astToNodeLinkGraph");
             return declareSuccessResponse({
-                graph
+                ...output
             });
         } catch (e) {
             if (e instanceof RuntimeError) {

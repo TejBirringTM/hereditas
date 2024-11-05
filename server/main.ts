@@ -1,8 +1,13 @@
 import { Application } from "@oak/oak";
 import config from "./config.ts";
 import services from "./the-services-collection.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const app = new Application();
+
+app.use(oakCors({
+  origin: config.cors.origin
+}))
 
 services.forEach((service)=>{
   app.use(service.router.routes());

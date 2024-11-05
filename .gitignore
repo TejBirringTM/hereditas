@@ -8,3 +8,8 @@ family-tree-*.txt
 
 # IDE-generated files
 .vscode/
+.idea/
+
+# logs
+log
+logs/

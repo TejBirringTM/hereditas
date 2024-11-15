@@ -1,0 +1,22 @@
+svg {
+    z-index: 0
+}
+
+:root {
+    --graph-popup-border-colour: oklch(83.47% 0.1472 83.01);
+    --graph-popup-background-colour: oklch(90.24% 0.0688 84.86);
+    --graph-popup-text-colour: --graph-popup-border-colour;
+}
+.popup {
+    position: absolute;
+    display: block;
+    background-color: var(--graph-popup-background-colour);
+    /* opacity: 95%; */
+    padding: 0.25rem 0.5rem ;
+    /* border: 1px solid var(--graph-popup-border-colour); */
+    color: var(--mantine-color-dark-9);
+    border-radius: 3.5px;
+    z-index: 1;
+    max-width: 300px; 
+    overflow: hidden;
+}

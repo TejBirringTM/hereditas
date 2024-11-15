@@ -1,5 +1,5 @@
 import * as v from "valibot";
-
+import { linkSchema, nodeSchema } from "./graph-schema";
 
 const errorResponseBodySchema = v.object({
     success: v.literal(false),
@@ -12,16 +12,12 @@ const successResponseBodySchema = v.object({
     success: v.literal(true),
     error: v.literal(false),
     data: v.object({
-        graph: v.object({
-            nodes: v.array(v.object({})),
-            links: v.array(v.object({})),
-        })
+        nodes: v.array(nodeSchema),
+        links: v.array(linkSchema)
     })
 });
 
 const responseBodySchema = v.union([successResponseBodySchema, errorResponseBodySchema]);
-
-export type FamilyTreeGraph = v.InferInput<typeof successResponseBodySchema>["data"]["graph"];
 
 export default function parseFamilyTreeEntry(text: string) {
     return fetch(`${import.meta.env.VITE_SERVER_URL ?? "*"}/services/family-tree-parser/parse/v1`, {
@@ -39,11 +35,14 @@ export default function parseFamilyTreeEntry(text: string) {
         console.debug("json", json);
         const parseResult = v.safeParse(responseBodySchema, json);
         if (!parseResult.success) {
-            throw new Error("Failed to parse family tree entry");
+            throw new Error("Failed to parse family tree entry"); // response could not be validated using the above schema
         } else if (!parseResult.output.success) {
-            throw new Error(parseResult.output.message);
+            throw new Error(parseResult.output.message);          // server could not parse or process the family tree
         } else {
-            return parseResult.output.data.graph;
+            return parseResult.output.data;
         }
     })
 }
+
+export {type Node, type NodeType, type Link, type LinkType} from "./graph-schema";
+export type Graph = v.InferInput<typeof successResponseBodySchema>["data"];

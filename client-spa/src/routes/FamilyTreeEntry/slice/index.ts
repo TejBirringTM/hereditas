@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {FamilyTreeGraph} from "./parse-family-tree-entry.ts";
-
+import { Graph } from '../libs/parse-family-tree-entry';
 // const localStorageKey_textEntry = "family-tree-user-entry";
 
 const familyTreeEntrySlice = createSlice({
@@ -8,7 +7,7 @@ const familyTreeEntrySlice = createSlice({
   initialState: {
     textEntry: "",
     errorMessage: "",
-    graph: null as FamilyTreeGraph | null,
+    graph: null as Graph | null,
   },
   reducers: {
     setTextEntry: (state, action: PayloadAction<string>) => {
@@ -22,7 +21,7 @@ const familyTreeEntrySlice = createSlice({
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload;
     },
-    setGraph: (state, action: PayloadAction<FamilyTreeGraph>) => {
+    setGraph: (state, action: PayloadAction<Graph>) => {
       state.graph = action.payload;
     },
     reset: (state) => {

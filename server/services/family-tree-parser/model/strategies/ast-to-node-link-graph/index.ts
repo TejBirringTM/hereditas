@@ -1,24 +1,25 @@
 import { type IToken } from "ebnf";
-import { recursivelyFindOfType } from "../../../../../libs/grammar-parser/main.ts";
-import { type Graph } from "./graph.ts";
-import processStatement from "./process-statement.ts";
+import { declareStrategy, transform } from "../strategy.ts";
+import parseAst from "../../parse-ast/index.ts";
+import { graphFromFamilyTreeContext } from "./graph.ts";
+import assignGenerationNumbers from "./graph-transformations/assign-generation-numbers.ts";
+import filterNodesAndLinks from "./graph-transformations/filter-nodes-links.ts";
+import appendDetails from "./graph-transformations/append-details.ts";
 
-export default function astToNodeLinkGraph(ast: IToken) {
-    // create an empty graph to populate
-    const graph : Graph = {
-        nodes: [],
-        links: []
-    };
+export default declareStrategy((ast: IToken)=>{
+    // parse AST
+    const familyTreeContext = parseAst(ast);
 
-    // Step 1: deeply traverse AST to find statements,
-    //         this works because there is only one scope.
-    const statements = recursivelyFindOfType(ast, "STATEMENT");
-    
-    // Step 2: process each statement
-    for (const token of statements) {
-        processStatement(graph, token);
-    }
+    // initialise basic graph
+    const startGraph = graphFromFamilyTreeContext(familyTreeContext);
 
-    // return the populated graph
-    return graph;
-}
+    // perform transformations on the graph
+    const transformedGraph = transform(startGraph)
+        .execute(assignGenerationNumbers)
+        .execute(appendDetails)
+        .execute(filterNodesAndLinks)
+        .output;
+
+    // return the populated graph.
+    return transformedGraph;
+});

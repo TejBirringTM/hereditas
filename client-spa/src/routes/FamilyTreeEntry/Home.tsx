@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { RootState } from "../../store";
 import { setTextEntry, setErrorMessage, setGraph, reset, } from "./slice";
-import parseFamilyTreeEntry from "./parse-family-tree-entry.ts";
+import parseFamilyTreeEntry, { Graph } from "./libs/parse-family-tree-entry";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
 import UndoIcon from "../../assets/icons/uicons-thin-straight/fi-ts-undo.svg?react"
 import { rem } from '@mantine/core';
+import FamilyTreeEntryGraph from "./components/FamilyTreeGraph";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useViewportSize } from "@mantine/hooks";
 
 export default function Home() {
    const dispatch = useDispatch();
@@ -37,27 +40,35 @@ export default function Home() {
    }
 
    function resetRequest() {
-    dispatch(reset());
+        dispatch(reset());
    }
+
+   function updateText(event: ChangeEvent<HTMLTextAreaElement>) {
+        dispatch(setTextEntry(event.currentTarget.value));
+   }
+
+   const { height: viewportHeight, width: viewportWidth } = useViewportSize();
+
+   const [svgHeight, setSvgHeight] = useState(0);
+
+   useEffect(()=>{
+    if (graph) {
+        setSvgHeight(Math.max(...(graph as Graph).nodes.map((node)=>(node.generation))) * 350);
+    }
+   }, [graph])
 
     return (<>
          <p>
             Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the 'Visualise' button.
          </p>
          <Flex direction="column" gap="lg">
-            <Textarea autosize onChange={(event)=>dispatch(setTextEntry(event.currentTarget.value))} value={text} />
-            
+            <Textarea autosize onChange={updateText} value={text} readOnly={!!graph} />
+
             <Flex
                 justify="end"
                 gap="md"
             >
-                <Button 
-                    size="lg" 
-                    disabled={!text || !!graph} 
-                    onClick={submitRequest}
-                >
-                    Visualise
-                </Button>
+                {/*  */}
                 <Button 
                     size="lg" 
                     disabled={!graph} 
@@ -65,6 +76,14 @@ export default function Home() {
                     onClick={resetRequest} 
                 >
                     Reset
+                </Button>
+                {/*  */}
+                <Button 
+                    size="lg" 
+                    disabled={!text || !!graph} 
+                    onClick={submitRequest}
+                >
+                    Visualise
                 </Button>
             </Flex>
 
@@ -74,7 +93,7 @@ export default function Home() {
                 </Alert>
             }
 
-
+            <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} />
          </Flex>
     </>)
 }

@@ -5,6 +5,7 @@ import ApiRequestErrors from "./request-errors.ts";
 import { declareErrorResponse, type ApiErrorResult, type ApiSuccessResult } from "./response.ts";
 export {declareSuccessResponse, declareErrorResponse} from "./response.ts";
 import { type TServicePath, type TRequestPath, servicePath as _servicePath, requestPath as _requestPath, type TVersionMajor } from "./paths.ts";
+import debugOnly from "./debug-only.ts";
 
 export function declareJsonApi(servicePath: TServicePath) {
     const __servicePath = _servicePath(servicePath);
@@ -22,7 +23,9 @@ export function declareJsonApi(servicePath: TServicePath) {
     )=>{
         const __requestPath = _requestPath(requestPath, versionMajor);
         
-        console.debug(`✅ Registered request ===> \n${__servicePath}${__requestPath}`);
+        debugOnly(()=>{
+            console.debug(`✅ Registered request (POST) ===> ${__servicePath}${__requestPath}`);
+        });
 
         return router.post(__requestPath, async (ctx) => {
             // try parse request body as a JSON object

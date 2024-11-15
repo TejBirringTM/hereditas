@@ -11,7 +11,7 @@ export default function parseFamilyTree(input: string, strategy: StrategyKey) {
         // 2. transform AST to a node-link graph
         const output = getStrategy(strategy)(ast);
         return output;
-    } catch (e) {
+    } catch (e) { 
         if (e instanceof RuntimeError) {
             throw wrapRuntimeError(e, "Failed to parse family tree:");
         } else {

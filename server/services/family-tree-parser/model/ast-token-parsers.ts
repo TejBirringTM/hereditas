@@ -9,7 +9,7 @@ export const MAYBE_A_ = <T>(parser: TokenParser<T>, token?: IToken) => token ? p
 
 export const MALE_DECLARATION = ((token)=>{
     const key = recursivelyFindFirstOfType(token, "DECLARATION_KEY", false, true).text;
-    const title = recursivelyFindFirstOfType(token, "STRING", false, true).text;
+    const title = recursivelyFindFirstOfType(token, "STRING", false, true).text.slice(1, -1);
     return {
         type: "MALE_DECLARATION",
         key,
@@ -35,7 +35,7 @@ export const MALE_EXPRESSION = ((token)=>{
 
 export const FEMALE_DECLARATION = ((token)=>{
     const key = recursivelyFindFirstOfType(token, "DECLARATION_KEY", false, true).text;
-    const title = recursivelyFindFirstOfType(token, "STRING", false, true).text;
+    const title = recursivelyFindFirstOfType(token, "STRING", false, true).text.slice(1, -1);
     return {
         type: "FEMALE_DECLARATION",
         key,

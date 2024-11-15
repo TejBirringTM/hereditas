@@ -23,6 +23,10 @@ familyTreeParserService.declareRequest(
             if (e instanceof RuntimeError) {
                 return declareErrorResponse(Status.BadRequest, e.message);
             } else {
+                const errorMessage = e instanceof Error ? e.message : undefined;
+                if (errorMessage) {
+                    console.error(errorMessage);
+                }
                 return declareErrorResponse(Status.InternalServerError, "An unknown error occurred.");
             }
         }

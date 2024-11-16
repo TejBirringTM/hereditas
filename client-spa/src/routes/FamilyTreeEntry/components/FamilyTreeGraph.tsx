@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { Graph as FamilyTreeGraph } from "../libs/parse-family-tree-entry";
 import * as d3 from "d3";
 import { SimulationNode, SimulationLink } from "./types";
 import { getLinkStyle, getNodeStyle } from "./styling/node-link-style";
 import FamilyTreeGraphPopup from "./FamilyTreeGraphPopup";
 import { gridLineColour } from "./styling/grid-style";
+import styles from "./FamilyTreeGraph.module.css"
 
 interface FamilyTreeEntryGraphProps {
     graph?: FamilyTreeGraph | null,
@@ -97,7 +98,8 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "max-width: 100%; height: auto;")
+                .attr("style", "height: auto;")
+                // .attr("style", "max-width: 100%; height: auto;")
             svg = div.select("svg");            
         } else {
             svg.selectChildren().remove();
@@ -105,7 +107,8 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "max-width: 100%; height: auto;")
+                .attr("style", "height: auto;")
+                // .attr("style", "max-width: 100%; height: auto;")
         }
 
         function updateNodeStyles() {
@@ -367,12 +370,11 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         }
     }, [graph, width, height]);
 
-    return <div>
-        <div ref={root} style={{height: "fit-content"}}></div>        
+    return <div ref={root} className={styles.graph} style={{height: "fit-content", overflowX: "auto"}}>
         <FamilyTreeGraphPopup
             node={selectedNode}
             left={selectedNodePosition?.[0]}
             top={selectedNodePosition?.[1]}
         />
     </div>
-}
+};

@@ -9,7 +9,7 @@ import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xma
 import UndoIcon from "../../assets/icons/uicons-thin-straight/fi-ts-undo.svg?react"
 import { rem } from '@mantine/core';
 import FamilyTreeEntryGraph from "./components/FamilyTreeGraph";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useViewportSize } from "@mantine/hooks";
 
 export default function Home() {
@@ -39,8 +39,10 @@ export default function Home() {
        }
    }
 
+   const refTextArea = useRef<HTMLTextAreaElement>(null);
    function resetRequest() {
         dispatch(reset());
+        refTextArea.current?.scrollTo();
    }
 
    function updateText(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -62,7 +64,7 @@ export default function Home() {
             Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the 'Visualise' button.
          </p>
          <Flex direction="column" gap="lg">
-            <Textarea autosize onChange={updateText} value={text} readOnly={!!graph} />
+            <Textarea ref={refTextArea} autosize onChange={updateText} value={text} readOnly={!!graph} />
 
             <Flex
                 justify="end"
@@ -72,7 +74,7 @@ export default function Home() {
                 <Button 
                     size="lg" 
                     disabled={!graph} 
-                    leftSection={<UndoIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor" }} />}
+                    leftSection={<UndoIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />}
                     onClick={resetRequest} 
                 >
                     Reset

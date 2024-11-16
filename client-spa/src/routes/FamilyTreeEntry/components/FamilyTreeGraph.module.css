@@ -4,12 +4,15 @@
     --graph-popup-text-colour: --graph-popup-border-colour;
     --graph-border-radius: 3.5px;
     --graph-popup-border-radius: 3.5px;
+    --graph-background-colour: oklch(94.7% 0.0115 84.58);
 }
 
-svg {
-    z-index: 0;
-    background-color: #F1EDE5;
-    border-radius: var(--graph-border-radius);
+.graph {
+    svg {
+        z-index: 0;
+        background-color: var(--graph-background-colour);
+        border-radius: var(--graph-border-radius);
+    }
 }
 
 .popup {

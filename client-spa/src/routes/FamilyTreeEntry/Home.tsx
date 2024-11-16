@@ -2,7 +2,7 @@ import { Button, Flex, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { RootState } from "../../store";
-import { setTextEntry, setErrorMessage, setGraph, reset, } from "./slice";
+import { setTextEntry, setErrorMessage, setGraph, reset, recoverTextEntry } from "./slice";
 import parseFamilyTreeEntry, { Graph } from "./libs/parse-family-tree-entry";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
@@ -52,6 +52,8 @@ export default function Home() {
    const { height: viewportHeight, width: viewportWidth } = useViewportSize();
 
    const [svgHeight, setSvgHeight] = useState(0);
+
+   dispatch(recoverTextEntry());
 
    useEffect(()=>{
     if (graph) {

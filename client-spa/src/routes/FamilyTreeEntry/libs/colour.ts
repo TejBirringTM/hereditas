@@ -21,16 +21,16 @@ export class Colour {
         // if (l < 0 || l > 1) {
         //     throw new Error("Invalid lightness!");
         // }
-        // if (c < 0 || c > 0.4) {
-        //     throw new Error("Invalid chroma!");
-        // }
-        // if (h < 0 || h > 360) {
-        //     throw new Error("Invalid hue!");
-        // }
-        // if (alpha && (alpha < 0 || alpha > 1)) {
-        //     throw new Error("Invalid alpha value!");
-        // }
-        this.colour = new Color("oklch", [l, c, h], alpha);
+        if (c < 0 || c > 0.4) {
+            throw new Error("Invalid chroma!");
+        }
+        if (h < 0 || h > 360) {
+            throw new Error("Invalid hue!");
+        }
+        if (alpha && (alpha < 0 || alpha > 1)) {
+            throw new Error("Invalid alpha value!");
+        }
+        this.colour = new Color("oklch", [l, c, h], alpha ?? 1);
     }
     get hex() {
         return this.colour.toString({format: "hex"});
@@ -40,8 +40,7 @@ export class Colour {
         const l = newColour.oklch.l;
         const c = newColour.oklch.c;
         const h = newColour.oklch.h;
-        console.log({l,c,h});
-        // const alpha = newColour.oklch?.alpha ? newColour.oklch.alpha : 1;
-        return new Colour(l, c, h);
+        const alpha = newColour.alpha;
+        return new Colour(l, c, h, alpha);
     }
 }

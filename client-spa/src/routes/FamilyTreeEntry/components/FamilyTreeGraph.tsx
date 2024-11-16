@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Graph as FamilyTreeGraph } from "../libs/parse-family-tree-entry";
 import * as d3 from "d3";
 import { SimulationNode, SimulationLink } from "./types";
-import { getLinkStyle, getNodeStyle } from "./styling/style";
+import { getLinkStyle, getNodeStyle } from "./styling/node-link-style";
 import FamilyTreeGraphPopup from "./FamilyTreeGraphPopup";
+import { gridLineColour } from "./styling/grid-style";
 
 interface FamilyTreeEntryGraphProps {
     graph?: FamilyTreeGraph | null,
@@ -75,28 +76,36 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         const svgHeight = height;
         const div = d3.select(root.current);
         let svg = div.select("svg");
-        if (svg.empty()) {
-            div.append('svg')
-                .attr("width", svgWidth)
-                .attr("height", svgHeight)
-                .attr("viewBox", [0, 0, svgWidth, svgHeight])
-                .attr("style", "max-width: 100%; height: auto;")
-            svg = div.select("svg");            
-        } else {
-            svg.selectChildren().remove();
-            svg.attr("width", svgWidth)
-                .attr("height", svgHeight)
-                .attr("viewBox", [0, 0, svgWidth, svgHeight])
-        }
 
         if (!graph) {
             console.debug("No graph, therefore nothing to draw.");
-            svg.selectChildren().remove();
+            svg.remove();
             selectNode(null);
             selectNodePosition(null);
             return;
         } else {
             console.debug("Drawing graph...");
+        }
+
+        const numOfGenerations = Math.max(...graph.nodes.map((node)=>node.generation));
+        const pxPerGenerationHeight = 250;
+        const pxGenerationsHeight = (numOfGenerations * pxPerGenerationHeight) + pxPerGenerationHeight;
+        
+
+        if (svg.empty()) {
+            div.append('svg')
+                .attr("width", svgWidth)
+                .attr("height", pxGenerationsHeight)
+                .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
+                .attr("style", "max-width: 100%; height: auto;")
+            svg = div.select("svg");            
+        } else {
+            svg.selectChildren().remove();
+            svg
+                .attr("width", svgWidth)
+                .attr("height", pxGenerationsHeight)
+                .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
+                .attr("style", "max-width: 100%; height: auto;")
         }
 
         function updateNodeStyles() {
@@ -118,7 +127,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         }
 
         function updateLinkStyles() {
-            const linkLines = svg.selectAll<SVGLineElement, SimulationLink>("line");
+            const linkLines = svg.selectAll<SVGLineElement, SimulationLink>("line.link");
             linkLines
                 .attr("stroke", (d)=>getLinkStyle(d).stroke)
                 .attr("stroke-width", (d)=>getLinkStyle(d)["stroke-width"])
@@ -161,6 +170,32 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .append('path')
                 .attr('d', d3.line()(filledArrowPoints))
 
+        const yLines = new Array<number>(numOfGenerations);
+        for (let i = 0; i<numOfGenerations; i++) {
+            yLines[i]=(i+1)*pxPerGenerationHeight;
+        }
+        const _yLines = svg.selectAll("line.y-guide")
+            .data(yLines)
+            .join(
+                (enter) => {
+                    const line = enter.append("line")
+                        .classed("y-guide", true)
+                        .attr("x1", 0)
+                        .attr("x2", svgWidth)
+                        .attr("y1", (d)=>d)
+                        .attr("y2", (d)=>d)
+                        .attr("stroke", gridLineColour.hex)
+                        .attr("stroke-width", 2)
+                    return line;
+                },
+                (update) => {
+                    return update;
+                },
+                (exit) => {
+                    return exit.remove();
+                }
+        )
+
         const nodes : SimulationNode[] = graph.nodes.map((node)=>({
             ...node,
             index: undefined,
@@ -185,7 +220,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         const forceCentre = d3.forceCenter(svgWidth/2, svgHeight/2);
         const forceCollide = d3.forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r as number) * 1.5));
         const forceLinks = d3.forceLink(links)
-                                .strength((d)=>((d.type === "Bride" || d.type === "Groom") ? 1 : 1/75))
+                                .strength((d)=>((d.type === "Bride" || d.type === "Groom") ? 1 : 1/100))
                                 .distance((d)=>{
                                     switch (d.type) {
                                         case "Bride":
@@ -200,7 +235,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                                             return 30;
                                     }
                                 });
-        const forceY = d3.forceY<SimulationNode>((d) => (d.generation * 250)).strength(0.1);
+        const forceY = d3.forceY<SimulationNode>((d) => (d.generation * pxPerGenerationHeight)).strength(2);
 
         const simulation = d3.forceSimulation(nodes)
                             .force("link", forceLinks.id((node)=>(node as typeof nodes[0]).identity))
@@ -218,7 +253,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
 
                     group.append("circle")
                         .attr("pointer-events", "visibleFill")
-                        .attr("cursor", "pointer")
+                        .attr("cursor", (d)=>(d.type === "Male" || d.type === "Female") ? "pointer" : null)
                         .on("mouseenter", (_event, d) => {
                             if ((d.state === "normal") && (d.type === "Male" || d.type === "Female")) {
                                 d.state = "hovered";
@@ -237,7 +272,16 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                             event.stopPropagation();
                             if (d.type === "Male" || d.type === "Female") {
                                 selectNode(d, nodes, links);
-                                const position = [event.pageX, event.pageY] as [number, number];
+                                let position = [event.pageX, event.pageY] as [number, number];
+                                /*
+                                    Below, we need to adjust the x position such that the popup does not start from a position
+                                    where it would exceed the svgWidth. If this happens, the popup will automatically be squeezed
+                                    to fit the svg dimensions - which does not look good!
+
+                                    300px is the max-width of the popup (see the corresponding FamilyTreeGraph.module.css file)
+                                    the additional 15px is used as an arbitrary margin that seems to work well.
+                                */
+                                position[0] = ((position[0] + 300) > svgWidth) ? (svgWidth - 300 - 15) : position[0];
                                 selectNodePosition(position);
                             }
                             updateStyles();
@@ -261,11 +305,12 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 },
             )
 
-            const _links = svg.selectAll("line")
+        const _links = svg.selectAll("line.link")
             .data(links)
             .join(
                 (enter)=>{
                     const line = enter.append("line")
+                        .classed("link", true)
                         .attr("pointer-events", "none");
                     updateStyles();
                     return line;
@@ -275,10 +320,21 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 },
                 (exit)=>{
                     return exit.remove()
-                },
-            )    
+                }
+        )    
+        
+
 
         function onSimulationTick() {
+            _nodes
+                .select("circle")
+                .attr("cx", (d) => d.x ?? null)
+                .attr("cy", (d) => d.y ?? null);
+
+            _nodes.select("text")
+                .attr("x", (d) => d.x ?? null)
+                .attr("y", (d) => d.y ?? null);
+
             _links
                 .attr("x1", (d) => {
                     if (!d.target.x || !d.target.y || !d.source.x || !d.source.y) return null;
@@ -308,20 +364,11 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
                     return d.target.y + Math.sin(angle) * (getNodeStyle(d.target).r as number);
                 })
-
-            _nodes
-                .select("circle")
-                .attr("cx", (d) => d.x ?? null)
-                .attr("cy", (d) => d.y ?? null);
-
-            _nodes.select("text")
-                .attr("x", (d) => d.x ?? null)
-                .attr("y", (d) => d.y ?? null);
         }
     }, [graph, width, height]);
 
     return <div>
-        <div ref={root} style={{width: "100%", height: "fit-content"}}></div>        
+        <div ref={root} style={{height: "fit-content"}}></div>        
         <FamilyTreeGraphPopup
             node={selectedNode}
             left={selectedNodePosition?.[0]}

@@ -138,7 +138,7 @@ export const getLinkStyle = declareLinkStyler((link)=>{
     else if (link.type === "Progeny" || link.type === "AdoptedHeir") {
         return {
             stroke: linkStrokeColour(link, defaultProgenyLinksColour),
-            "stroke-width": link.state === "highlighted" ? 8 : 4,
+            "stroke-width": link.state === "highlighted" ? 6 : 4,
             fill: null,
             "marker-start": null,
             "marker-end": "url(#filledArrow)"

@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Graph as FamilyTreeGraph } from "../libs/parse-family-tree-entry";
 import * as d3 from "d3";
 import { SimulationNode, SimulationLink } from "./types";

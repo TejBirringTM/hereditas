@@ -1,7 +1,7 @@
 import { Text } from "@mantine/core";
 import { Node } from "../libs/parse-family-tree-entry";
 import styles from "./FamilyTreeGraph.module.css"
-import appendOrdinalSuffix from "../libs/append-ordinal-suffix";
+import appendOrdinalSuffix from "../../../libs/append-ordinal-suffix";
 
 interface FamilyTreeGraphPopupProps {
     node?: Node | null,

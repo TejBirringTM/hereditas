@@ -1,5 +1,5 @@
 import Color from "colorjs.io";
-import { Colour } from "../../libs/colour";
+import { Colour } from "../../../../libs/colour";
 import { declareLinkStyler, declareNodeStyler } from "./types";
 import { SimulationLink, SimulationNode } from "../types";
 

@@ -76,7 +76,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         const svgWidth = width;
         const svgHeight = height;
         const div = d3.select(root.current);
-        let svg = div.select("svg");
+        let svg = div.select<SVGElement>("svg");
 
         if (!graph) {
             console.debug("No graph, therefore nothing to draw.");
@@ -98,7 +98,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "height: auto;")
+                .attr("style", "max-width: 100%;")
                 // .attr("style", "max-width: 100%; height: auto;")
             svg = div.select("svg");            
         } else {
@@ -107,7 +107,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "height: auto;")
+                .attr("style", "max-width: 100%;")
                 // .attr("style", "max-width: 100%; height: auto;")
         }
 
@@ -329,6 +329,8 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
 
 
         function onSimulationTick() {
+            scrollToSvg();
+
             _nodes
                 .select("circle")
                 .attr("cx", (d) => d.x ?? null)
@@ -367,6 +369,16 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
                     return d.target.y + Math.sin(angle) * (getNodeStyle(d.target).r as number);
                 })
+        }
+
+        let scrolledIntoView = false;
+
+        function scrollToSvg() {
+            const el = svg.node();
+            if (el && !scrolledIntoView) {
+                el.scrollIntoView({behavior: "smooth"});
+                scrolledIntoView = true;
+            }
         }
     }, [graph, width, height]);
 

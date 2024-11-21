@@ -1,59 +1,50 @@
 import { Button, Flex, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { RootState } from "../../store";
-import { setTextEntry, setErrorMessage, setGraph, reset, recoverTextEntry } from "./slice";
-import parseFamilyTreeEntry, { Graph } from "./libs/parse-family-tree-entry";
+import { AppDispatch, RootState } from "../../store";
+import { setFamilyTreeTextEntry, processFamilyTreeTextEntry, initialiseFamilyTreeEntry} from "./slice";
+import { Graph } from "./libs/parse-family-tree-entry";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
-import UndoIcon from "../../assets/icons/uicons-thin-straight/fi-ts-undo.svg?react"
-import { rem } from '@mantine/core';
 import FamilyTreeEntryGraph from "./components/FamilyTreeGraph";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useViewportSize } from "@mantine/hooks";
+import ShareModal from "./components/ShareModal";
+import ResetMenu from "./components/ResetMenu";
 
 export default function Home() {
-   const dispatch = useDispatch();
+   const dispatch = useDispatch<AppDispatch>();
 
-   const text = useSelector((state: RootState)=>{
+   const textEntry = useSelector((state: RootState)=>{
       return state.familyTreeEntry.textEntry;
-   });
-
-   const error = useSelector((state: RootState)=>{
-    return state.familyTreeEntry.errorMessage;
    });
 
    const graph = useSelector((state: RootState)=>{
     return state.familyTreeEntry.graph;
    });
 
-   async function submitRequest() {
-       try {
-           const graph = await parseFamilyTreeEntry(text);
-           dispatch(setErrorMessage(""));
-           dispatch(setGraph(graph));
-       } catch (e) {
-           if (e instanceof Error) {
-            dispatch(setErrorMessage(e.message));
-           }
-       }
-   }
+   const state = useSelector((state: RootState)=>{
+    return state.familyTreeEntry.state;
+   });
+
+   const errorMessage = useSelector((state: RootState)=>{
+    return state.familyTreeEntry.errorMessage;
+   });
 
    const refTextArea = useRef<HTMLTextAreaElement>(null);
-   function resetRequest() {
-        dispatch(reset());
-        refTextArea.current?.scrollTo();
-   }
-
-   function updateText(event: ChangeEvent<HTMLTextAreaElement>) {
-        dispatch(setTextEntry(event.currentTarget.value));
-   }
 
    const { height: viewportHeight, width: viewportWidth } = useViewportSize();
-
    const [svgHeight, setSvgHeight] = useState(0);
 
-   dispatch(recoverTextEntry());
+   function updateTextEntry(event: ChangeEvent<HTMLTextAreaElement>) {
+        dispatch(setFamilyTreeTextEntry({textEntry: event.currentTarget.value, persistToLocalStorage: false}));
+   }
+
+   useEffect(()=>{
+        if (state === "unknown") {
+            dispatch(initialiseFamilyTreeEntry());
+        }
+   })
 
    useEffect(()=>{
     if (graph) {
@@ -66,34 +57,27 @@ export default function Home() {
             Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the 'Visualise' button.
          </p>
          <Flex direction="column" gap="lg">
-            <Textarea ref={refTextArea} autosize onChange={updateText} value={text} readOnly={!!graph} />
+            <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={textEntry} disabled={state === "drawn"} />
 
-            <Flex
-                justify="end"
-                gap="md"
-            >
+            <Flex justify="end" gap="md">
+                <ResetMenu />
+
+                {/*  */}
+                <ShareModal disabled={state !== "drawn"} />
+
                 {/*  */}
                 <Button 
                     size="lg" 
-                    disabled={!graph} 
-                    leftSection={<UndoIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />}
-                    onClick={resetRequest} 
-                >
-                    Reset
-                </Button>
-                {/*  */}
-                <Button 
-                    size="lg" 
-                    disabled={!text || !!graph} 
-                    onClick={submitRequest}
+                    disabled={state !== "editing" || textEntry.length === 0} 
+                    onClick={()=>dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: true}))}
                 >
                     Visualise
                 </Button>
             </Flex>
 
-            { error &&
+            { state === "error" &&
                 <Alert variant="light" color="red" title="Error" icon={<ErrorIcon style={{fill: "var(--mantine-color-red-light-color)"}} />}>
-                    { error }
+                    { errorMessage }
                 </Alert>
             }
 

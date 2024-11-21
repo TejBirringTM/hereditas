@@ -1,6 +1,10 @@
-export default function debugOnly<Output>(fn: ()=>Output) {
+export function isDebugMode() {
     const value = Deno.env.get("DEBUG");
-    if (value && !["false", "no", "0"].includes(value.toLowerCase())) {
+    return (value && !["false", "no", "0"].includes(value.toLowerCase()));
+}
+
+export default function debugOnly<Output>(fn: ()=>Output) {
+    if (isDebugMode()) {
         fn();
     }
 }

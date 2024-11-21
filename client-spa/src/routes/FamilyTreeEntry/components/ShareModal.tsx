@@ -35,12 +35,13 @@ export default function ShareModal({disabled}: ShareModalProps) {
         } else {
             setTokenCopied(false);
         }
-    }, [opened])
+    }, [opened, shareLink])
 
 
     useEffect(()=>{
         textInputRef.current?.select();
-    }, [textInputRef.current])
+    });
+
     return <>
         <Modal opened={opened} onClose={close} title="Share">
             <Text>Use the link below to share the current view.</Text>

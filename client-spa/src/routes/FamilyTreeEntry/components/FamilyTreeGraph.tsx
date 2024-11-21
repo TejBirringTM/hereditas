@@ -275,7 +275,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                             event.stopPropagation();
                             if (d.type === "Male" || d.type === "Female") {
                                 selectNode(d, nodes, links);
-                                let position = [event.pageX, event.pageY] as [number, number];
+                                const position = [event.pageX, event.pageY] as [number, number];
                                 /*
                                     Below, we need to adjust the x position such that the popup does not start from a position
                                     where it would exceed the svgWidth. If this happens, the popup will automatically be squeezed

@@ -7,22 +7,23 @@ import Home from "./routes/FamilyTreeEntry/Home";
 import UsersGuide from "./routes/FamilyTreeEntry/UsersGuide";
 import Error from "./routes/Error";
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Root />,
-      errorElement: <Error />,
-      children: [
-        {
-            path: "",
-            element: <Home />
-        },
-        {
-            path: "users-guide",
-            element: <UsersGuide />
-        }
-      ]
-    },
-  ]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <Error />,
+    children: [
+      {
+          path: "",
+          element: <Home />
+      },
+      {
+          path: "users-guide",
+          element: <UsersGuide />
+      }
+    ]
+  },
+]);
 
-  export default () => <RouterProvider router={router} />
+const Router = () => <RouterProvider router={router} />
+export default Router;

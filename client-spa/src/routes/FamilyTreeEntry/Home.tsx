@@ -34,7 +34,7 @@ export default function Home() {
 
    const refTextArea = useRef<HTMLTextAreaElement>(null);
 
-   const { height: viewportHeight, width: viewportWidth } = useViewportSize();
+   const { height: _viewportHeight, width: viewportWidth } = useViewportSize();
    const [svgHeight, setSvgHeight] = useState(0);
 
    const posthog = usePostHog();

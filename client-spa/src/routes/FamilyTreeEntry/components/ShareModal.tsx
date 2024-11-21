@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useEffect, useRef, useState } from 'react';
 import { urlSearchKey_familyTreeToken } from '../slice';
+import { usePostHog } from 'posthog-js/react';
 
 
 interface ShareModalProps {
@@ -25,12 +26,15 @@ export default function ShareModal({disabled}: ShareModalProps) {
         return url.toString();
     });
 
+    const posthog = usePostHog();
+
     useEffect(()=>{
         if (opened) {
             navigator.clipboard.writeText(shareLink)
             .then(()=>{
                 setTokenCopied(true);
                 console.debug("Share link copied to clipboard.");
+                posthog.capture("share link copied to clipboard");
             });
         } else {
             setTokenCopied(false);
@@ -39,8 +43,10 @@ export default function ShareModal({disabled}: ShareModalProps) {
 
 
     useEffect(()=>{
-        textInputRef.current?.select();
-    });
+        if (textInputRef.current) {
+            textInputRef.current.select();
+        }
+    }, [textInputRef.current]);
 
     return <>
         <Modal opened={opened} onClose={close} title="Share">

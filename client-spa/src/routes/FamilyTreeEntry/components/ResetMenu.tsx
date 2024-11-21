@@ -3,10 +3,12 @@ import UndoIcon from "../../../assets/icons/uicons-thin-straight/fi-ts-undo.svg?
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { resetFamilyTreeEntry } from "../slice";
+import { usePostHog } from "posthog-js/react";
 
 export default function ResetMenu() {
     const dispatch = useDispatch();
- 
+    const posthog = usePostHog();
+
     const familyTreeTextEntry = useSelector((state: RootState)=>{
        return state.familyTreeEntry.textEntry;
     });
@@ -16,11 +18,13 @@ export default function ResetMenu() {
     });
  
     function resetVisualisationOnly() {
-        dispatch(resetFamilyTreeEntry({clearTextEntry: false}))
+        dispatch(resetFamilyTreeEntry({clearTextEntry: false}));
+        posthog.capture("reset family tree entry (visualisation only)");
     }
 
     function resetEverything() {
         dispatch(resetFamilyTreeEntry({clearTextEntry: true}));
+        posthog.capture("reset family tree entry (everything)");
     }
 
     return (

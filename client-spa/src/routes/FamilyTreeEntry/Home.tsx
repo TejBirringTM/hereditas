@@ -11,6 +11,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useViewportSize } from "@mantine/hooks";
 import ShareModal from "./components/ShareModal";
 import ResetMenu from "./components/ResetMenu";
+import { usePostHog } from "posthog-js/react";
 
 export default function Home() {
    const dispatch = useDispatch<AppDispatch>();
@@ -36,12 +37,21 @@ export default function Home() {
    const { height: viewportHeight, width: viewportWidth } = useViewportSize();
    const [svgHeight, setSvgHeight] = useState(0);
 
+   const posthog = usePostHog();
+
    function updateTextEntry(event: ChangeEvent<HTMLTextAreaElement>) {
         dispatch(setFamilyTreeTextEntry({textEntry: event.currentTarget.value, persistToLocalStorage: false}));
+        posthog.capture("set family tree text entry (from user input)");
+   }
+
+   function processEntry() {
+        dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: true}));
+        posthog.capture("process (parse to graph and tokenise) family tree entry");
    }
 
    useEffect(()=>{
         if (state === "unknown") {
+            posthog.capture("navigate to home page");
             dispatch(initialiseFamilyTreeEntry());
         }
    })
@@ -69,7 +79,7 @@ export default function Home() {
                 <Button 
                     size="lg" 
                     disabled={state !== "editing" || textEntry.length === 0} 
-                    onClick={()=>dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: true}))}
+                    onClick={processEntry}
                 >
                     Visualise
                 </Button>

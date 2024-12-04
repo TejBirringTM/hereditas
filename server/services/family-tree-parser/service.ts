@@ -20,6 +20,9 @@ familyTreeParserService.declareRequest(
                 ...output
             });
         } catch (e) {
+            if (e instanceof Error) {
+                console.error(e.stack)
+            }
             if (e instanceof RuntimeError) {
                 return declareErrorResponse(Status.BadRequest, e.message);
             } else {

@@ -1,8 +1,36 @@
 import assert from "node:assert";
 import type { IToken } from "ebnf";
-import { MALE_DECLARATION, type inferToken, MALE_REFERENCE, FEMALE_REFERENCE, MARRIAGE_REFERENCE, MALE_EXPRESSION, FEMALE_EXPRESSION, PERSON_EXPRESSION, FEMALE_DECLARATION, MARRIAGE_DECLARATION, PROGENY_DECLARATION, ADOPTED_HEIR_DECLARATION } from "../ast-token-parsers.ts";
+import { MALE_DECLARATION, type inferToken, MALE_REFERENCE, FEMALE_REFERENCE, MARRIAGE_REFERENCE, MALE_EXPRESSION, FEMALE_EXPRESSION, PERSON_EXPRESSION, FEMALE_DECLARATION, MARRIAGE_DECLARATION, PROGENY_DECLARATION, ADOPTED_PROGENY_DECLARATION } from "../ast-token-parsers.ts";
 import familyTreeParserErrors from "../errors.ts";
-import { FamilyTreeContext, LBride, LGroom, LHusbandTo, LWifeTo, NFemale, NMale, NMarriage, LProgeny, LExplicitParentTo, LExplicitChildTo, LAdoptedHeir } from "./types.ts";
+import { 
+    FamilyTreeContext,
+    NMale,
+    NFemale,
+    NMarriage,
+    NPerson,
+    LGroom,
+    LBride,
+    LMarriage,
+    LWife,
+    LHusband,
+    LMaritalSpouse,
+    LMaritalProgeny,
+    LMaritalProgenitor,
+    LAdoptedMaritalProgeny,
+    LAdoptiveMaritalProgenitor,
+    LMother,
+    LAdoptiveMother,
+    LFather,
+    LAdoptiveFather,
+    LParent,
+    LAdoptiveParent,
+    LSon,
+    LAdoptedSon,
+    LDaughter,
+    LAdoptedDaughter,
+    LChild,
+    LAdoptedChild,
+ } from "./types.ts";
 
 type StatementParser = (FamilyTreeContext: FamilyTreeContext, token: IToken) => void;
 const declareStatementParser = <T>(parser: StatementParser) => parser;
@@ -80,39 +108,257 @@ function declareFemale(context: FamilyTreeContext, key: string, title: string) {
 }
 
 function declareMarriage(context: FamilyTreeContext, key: string, groom: NMale, bride: NFemale) {
-    const identity = `marriage:${key}` as NMarriage["identity"];
-    if (context.marriageNodes.has(identity)) {
-        throw familyTreeParserErrors.DuplicateDeclaration.create(`Family tree already has node with identity: ${identity}`)
+    const marriageIdentity = `marriage:${key}` as NMarriage["identity"];
+    if (context.marriageNodes.has(marriageIdentity)) {
+        throw familyTreeParserErrors.DuplicateDeclaration.create(`Family tree already has node with identity: ${marriageIdentity}`)
     }
     // create marriage node and links
     const marriageNode = {
         type: "Marriage",
-        identity,
+        identity: marriageIdentity,
     } satisfies NMarriage;
     const linkGroom = {
         type: "Groom",
-        fromNodeIdentity: groom.identity,
-        toNodeIdentity: identity,
+        fromNodeIdentity: marriageIdentity,
+        toNodeIdentity: groom.identity,
     } satisfies LGroom;
     const linkBride = {
         type: "Bride",
-        fromNodeIdentity: bride.identity,
-        toNodeIdentity: identity,
+        fromNodeIdentity: marriageIdentity,
+        toNodeIdentity: bride.identity,
     } satisfies LBride;
-    context.marriageNodes.set(identity, marriageNode);
-    context.links.push(linkGroom, linkBride);
+    const linkGroom1 = {
+        type: "Marriage",
+        fromNodeIdentity: groom.identity,
+        toNodeIdentity: marriageIdentity,
+    } satisfies LMarriage;
+    const lBride1 = {
+        type: "Marriage",
+        fromNodeIdentity: bride.identity,
+        toNodeIdentity: marriageIdentity,
+    } satisfies LMarriage;
+    context.marriageNodes.set(marriageIdentity, marriageNode);
+    context.links.push(linkGroom, linkBride, linkGroom1, lBride1);
     // create spousal links
-    const linkHusbandTo = {
-        type: "HusbandTo",
+    const linkWife = {
+        type: "Wife",
         fromNodeIdentity: groom.identity,
         toNodeIdentity: bride.identity
-    } satisfies LHusbandTo;
-    const linkWifeTo = {
-        type: "WifeTo",
+    } satisfies LWife;
+    const linkHusband = {
+        type: "Husband",
         fromNodeIdentity: bride.identity,
         toNodeIdentity: groom.identity
-    } satisfies LWifeTo;
-    context.links.push(linkHusbandTo, linkWifeTo);
+    } satisfies LHusband;
+    const linkWife1 = {
+        type: "MaritalSpouse",
+        fromNodeIdentity: groom.identity,
+        toNodeIdentity: bride.identity
+    } satisfies LMaritalSpouse;
+    const linkHusband1 = {
+        type: "MaritalSpouse",
+        fromNodeIdentity: bride.identity,
+        toNodeIdentity: groom.identity
+    } satisfies LMaritalSpouse;
+    context.links.push(linkWife, linkHusband, linkWife1, linkHusband1);
+}
+
+function declareProgeny(context: FamilyTreeContext, marriage: NMarriage, child: NPerson) {
+    // resolve parents (groom and bride of marriage)
+    const father = (()=>{
+        const linkGroom = context.links.find((link)=>(link.type === 'Groom' && link.fromNodeIdentity === marriage.identity)) as LGroom | undefined;
+        assert(linkGroom);
+        const maleIdentity = linkGroom.toNodeIdentity;
+        const male = context.maleNodes.get(maleIdentity);
+        assert(male);
+        return male;
+    })();
+    assert(father);
+    const mother = (()=>{
+        const linkBride = context.links.find((link)=>(link.type === 'Bride' && link.fromNodeIdentity === marriage.identity)) as LBride | undefined;
+        assert(linkBride);
+        const femaleIdentity = linkBride.toNodeIdentity;
+        const female = context.femaleNodes.get(femaleIdentity);
+        assert(female);
+        return female;
+    })();
+    assert(mother);
+    // create progenitor/progeny links
+    const linkMaritalProgeny = {
+        type: "MaritalProgeny",
+        fromNodeIdentity: marriage.identity,
+        toNodeIdentity: child.identity
+    } satisfies LMaritalProgeny;
+    const linkMaritalProgenitor = {
+        type: "MaritalProgenitor",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: marriage.identity
+    } satisfies LMaritalProgenitor;
+    // create parentage links
+    const linkMother = {
+        type: "Mother",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: mother.identity
+    } satisfies LMother;
+    const linkFather = {
+        type: "Father",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: father.identity
+    } satisfies LFather;
+    const linkMother1 = {
+        type: "Parent",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: mother.identity,
+    } satisfies LParent;
+    const linkFather1 = {
+        type: "Parent",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: father.identity,
+    } satisfies LParent;
+    context.links.push(linkMaritalProgeny, linkMaritalProgenitor, linkMother, linkMother1, linkFather, linkFather1);
+    // create child links
+    const linkChildToMother = {
+        type: "Child",
+        fromNodeIdentity: mother.identity,
+        toNodeIdentity: child.identity,
+    } satisfies LChild;
+    const linkChildToFather = {
+        type: "Child",
+        fromNodeIdentity: father.identity,
+        toNodeIdentity: child.identity,
+    } satisfies LChild;
+    context.links.push(linkChildToMother, linkChildToFather);
+    if (child.type === "Male") {
+        const linkSonToMother = {
+            type: "Son",
+            fromNodeIdentity: mother.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LSon;
+        const linkSonToFather = {
+            type: "Son",
+            fromNodeIdentity: father.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LSon;
+        context.links.push(linkSonToMother, linkSonToFather);
+    } else if (child.type === "Female") {
+        const linkDaughterToMother = {
+            type: "Daughter",
+            fromNodeIdentity: mother.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LDaughter;
+        const linkDaughterToFather = {
+            type: "Daughter",
+            fromNodeIdentity: father.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LDaughter;
+        context.links.push(linkDaughterToMother, linkDaughterToFather);
+    }
+}
+
+function declareAdoptiveProgeny(context: FamilyTreeContext, marriageOrIndividual: NMarriage | NPerson, child: NPerson) {
+    // resolve parents (groom and bride of marriage)
+    const father = (()=>{
+        if (marriageOrIndividual.type === "Male") {
+            return marriageOrIndividual;
+        } else {
+            const linkGroom = context.links.find((link)=>(link.type === 'Groom' && link.fromNodeIdentity === marriageOrIndividual.identity)) as LGroom | undefined;
+            assert(linkGroom);
+            const maleIdentity = linkGroom.toNodeIdentity;
+            const male = context.maleNodes.get(maleIdentity);
+            assert(male);
+            return male;
+        }
+    })() satisfies NMale;
+
+    const mother = (()=>{
+        if (marriageOrIndividual.type === "Female") {
+            return marriageOrIndividual;
+        } else {
+            const linkBride = context.links.find((link)=>(link.type === 'Bride' && link.fromNodeIdentity === marriageOrIndividual.identity)) as LBride | undefined;
+            assert(linkBride);
+            const femaleIdentity = linkBride.toNodeIdentity;
+            const female = context.femaleNodes.get(femaleIdentity);
+            assert(female);
+            return female;
+        }
+    })() satisfies NFemale;
+    
+    // create progenitor/progeny links
+    if (marriageOrIndividual.type === "Marriage") {
+        const linkMaritalProgeny = {
+            type: "AdoptedMaritalProgeny",
+            fromNodeIdentity: marriageOrIndividual.identity,
+            toNodeIdentity: child.identity
+        } satisfies LAdoptedMaritalProgeny;
+        const linkMaritalProgenitor = {
+            type: "AdoptiveMaritalProgenitor",
+            fromNodeIdentity: child.identity,
+            toNodeIdentity: marriageOrIndividual.identity
+        } satisfies LAdoptiveMaritalProgenitor;
+        context.links.push(linkMaritalProgeny, linkMaritalProgenitor);
+    }
+
+    // create parentage links
+    const linkMother = {
+        type: "AdoptiveMother",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: mother.identity
+    } satisfies LAdoptiveMother;
+    const linkFather = {
+        type: "AdoptiveFather",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: father.identity
+    } satisfies LAdoptiveFather;
+    const linkMother1 = {
+        type: "AdoptiveParent",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: mother.identity,
+    } satisfies LAdoptiveParent;
+    const linkFather1 = {
+        type: "AdoptiveParent",
+        fromNodeIdentity: child.identity,
+        toNodeIdentity: father.identity,
+    } satisfies LAdoptiveParent;
+    context.links.push(linkMother, linkMother1, linkFather, linkFather1);
+
+    // create child links
+    const linkChildToMother = {
+        type: "AdoptedChild",
+        fromNodeIdentity: mother.identity,
+        toNodeIdentity: child.identity,
+    } satisfies LAdoptedChild;
+    const linkChildToFather = {
+        type: "AdoptedChild",
+        fromNodeIdentity: father.identity,
+        toNodeIdentity: child.identity,
+    } satisfies LAdoptedChild;
+    context.links.push(linkChildToMother, linkChildToFather);
+
+    if (child.type === "Male") {
+        const linkSonToMother = {
+            type: "AdoptedSon",
+            fromNodeIdentity: mother.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LAdoptedSon;
+        const linkSonToFather = {
+            type: "AdoptedSon",
+            fromNodeIdentity: father.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LAdoptedSon;
+        context.links.push(linkSonToMother, linkSonToFather);
+    } else if (child.type === "Female") {
+        const linkDaughterToMother = {
+            type: "AdoptedDaughter",
+            fromNodeIdentity: mother.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LAdoptedDaughter;
+        const linkDaughterToFather = {
+            type: "AdoptedDaughter",
+            fromNodeIdentity: father.identity,
+            toNodeIdentity: child.identity,
+        } satisfies LAdoptedDaughter;
+        context.links.push(linkDaughterToMother, linkDaughterToFather);
+    }
 }
 
 const statementParsers = {
@@ -128,76 +374,31 @@ const statementParsers = {
         const parsedToken = MARRIAGE_DECLARATION(token);
         const from = resolveExpression(context, parsedToken.from);
         const to = resolveExpression(context, parsedToken.to);
-        declareMarriage(context, parsedToken.key, from, to);
+        const groom = (from.type === "Male" ? from : to) as NMale;
+        const bride = (from.type === "Female" ? from : to) as NFemale;
+        declareMarriage(context, parsedToken.key, groom, bride);
     }),
     PROGENY_DECLARATION: declareStatementParser((context, token)=>{
         const parsedToken = PROGENY_DECLARATION(token);
         // resolve marriage
         const marriage = resolveReference(context, parsedToken.from);
-        // resolve parents (groom and bride of marriage)
-        const father = (()=>{
-            const linkGroom = context.links.find((link)=>(link.type === 'Groom' && link.toNodeIdentity === marriage.identity)) as LGroom | undefined;
-            assert(linkGroom);
-            const maleIdentity = linkGroom.fromNodeIdentity;
-            const male = context.maleNodes.get(maleIdentity);
-            assert(male);
-            return male;
-        })();
-        assert(father);
-        const mother = (()=>{
-            const linkBride = context.links.find((link)=>(link.type === 'Bride' && link.toNodeIdentity === marriage.identity)) as LBride | undefined;
-            assert(linkBride);
-            const femaleIdentity = linkBride.fromNodeIdentity;
-            const female = context.femaleNodes.get(femaleIdentity);
-            assert(female);
-            return female;
-        })();
-        assert(mother);
         // resolve child 
         const child = resolveExpression(context, parsedToken.to);
-        // add progeny link
-        const linkProgeny = {
-            type: "Progeny",
-            fromNodeIdentity: marriage.identity,
-            toNodeIdentity: child.identity,
-        } satisfies LProgeny;
-        context.links.push(linkProgeny);
-        // add child links
-        const linkFatherToChild = {
-            type: "ParentTo",
-            fromNodeIdentity: father.identity,
-            toNodeIdentity: child.identity,
-         } satisfies LExplicitParentTo;
-        const linkMotherToChild = { 
-            type: "ParentTo",
-            fromNodeIdentity: mother.identity,
-            toNodeIdentity: child.identity,
-        } satisfies LExplicitParentTo;
-        context.links.push(linkFatherToChild, linkMotherToChild);
-        // add parent links
-        const linkChildToFather = {
-            type: "ChildTo",
-            fromNodeIdentity: child.identity,
-            toNodeIdentity: father.identity,
-        } satisfies LExplicitChildTo;
-        const linkChildToMother = {
-            type: "ChildTo",
-            fromNodeIdentity: child.identity,
-            toNodeIdentity: mother.identity
-        } satisfies LExplicitChildTo;
-        context.links.push(linkChildToFather, linkChildToMother );
+        // add progeny links
+        declareProgeny(context, marriage, child);
     }),
-    ADOPTED_HEIR_DECLARATION: declareStatementParser((context, token)=>{
-        const parsedToken = ADOPTED_HEIR_DECLARATION(token);
-        const from = resolveExpression(context, parsedToken.from);
-        const to = resolveExpression(context, parsedToken.to);
-        const linkAdoptedHeir = {
-            type: "AdoptedHeir",
-            fromNodeIdentity: from.identity,
-            toNodeIdentity: to.identity,
-        } satisfies LAdoptedHeir;
-        context.links.push(linkAdoptedHeir);
-    }),    
+    ADOPTED_PROGENY_DECLARATION: declareStatementParser((context, token)=>{
+        const parsedToken = ADOPTED_PROGENY_DECLARATION(token);
+        // resolve marriage
+        const marriageOrIndividual = parsedToken.from.type === "MARRIAGE_REFERENCE" ? resolveReference(context, parsedToken.from) : resolveExpression(context, parsedToken.from);
+        // resolve child
+        const child = resolveExpression(context, parsedToken.to);
+        // add adoptive progeny links
+        declareAdoptiveProgeny(context, marriageOrIndividual, child);
+    }),
+    COMMENT: declareStatementParser(()=>{
+        // do nothing with comments!
+    })
 } as Record<string, StatementParser>;
 
 const statementParserKeys = Object.keys(statementParsers);

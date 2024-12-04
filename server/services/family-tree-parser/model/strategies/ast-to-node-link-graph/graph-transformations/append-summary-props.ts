@@ -7,7 +7,7 @@ import assignGenerationNumbers from "./assign-generation-numbers.ts";
 
 type Input = ReturnType<typeof assignGenerationNumbers["fn"]>;
 
-export default declareTransformation("Append details", (input: Input)=>{
+export default declareTransformation("Append summary properties", (input: Input)=>{
 
     const transformed = {
         nodes: input.nodes.map((node)=>{

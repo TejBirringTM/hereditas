@@ -30,7 +30,8 @@
     "npm:@types/node@*": "22.5.4",
     "npm:ebnf@*": "1.9.1",
     "npm:ebnf@^1.9.1": "1.9.1",
-    "npm:path-to-regexp@6.2.1": "6.2.1"
+    "npm:path-to-regexp@6.2.1": "6.2.1",
+    "npm:ts-essentials@*": "10.0.3"
   },
   "jsr": {
     "@deno-library/compress@0.5.2": {
@@ -189,6 +190,9 @@
     },
     "path-to-regexp@6.2.1": {
       "integrity": "sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw=="
+    },
+    "ts-essentials@10.0.3": {
+      "integrity": "sha512-/FrVAZ76JLTWxJOERk04fm8hYENDo0PWSP3YLQKxevLwWtxemGcl5JJEzN4iqfDlRve0ckyfFaOBu4xbNH/wZw=="
     },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="

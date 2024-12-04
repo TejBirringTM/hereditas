@@ -2,16 +2,15 @@ import { IToken } from "ebnf";
 import { recursivelyFindOfType } from "../../../../libs/grammar-parser/main.ts";
 import { FamilyTreeContext } from "./types.ts";
 import processStatement from "./process-statement.ts";
-import debugOnly from "../../../../framework/debug-only.ts";
 
 export default function parseAst(ast: IToken) {
     // Step 1: initialise context
-    const context = {
+    const context: FamilyTreeContext = {
         maleNodes: new Map(),
         femaleNodes: new Map(),
         marriageNodes: new Map(),
         links: []
-    } satisfies FamilyTreeContext;
+    };
 
     // Step 2: deeply traverse AST to find statements,
     //         this works because there is only one top-level scope to traverse for statements.
@@ -24,10 +23,5 @@ export default function parseAst(ast: IToken) {
     }
 
     // Step 4: return the context
-    debugOnly(()=>{
-        // console.debug("Parsed AST:");
-        // console.dir(context, {depth: Infinity});
-    });
-
-    return context;
+    return Object.freeze(context);
 }

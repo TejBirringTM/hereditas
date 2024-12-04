@@ -8,8 +8,9 @@ export default declareTransformation("Filter nodes and links", (input: Input)=>{
         links: input.links.filter((link)=>(
             link.type === "Groom" || 
             link.type === "Bride" ||
-            link.type === "Progeny" ||
-            link.type === "AdoptedHeir"
+            link.type === "MaritalProgeny" ||
+            link.type === "AdoptedMaritalProgeny" ||
+            link.type === "AdoptedChild"
         ))
     }
 });

@@ -69,28 +69,32 @@ export const PERSON_EXPRESSION = ((token)=>{
     return expression;
 }) satisfies SomeTokenParser;
 
-export const ADOPTED_HEIR_DECLARATION = ((token)=>{
-    const maleExpressions = shallowFindOfType(token, "MALE_EXPRESSION");
-    const fromMaleExpression = MAYBE_A_(MALE_EXPRESSION, maleExpressions[0]);
-    const toMaleExpression = MAYBE_A_(MALE_EXPRESSION, maleExpressions[1]);
-    assert(!!fromMaleExpression);
-    assert(!!toMaleExpression);
+export const ADOPTED_PROGENY_DECLARATION = ((token)=>{
+    const marriageReferences = shallowFindOfType(token, "MARRIAGE_REFERENCE");
+    const personExpressions = shallowFindOfType(token, "PERSON_EXPRESSION");
+    const fromExpression = (marriageReferences.length > 0) ? MAYBE_A_(MARRIAGE_REFERENCE, marriageReferences[0]) : MAYBE_A_(PERSON_EXPRESSION, personExpressions[0]);
+    const toExpression = (marriageReferences.length > 0) ? MAYBE_A_(PERSON_EXPRESSION, personExpressions[0]) : MAYBE_A_(PERSON_EXPRESSION, personExpressions[1]);
+    assert(!!fromExpression);
+    assert(!!toExpression);
     return {
-        type: "ADOPTED_HEIR_DECLARATION",
-        from: fromMaleExpression,
-        to: toMaleExpression
+        type: "ADOPTED_PROGENY_DECLARATION",
+        from: fromExpression,
+        to: toExpression
     }
 }) satisfies SomeTokenParser;
 
 export const MARRIAGE_DECLARATION = ((token)=>{
-    const fromMaleExpression = MALE_EXPRESSION(recursivelyFindFirstOfType(token, "MALE_EXPRESSION", false, true));
-    const toFemaleExpression = FEMALE_EXPRESSION(recursivelyFindFirstOfType(token, "FEMALE_EXPRESSION", false, true));
-    const key = recursivelyFindFirstOfType(token, "MARRIAGE_DECLARATION_KEY", false, true).text;
+    const personExpressions = shallowFindOfType(token, "PERSON_EXPRESSION");
+    const fromExpression = MAYBE_A_(PERSON_EXPRESSION, personExpressions[0]);
+    const toExpression = MAYBE_A_(PERSON_EXPRESSION, personExpressions[1]);
+    assert(!!fromExpression);
+    assert(!!toExpression);
+    const key = recursivelyFindFirstOfType(token, "MARRIAGE_DECLARATION_KEY", false, false)?.text;
     return {
         type: "MARRIAGE_DECLARATION",
-        from: fromMaleExpression,
-        to: toFemaleExpression,
-        key
+        from: fromExpression,
+        to: toExpression,
+        key: key || `mrg:${toExpression.key}`
     }
 }) satisfies SomeTokenParser;
 

@@ -1,4 +1,4 @@
-import { Button, Flex, Textarea } from "@mantine/core";
+import { Box, Button, Flex, rem, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store";
@@ -12,6 +12,7 @@ import { useViewportSize } from "@mantine/hooks";
 import ShareModal from "./components/ShareModal";
 import ResetMenu from "./components/ResetMenu";
 import { usePostHog } from "posthog-js/react";
+import defaultTheme from "../../assets/themes/default-theme";
 
 export default function Home() {
    const dispatch = useDispatch<AppDispatch>();
@@ -62,14 +63,14 @@ export default function Home() {
     }
    }, [graph])
 
-    return (<>
+    return (<Box px={{base: rem(10), sm: rem(20)}}>
          <p>
             Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the 'Visualise' button.
          </p>
          <Flex direction="column" gap="lg">
-            <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={textEntry} disabled={state === "drawn"} />
-
-            <Flex justify="end" gap="md">
+            <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={textEntry} disabled={state === "drawn"} fw={500} styles={{input: {fontFamily: defaultTheme.fontFamilyMonospace, fontSize: "1.05rem", lineHeight: 1.35, paddingTop: "0.85rem", paddingBottom: "0.85rem"}}} />
+            
+            <Flex direction={{base: "column-reverse", sm: "row"}} justify="end" gap="md">
                 <ResetMenu />
 
                 {/*  */}
@@ -80,6 +81,7 @@ export default function Home() {
                     size="lg" 
                     disabled={state !== "editing" || textEntry.length === 0} 
                     onClick={processEntry}
+                    color="patina.6"
                 >
                     Visualise
                 </Button>
@@ -93,5 +95,5 @@ export default function Home() {
 
             <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} />
          </Flex>
-    </>)
+    </Box>)
 }

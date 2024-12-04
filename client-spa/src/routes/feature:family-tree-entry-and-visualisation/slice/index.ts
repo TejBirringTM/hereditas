@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import parseFamilyTreeEntry, { Graph } from '../libs/parse-family-tree-entry';
 import { RootState } from '../../../store';
-import { detokeniseString, tokeniseString } from '../libs/tokenise';
+import { detokeniseString, tokeniseString } from '../../../libs/tokenise';
 
 export const localStorageKey_textEntry = "family-tree-user-entry";
 export const urlSearchKey_familyTreeToken = "ftt";

@@ -3,12 +3,15 @@ import { Flex, MantineProvider } from '@mantine/core';
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet } from "react-router-dom";
+import TheHeaderLogo from '../components/TheHeaderLogo';
+import defaultTheme from '../assets/themes/default-theme';
+import TheMenuMain from '../components/TheMainMenu';
 
 export default function Root() {
     const [menuOpened, { toggle: toggleMenu }] = useDisclosure();
 
     return (
-        <MantineProvider>
+        <MantineProvider theme={defaultTheme}>
         <AppShell
           header={{ height: 60 }}
           navbar={{
@@ -31,14 +34,14 @@ export default function Root() {
                 size="sm"
                 mr="xs"
               />
-              <div>
-                Family Tree Visualiser
-              </div>
+                <TheHeaderLogo />
             </Flex>
             
           </AppShell.Header>
   
-          <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+          <AppShell.Navbar>
+            <TheMenuMain />
+          </AppShell.Navbar>
   
           <AppShell.Main>
             <Outlet />

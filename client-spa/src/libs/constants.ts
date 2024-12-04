@@ -1,0 +1,1 @@
+export const GOLDEN_RATIO = 1.6180339887;

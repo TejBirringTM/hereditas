@@ -33,7 +33,8 @@ export default function ResetMenu() {
             <Button 
                 size="lg" 
                 disabled={familyTreeTextEntry.length === 0}
-                leftSection={<UndoIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />} 
+                leftSection={<UndoIcon style={{ width: "fit-content", height: rem(16), stroke: "currentColor"}} />}
+                color="teal.3"
             >
                 Reset
             </Button>

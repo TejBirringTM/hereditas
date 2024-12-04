@@ -5,4 +5,14 @@ import svgr from "vite-plugin-svgr";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
+  build: {
+    rollupOptions: {
+      output: {
+        // manualChunks: (id, meta) => {
+        //   console.log(id, meta);
+        //   return "chunk";
+        // }
+      }
+    }
+  }
 })

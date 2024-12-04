@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "analyze": "vite-bundle-visualizer -t network"
   },
   "dependencies": {
     "@mantine/core": "^7.13.4",
@@ -19,20 +20,23 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
+    "react-remark": "^2.1.0",
     "react-router-dom": "^6.27.0",
-    "valibot": "^0.42.1"
+    "valibot": "^0.42.1",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@types/d3": "^7.4.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/webfontloader": "^1.6.38",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.49",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "ts-essentials": "^10.0.3",
@@ -40,6 +44,7 @@
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10",
+    "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-svgr": "^4.3.0"
   }
 }

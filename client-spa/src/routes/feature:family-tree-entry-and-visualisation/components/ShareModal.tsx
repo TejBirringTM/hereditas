@@ -39,7 +39,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
         } else {
             setTokenCopied(false);
         }
-    }, [opened, shareLink])
+    }, [opened, shareLink, posthog])
 
 
     useEffect(()=>{
@@ -56,7 +56,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
             }
             <TextInput value={shareLink} mt="xs" mb="lg" readOnly ref={textInputRef} />
             <Flex justify="flex-end">
-                <Button onClick={close}>Done</Button>
+                <Button onClick={close} color="patina.6">Done</Button>
             </Flex>
         </Modal> 
 
@@ -65,6 +65,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
             disabled={disabled} 
             leftSection={<ShareIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />}
             onClick={open} 
+            color="patina.6"
         >
             Share
         </Button>

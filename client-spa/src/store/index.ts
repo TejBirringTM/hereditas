@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import familyTreeEntry from '../routes/FamilyTreeEntry/slice';
+import familyTreeEntry from '../routes/feature:family-tree-entry-and-visualisation/slice';
 
 const store = configureStore({
     reducer: {

@@ -1,0 +1,155 @@
+.markdown-content {
+    max-width: var(--mantine-breakpoint-md);
+    margin: 0 auto 8rem 0;
+    padding: 0 2rem;
+    /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; */
+    line-height: 1.6;
+    color: var(--mantine-color-dark);
+}
+
+/* Headings */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin-top: 2em;
+    &:first-child {
+        margin-top: 1rem;
+        @media (max-width: $mantine-breakpoint-sm) {
+            margin-top: 0;
+        }
+    }
+    margin-bottom: 1em;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--mantine-color-dark);
+}
+
+.markdown-content h1 {
+    font-size: 2.25rem;
+    border-bottom: 2px solid rgb(from var(--mantine-color-teal-1) r g b / 10%);
+    padding-bottom: 0.5rem;
+}
+
+.markdown-content h2 {
+    font-size: 1.8rem;
+    border-bottom: 2px solid rgb(from var(--mantine-color-teal-1) r g b / 6.5%);
+    padding-bottom: 0.3rem;
+}
+
+.markdown-content h3 { font-size: 1.5rem; }
+.markdown-content h4 { font-size: 1.25rem; }
+.markdown-content h5 { font-size: 1.1rem; }
+.markdown-content h6 { font-size: 1rem; }
+
+/* Paragraphs and Lists */
+.markdown-content p,
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: 1.5em;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 2em;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5em;
+}
+
+/* Links */
+.markdown-content a {
+    color: #3182ce;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.markdown-content a:hover {
+    border-bottom-color: #3182ce;
+}
+
+/* Code Blocks */
+.markdown-content pre {
+    background-color: #f7fafc;
+    border-radius: 6px;
+    padding: 1em;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+}
+
+.markdown-content code {
+    background-color: #f7fafc;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+}
+
+/* Blockquotes */
+.markdown-content blockquote {
+    margin: 1.5em 0;
+    padding: 0.5em 1em;
+    border-left: 4px solid #e2e8f0;
+    background-color: #f8fafc;
+    color: #4a5568;
+}
+
+/* Tables */
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+    padding: 0.75em;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.markdown-content th {
+    background-color: #f7fafc;
+    font-weight: 600;
+}
+
+.markdown-content tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+/* Images */
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5em 0;
+    border-radius: 6px;
+}
+
+/* Horizontal Rule */
+.markdown-content hr {
+    border: 0;
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 2em 0;
+}
+
+/* Task Lists */
+.markdown-content input[type="checkbox"] {
+    margin-right: 0.5em;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .markdown-content {
+        padding: 1rem;
+    }
+    
+    .markdown-content h1 { font-size: 2rem; }
+    .markdown-content h2 { font-size: 1.6rem; }
+    .markdown-content h3 { font-size: 1.3rem; }
+}

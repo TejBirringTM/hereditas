@@ -48,9 +48,9 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
 
             {
                 (numOfAdoptedHeirs === 1) ?
-                    <Text>1 heir by adoption <em>(mutabannā)</em>.</Text> : 
+                    <Text>1 heir by adoption.</Text> : 
                 (numOfAdoptedHeirs > 1) ?
-                    <Text>{numOfChildren} heirs by adoption <em>(mutabannā)</em>.</Text> :
+                    <Text>{numOfChildren} heirs by adoption.</Text> :
                     null
             }
         </div>

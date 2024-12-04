@@ -12,7 +12,7 @@ const defaultProgenyLinksColour = new Colour(0.596, 0.0415, 222.26);
 
 const nodeHoverStrokeColour = new Colour(0.8981, 0.0421, 187.16);
 const nodeSelectedStrokeColour = new Colour(0.8347, 0.1472, 83.01);
-const nodeHighlightedStrokeColour = new Colour(0.8832, 0.0901, 86.14);
+const nodeHighlightedStrokeColour = nodeSelectedStrokeColour; //new Colour(0.8832, 0.0901, 86.14);
 const linkHighlightedStrokeColour = nodeHighlightedStrokeColour;
 
 export const nodeStrokeColour = (node: SimulationNode) => {

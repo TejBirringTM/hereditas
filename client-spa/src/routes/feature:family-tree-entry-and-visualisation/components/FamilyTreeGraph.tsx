@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Graph as FamilyTreeGraph } from "../libs/parse-family-tree-entry";
-import * as d3 from "d3";
+import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceSimulation} from "d3-force";
+import {select} from "d3-selection"
+import {line} from "d3-shape"
 import { SimulationNode, SimulationLink } from "./types";
-import { getLinkStyle, getNodeStyle } from "./styling/node-link-style";
+import { getLinkStyle, getNodeStyle } from "./family-tree-graph-styling/node-link-style";
 import FamilyTreeGraphPopup from "./FamilyTreeGraphPopup";
-import { gridLineColour } from "./styling/grid-style";
+import { gridLineColour } from "./family-tree-graph-styling/grid-style";
 import styles from "./FamilyTreeGraph.module.css"
 
 interface FamilyTreeEntryGraphProps {
@@ -75,7 +77,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
     useEffect(()=>{
         const svgWidth = width;
         const svgHeight = height;
-        const div = d3.select(root.current);
+        const div = select(root.current);
         let svg = div.select<SVGElement>("svg");
 
         if (!graph) {
@@ -171,7 +173,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 .attr('orient', 'auto-start-reverse')
                 .attr('fill', 'context-stroke')
                 .append('path')
-                .attr('d', d3.line()(filledArrowPoints))
+                .attr('d', line()(filledArrowPoints))
 
         const yLines = new Array<number>(numOfGenerations);
         for (let i = 0; i<numOfGenerations; i++) {
@@ -219,10 +221,10 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
             state: "normal"
         })) satisfies SimulationLink[];
 
-        const forceChargeNode = d3.forceManyBody();
-        const forceCentre = d3.forceCenter(svgWidth/2, svgHeight/2);
-        const forceCollide = d3.forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r as number) * 1.5));
-        const forceLinks = d3.forceLink(links)
+        const _forceManyBody = forceManyBody();
+        const _forceCentre = forceCenter(svgWidth/2, svgHeight/2);
+        const _forceCollide = forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r as number) * 1.5));
+        const _forceLink = forceLink(links)
                                 .strength((d)=>((d.type === "Bride" || d.type === "Groom") ? 1 : 1/100))
                                 .distance((d)=>{
                                     switch (d.type) {
@@ -238,14 +240,14 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                                             return 30;
                                     }
                                 });
-        const forceY = d3.forceY<SimulationNode>((d) => (d.generation * pxPerGenerationHeight)).strength(2);
+        const _forceY = forceY<SimulationNode>((d) => (d.generation * pxPerGenerationHeight)).strength(2);
 
-        const simulation = d3.forceSimulation(nodes)
-                            .force("link", forceLinks.id((node)=>(node as typeof nodes[0]).identity))
-                            .force("charge", forceChargeNode)
-                            .force("centre", forceCentre)
-                            .force("collide", forceCollide)
-                            .force("y", forceY)
+        const simulation = forceSimulation(nodes)
+                            .force("link", _forceLink.id((node)=>(node as typeof nodes[0]).identity))
+                            .force("charge", _forceManyBody)
+                            .force("centre", _forceCentre)
+                            .force("collide", _forceCollide)
+                            .force("y", _forceY)
                             .on("tick", onSimulationTick);
 
         const _nodes = svg.selectAll("g")

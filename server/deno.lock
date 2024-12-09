@@ -30,8 +30,11 @@
     "npm:@types/node@*": "22.5.4",
     "npm:ebnf@*": "1.9.1",
     "npm:ebnf@^1.9.1": "1.9.1",
+    "npm:lodash.set@*": "4.3.2",
     "npm:path-to-regexp@6.2.1": "6.2.1",
-    "npm:ts-essentials@*": "10.0.3"
+    "npm:ts-deepmerge@*": "7.0.2",
+    "npm:ts-essentials@*": "10.0.3",
+    "npm:type-fest@^4.30.0": "4.30.0"
   },
   "jsr": {
     "@deno-library/compress@0.5.2": {
@@ -188,11 +191,20 @@
     "ebnf@1.9.1": {
       "integrity": "sha512-uW2UKSsuty9ANJ3YByIQE4ANkD8nqUPO7r6Fwcc1ADKPe9FRdcPpMl3VEput4JSvKBJ4J86npIC2MLP0pYkCuw=="
     },
+    "lodash.set@4.3.2": {
+      "integrity": "sha512-4hNPN5jlm/N/HLMCO43v8BXKq9Z7QdAGc/VGrRD61w8gN9g/6jF9A4L1pbUgBLCffi0w9VsXfTOij5x8iTyFvg=="
+    },
     "path-to-regexp@6.2.1": {
       "integrity": "sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw=="
     },
+    "ts-deepmerge@7.0.2": {
+      "integrity": "sha512-akcpDTPuez4xzULo5NwuoKwYRtjQJ9eoNfBACiBMaXwNAx7B1PKfe5wqUFJuW5uKzQ68YjDFwPaWHDG1KnFGsA=="
+    },
     "ts-essentials@10.0.3": {
       "integrity": "sha512-/FrVAZ76JLTWxJOERk04fm8hYENDo0PWSP3YLQKxevLwWtxemGcl5JJEzN4iqfDlRve0ckyfFaOBu4xbNH/wZw=="
+    },
+    "type-fest@4.30.0": {
+      "integrity": "sha512-G6zXWS1dLj6eagy6sVhOMQiLtJdxQBHIA9Z6HFUNLOlr6MFOgzV8wvmidtPONfPtEUv0uZsy77XJNzTAfwPDaA=="
     },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
@@ -209,7 +221,8 @@
     "https://deno.land/x/cors@v1.2.2/mod.ts": "2b351913f56d77ad80cb3b8633d4539c9eeddb426dae79437ada0e6a9cb4f1a6",
     "https://deno.land/x/cors@v1.2.2/oakCors.ts": "1348dc7673c61b85d2e80559a7b44f8e0246eaa6bcc6ec744fafe5d9b13b5c71",
     "https://deno.land/x/cors@v1.2.2/opineCors.ts": "fb5790115c26b7061d84b8d6c17d258a1e241bcab75b0bc3ca1fdb2e57bc5072",
-    "https://deno.land/x/cors@v1.2.2/types.ts": "97546633ccc7f0df7a29bacba5d91dc6f61decdd1b65258300244dba905d34b8"
+    "https://deno.land/x/cors@v1.2.2/types.ts": "97546633ccc7f0df7a29bacba5d91dc6f61decdd1b65258300244dba905d34b8",
+    "https://deno.land/x/lodash@4.17.19/npm-package/set.js": "7d360792369713f3b681afefb072820e8f65ff6a33b54be5f54eca09877c60a7"
   },
   "workspace": {
     "dependencies": [
@@ -218,7 +231,8 @@
       "jsr:@std/assert@1",
       "jsr:@valibot/valibot@~0.42.1",
       "npm:@faker-js/faker@^9.2.0",
-      "npm:ebnf@^1.9.1"
+      "npm:ebnf@^1.9.1",
+      "npm:type-fest@^4.30.0"
     ]
   }
 }

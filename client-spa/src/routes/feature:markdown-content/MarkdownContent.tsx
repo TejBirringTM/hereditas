@@ -17,7 +17,7 @@ export default function MarkdownContent({content}: MarkdownContentProps) {
             setMarkdownSource(_content);
         });
       }
-    }, [content]);
+    }, [content, setMarkdownSource]);
   
     return <div className={styles['markdown-content']}>
         {reactContent}

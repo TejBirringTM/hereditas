@@ -24,19 +24,15 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
     const root = useRef<HTMLDivElement>(null);
     const [selectedNode, _selectNode] = useState<SimulationNode|null>(null);
     const [selectedNodePosition, selectNodePosition] = useState<[number, number]|null>(null);
-    const div = select(root.current);
-    let svg = div.select<SVGElement>("svg");
 
     useImperativeHandle(ref, ()=>({
         reset() {
-            const gNodes = svg.select("g.nodes");
-            const gLinks = svg.select("g.links");
+            const gNodes = select("svg").select("g.nodes");
+            const gLinks = select("svg").select("g.links");
             gNodes.attr("transform", null);
             gLinks.attr("transform", null);
         },
     }));
-
-
 
     function selectNode(nodeToSelect: SimulationNode | null, allNodes?: SimulationNode[], allLinks?: SimulationLink[]) {
         // set state
@@ -93,7 +89,9 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
     useEffect(()=>{
         const svgWidth = width;
         const svgHeight = height;
-
+        const div = select(root.current);
+        let svg = div.select<SVGElement>("svg");
+        
         if (!graph) {
             console.debug("No graph, therefore nothing to draw.");
             svg.remove();
@@ -142,7 +140,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
             selectNode(null);
         }
     
-        let zoom = _zoom<SVGElement, unknown>()
+        const zoom = _zoom<SVGElement, unknown>()
             .on("zoom", handleZoom);
 
         svg.call(zoom);

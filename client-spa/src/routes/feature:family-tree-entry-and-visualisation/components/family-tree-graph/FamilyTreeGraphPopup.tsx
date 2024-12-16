@@ -13,46 +13,17 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
     if (!node || !top || !left) {
         return null;
     } else {
-        const generation = node.generation;
-        const numOfMarriages = node.numOfMarriages ?? 0;
-        const numOfChildren = node.numOfChildren ?? 0;
-        const numOfAdoptedHeirs = node.numOfAdoptedHeirs ?? 0;
         return <div
             className={styles.popup}
             style={{top, left}}
         >
-            <Text fz="lg" fw="bold">{node.title}</Text>
+            <Text fz="lg" fw="bold">{node.title || "(No name recorded)"}</Text>
+            {
+                node.patrilineage &&
+                    <Text fw="bold" fz="sm" fs={"italic"}>{appendOrdinalSuffix(node.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1)} generation of clan.</Text>
+            }
+            <Text fz="sm" fs={"italic"}>{appendOrdinalSuffix(node.generation)} generation in tree.</Text>
             
-            {
-                (generation && (node.type === "Male")) && 
-                <Text>{appendOrdinalSuffix(node.generation)} generation of clan, as recorded.</Text>
-            }
-
-            {
-                (numOfMarriages === 1) ?
-                    <Text>Married.</Text> :
-                (numOfMarriages > 1) ? 
-                    <Text>{numOfMarriages} marriages.</Text> :
-                    <Text>Unmarried or no marriage(s) recorded.</Text>
-            }
-
-            {
-                (numOfChildren === 1) ?
-                    <Text>1 child recorded.</Text> : 
-                (numOfChildren > 1) ?
-                    <Text>{numOfChildren} children recorded.</Text> :
-                (numOfMarriages > 0) ?
-                    <Text>No children recorded.</Text> :
-                    null
-            }
-
-            {
-                (numOfAdoptedHeirs === 1) ?
-                    <Text>1 heir by adoption.</Text> : 
-                (numOfAdoptedHeirs > 1) ?
-                    <Text>{numOfChildren} heirs by adoption.</Text> :
-                    null
-            }
         </div>
     }
 }

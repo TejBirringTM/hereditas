@@ -4,10 +4,10 @@ const FamilyTreeParserTransformationPipelineErrors = {
   MissingDeclaration: declareRuntimeError(
     "FamilyTreeParserTransformationPipeline:MissingDeclaration",
   ),
-  // ProcessingTimedOut: declareRuntimeError("FamilyTreeParserTransformationPipeline:ProcessingTimedOut"),
   ProcessingFailed: declareRuntimeError(
     "FamilyTreeParserTransformationPipeline:ProcessingFailed",
   ),
+  // UnexpectedCase: declareRuntimeError("FamilyTreeParserTransformationPipeline:UnexpectedCase")
 } as const;
 
 export default FamilyTreeParserTransformationPipelineErrors;

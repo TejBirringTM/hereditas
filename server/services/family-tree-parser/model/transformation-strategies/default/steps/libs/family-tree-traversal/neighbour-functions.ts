@@ -56,6 +56,12 @@ import { unique } from "../../../../../../../../libs/collection-utils.ts";
 //     return findMany(...successorsMarriages);
 // }
 
+export const patrilinealUp = (context: PipelineContext, identity: PersonIdentity) => {
+  const father = context.adjacencies.byPerson.single.father.get(identity);
+  const adoptiveFather = context.adjacencies.byPerson.single.adoptiveFather.get(identity);
+  return father ?? adoptiveFather;
+};
+
 // 'successor' is a child or adopted child
 const successors = (context: PipelineContext, identity: PersonIdentity) => [
   ...context.adjacencies.byPerson.multiple.children.get(identity),
@@ -63,7 +69,7 @@ const successors = (context: PipelineContext, identity: PersonIdentity) => [
 ];
 
 // 'testator' is a parent or adoptive parent
-const testators = (context: PipelineContext, identity: PersonIdentity) => [
+export const testators = (context: PipelineContext, identity: PersonIdentity) => [
   ...context.adjacencies.byPerson.multiple.parents.get(identity),
   ...context.adjacencies.byPerson.multiple.adoptiveParents.get(identity),
 ];

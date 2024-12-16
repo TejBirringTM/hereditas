@@ -15,7 +15,14 @@ export type BasicContext = _BasicContext;
 /* Context */
 export type AnyNode = _Node & {
   generation?: number;
+  patrilineage?: ReferentialSubgraph
 };
+
+export type ReferentialSubgraph = {
+  nodes: AnyNode["identity"][],
+  links: AnyLink[]
+}
+
 export type AnyLink = _Link;
 
 export type LinkType = AnyLink["type"];

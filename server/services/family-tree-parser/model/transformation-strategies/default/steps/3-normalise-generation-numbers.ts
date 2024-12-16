@@ -34,6 +34,16 @@ export default declareTransformationStep(
         .create("Failed to normalise generation numbers");
     }
 
+    // assign generation to marriage nodes
+    input.nodes.marriages.all.forEach((node)=>{
+      const groomIdentity = input.adjacencies.byMarriage.single.groom.get(node.identity);
+      const brideIdentity = input.adjacencies.byMarriage.single.bride.get(node.identity);
+      const groom = input.nodes.persons.male.$one(groomIdentity);
+      const bride = input.nodes.persons.female.$one(brideIdentity);
+      if (groom && bride && groom.generation && bride.generation) {
+        node.generation = groom.generation;
+      }
+    })
     return input;
   },
 );

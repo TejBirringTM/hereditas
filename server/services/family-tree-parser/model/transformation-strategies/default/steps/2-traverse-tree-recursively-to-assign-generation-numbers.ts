@@ -168,7 +168,7 @@ export default declareTransformationStep(
     if (unassignedNodes.length > 0) {
       throw FamilyTreeParserTransformationPipelineErrors.ProcessingFailed
         .create(
-          "Processing family tree timed out, probably due to complexity of input.",
+          "Processing family tree timed out, probably due to complexity of input",
         );
     }
 

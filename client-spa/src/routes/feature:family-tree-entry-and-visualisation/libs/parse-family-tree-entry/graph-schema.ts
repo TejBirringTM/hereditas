@@ -14,14 +14,14 @@ export const linkSchema = v.object({
     type: v.union([
         v.literal("Bride"),
         v.literal("Groom"),
-        v.literal("AdoptedHeir"),
-        v.literal("Progeny")
+        v.literal("MaritalProgeny"),
+        v.literal("AdoptedMaritalProgeny")
     ]),
 });
 
 export const nodeSchema = v.object({
     ...baseNodeSchema.entries,
-    directLineageHighlightedNodesAndLinks: v.optional(v.object({
+    patrilineage: v.optional(v.object({
         nodes: v.array(baseNodeSchema.entries.identity),
         links: v.array(linkSchema)
     })),

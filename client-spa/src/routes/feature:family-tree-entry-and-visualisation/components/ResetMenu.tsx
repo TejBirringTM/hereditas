@@ -4,8 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { resetFamilyTreeEntry } from "../slice";
 import { usePostHog } from "posthog-js/react";
+import { FamilyTreeEntryGraphFunctions } from "./family-tree-graph/FamilyTreeGraph";
+import { Ref } from "react";
 
-export default function ResetMenu() {
+interface ResetMenuProps {
+    resetPanAndZoom?: (()=>void) | undefined
+}
+
+export default function ResetMenu({resetPanAndZoom}: ResetMenuProps) {
     const dispatch = useDispatch();
     const posthog = usePostHog();
 
@@ -17,18 +23,24 @@ export default function ResetMenu() {
      return state.familyTreeEntry.state;
     });
  
-    function resetVisualisationOnly() {
+    function clearVisualisation() {
         dispatch(resetFamilyTreeEntry({clearTextEntry: false}));
         posthog.capture("reset family tree entry (visualisation only)");
     }
 
-    function resetEverything() {
+    function clearVisualisationAndTextEntry() {
         dispatch(resetFamilyTreeEntry({clearTextEntry: true}));
         posthog.capture("reset family tree entry (everything)");
     }
 
+    function clearPanAndZoom() {
+      if (resetPanAndZoom) {
+        resetPanAndZoom();
+      }
+    }
+
     return (
-        <Menu shadow="md" width={230}>
+        <Menu shadow="md" width={250}>
         <Menu.Target>
             <Button 
                 size="lg" 
@@ -41,12 +53,17 @@ export default function ResetMenu() {
         </Menu.Target>
   
         <Menu.Dropdown>
-          <Menu.Item disabled={state !== "drawn"} onClick={resetVisualisationOnly}>
-            Visualisation only (keep entry)
+          {resetPanAndZoom && 
+            <Menu.Item disabled={state !== "drawn"} onClick={clearPanAndZoom}>
+              Clear zoom
+            </Menu.Item>
+          } 
+          <Menu.Item disabled={state !== "drawn"} onClick={clearVisualisation}>
+            Clear visualisation
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item disabled={familyTreeTextEntry.length === 0} onClick={resetEverything}>
-            Everything (start afresh)
+          <Menu.Item disabled={familyTreeTextEntry.length === 0} onClick={clearVisualisationAndTextEntry}>
+            Clear everything
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>

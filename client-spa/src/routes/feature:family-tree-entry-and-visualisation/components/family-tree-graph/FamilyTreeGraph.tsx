@@ -1,13 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { Graph as FamilyTreeGraph } from "../libs/parse-family-tree-entry";
+import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
+import { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree-entry";
 import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceSimulation} from "d3-force";
 import {select} from "d3-selection"
 import {line} from "d3-shape"
-import { SimulationNode, SimulationLink } from "./types";
+import {zoom as _zoom, D3ZoomEvent} from "d3-zoom";
+import { SimulationNode, SimulationLink } from "../types";
 import { getLinkStyle, getNodeStyle } from "./family-tree-graph-styling/node-link-style";
 import FamilyTreeGraphPopup from "./FamilyTreeGraphPopup";
 import { gridLineColour } from "./family-tree-graph-styling/grid-style";
 import styles from "./FamilyTreeGraph.module.css"
+
+export interface FamilyTreeEntryGraphFunctions {
+    reset: () => void
+}
 
 interface FamilyTreeEntryGraphProps {
     graph?: FamilyTreeGraph | null,
@@ -15,12 +20,23 @@ interface FamilyTreeEntryGraphProps {
     height: number,
 }
 
-
-
-export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeEntryGraphProps) {
+const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphProps>(({graph, width, height}, ref)=>{
     const root = useRef<HTMLDivElement>(null);
     const [selectedNode, _selectNode] = useState<SimulationNode|null>(null);
     const [selectedNodePosition, selectNodePosition] = useState<[number, number]|null>(null);
+    const div = select(root.current);
+    let svg = div.select<SVGElement>("svg");
+
+    useImperativeHandle(ref, ()=>({
+        reset() {
+            const gNodes = svg.select("g.nodes");
+            const gLinks = svg.select("g.links");
+            gNodes.attr("transform", null);
+            gLinks.attr("transform", null);
+        },
+    }));
+
+
 
     function selectNode(nodeToSelect: SimulationNode | null, allNodes?: SimulationNode[], allLinks?: SimulationLink[]) {
         // set state
@@ -43,10 +59,10 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                     node.state = "normal";
                 }
                 // highlight those associated with the lineage of this node
-                if (!nodeToSelect.directLineageHighlightedNodesAndLinks) {
+                if (!nodeToSelect.patrilineage) {
                     return;
                 } else {
-                    const isLineageNode = nodeToSelect.directLineageHighlightedNodesAndLinks.nodes.includes(node.identity);
+                    const isLineageNode = nodeToSelect.patrilineage.nodes.includes(node.identity);
                     if (isLineageNode) {
                         node.state = "highlighted";
                     }
@@ -57,10 +73,10 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 // unhighlight existing 
                 link.state = "normal";
                 // highlight those associated with the lineage of this node
-                if (!nodeToSelect.directLineageHighlightedNodesAndLinks) {
+                if (!nodeToSelect.patrilineage) {
                     return
                 } else {
-                    const isLineageLink = nodeToSelect.directLineageHighlightedNodesAndLinks.links.find((lineageLink)=>(
+                    const isLineageLink = nodeToSelect.patrilineage.links.find((lineageLink)=>(
                         link.type === lineageLink.type &&
                         link.fromNodeIdentity === lineageLink.fromNodeIdentity &&
                         link.toNodeIdentity === lineageLink.toNodeIdentity
@@ -77,8 +93,6 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
     useEffect(()=>{
         const svgWidth = width;
         const svgHeight = height;
-        const div = select(root.current);
-        let svg = div.select<SVGElement>("svg");
 
         if (!graph) {
             console.debug("No graph, therefore nothing to draw.");
@@ -93,28 +107,48 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         const numOfGenerations = Math.max(...graph.nodes.map((node)=>node.generation));
         const pxPerGenerationHeight = 250;
         const pxGenerationsHeight = (numOfGenerations * pxPerGenerationHeight) + pxPerGenerationHeight;
-        
 
         if (svg.empty()) {
             div.append('svg')
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "max-width: 100%;")
-                // .attr("style", "max-width: 100%; height: auto;")
+                // .attr("style", "max-width: 100%;")
+                .attr("style", "max-width: 100%; height: auto;")
             svg = div.select("svg");            
+            svg.append("g").classed("nodes", true);
+            svg.append("g").classed("links", true);
+            svg.append("g").classed("y-guide", true);
         } else {
             svg.selectChildren().remove();
             svg
                 .attr("width", svgWidth)
                 .attr("height", pxGenerationsHeight)
                 .attr("viewBox", [0, 0, svgWidth, pxGenerationsHeight])
-                .attr("style", "max-width: 100%;")
-                // .attr("style", "max-width: 100%; height: auto;")
+                // .attr("style", "max-width: 100%;")
+                .attr("style", "max-width: 100%; height: auto;")
+            svg.append("g").classed("nodes", true);
+            svg.append("g").classed("links", true);
+            svg.append("g").classed("y-guide", true);
         }
 
+        const gNodes = svg.select("g.nodes");
+        const gLinks = svg.select("g.links");
+        const gY = svg.select("g.y-guide");
+
+        function handleZoom(event: D3ZoomEvent<SVGElement, unknown>) {
+            gNodes.attr("transform", event.transform.toString());
+            gLinks.attr("transform", event.transform.toString());
+            selectNode(null);
+        }
+    
+        let zoom = _zoom<SVGElement, unknown>()
+            .on("zoom", handleZoom);
+
+        svg.call(zoom);
+            
         function updateNodeStyles() {
-            const nodeSelectGroup = svg.selectAll("g");
+            const nodeSelectGroup = gNodes.selectAll("g.node");
             const nodeSelectCircle = nodeSelectGroup.selectAll<SVGCircleElement, SimulationNode>("circle");
             const nodeSelectText = nodeSelectGroup.selectAll<SVGTextElement, SimulationNode>("text");
 
@@ -132,7 +166,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         }
 
         function updateLinkStyles() {
-            const linkLines = svg.selectAll<SVGLineElement, SimulationLink>("line.link");
+            const linkLines = gLinks.selectAll<SVGLineElement, SimulationLink>("line.link");
             linkLines
                 .attr("stroke", (d)=>getLinkStyle(d).stroke)
                 .attr("stroke-width", (d)=>getLinkStyle(d)["stroke-width"])
@@ -179,7 +213,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
         for (let i = 0; i<numOfGenerations; i++) {
             yLines[i]=(i+1)*pxPerGenerationHeight;
         }
-        const _yLines = svg.selectAll("line.y-guide")
+        const _yLines = gY.selectAll("line.y-guide")
             .data(yLines)
             .join(
                 (enter) => {
@@ -232,9 +266,9 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                                             return 0;
                                         case "Groom":
                                             return 0;
-                                        case "Progeny":
+                                        case "MaritalProgeny":
                                             return 30;
-                                        case "AdoptedHeir":
+                                        case "AdoptedMaritalProgeny":
                                             return 30;
                                         default:
                                             return 30;
@@ -250,11 +284,11 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                             .force("y", _forceY)
                             .on("tick", onSimulationTick);
 
-        const _nodes = svg.selectAll("g")
+        const _nodes = gNodes.selectAll("g.node")
             .data(nodes)
             .join(
                 (enter)=>{
-                    const group = enter.append("g");
+                    const group = enter.append("g").classed("node", true);
 
                     group.append("circle")
                         .attr("pointer-events", "visibleFill")
@@ -310,7 +344,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
                 },
             )
 
-        const _links = svg.selectAll("line.link")
+        const _links = gLinks.selectAll("line.link")
             .data(links)
             .join(
                 (enter)=>{
@@ -390,5 +424,7 @@ export default function FamilyTreeEntryGraph({graph, width, height}: FamilyTreeE
             left={selectedNodePosition?.[0]}
             top={selectedNodePosition?.[1]}
         />
-    </div>
-};
+    </div>    
+})
+
+export default FamilyTreeEntryGraph;

@@ -6,7 +6,7 @@ import { setFamilyTreeTextEntry, processFamilyTreeTextEntry, initialiseFamilyTre
 import { Graph } from "./libs/parse-family-tree-entry";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
-import FamilyTreeEntryGraph from "./components/FamilyTreeGraph";
+import FamilyTreeEntryGraph, { FamilyTreeEntryGraphFunctions }  from "./components/family-tree-graph/FamilyTreeGraph";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useViewportSize } from "@mantine/hooks";
 import ShareModal from "./components/ShareModal";
@@ -63,6 +63,8 @@ export default function Home() {
     }
    }, [graph])
 
+   const ftree = useRef<FamilyTreeEntryGraphFunctions>(null);
+
     return (<Box px={{base: rem(10), sm: rem(20)}}>
          <p>
             Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the 'Visualise' button.
@@ -93,7 +95,7 @@ export default function Home() {
                 </Alert>
             }
 
-            <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} />
+            <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} ref={ftree} />
          </Flex>
     </Box>)
 }

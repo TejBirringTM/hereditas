@@ -34,6 +34,8 @@ export default function parseFamilyTreeEntry(text: string) {
     }).then((json)=>{
         const parseResult = v.safeParse(responseBodySchema, json);
         if (!parseResult.success) {
+            console.error(parseResult.issues)
+            // console.error(parseResult.issues.map((issue)=>issue.message))
             throw new Error("Failed to parse family tree entry"); // response could not be validated using the above schema
         } else if (!parseResult.output.success) {
             throw new Error(parseResult.output.message);          // server could not parse or process the family tree

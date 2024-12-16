@@ -14,8 +14,9 @@ export type BasicContext = _BasicContext;
 
 /* Context */
 export type AnyNode = _Node & {
-  generation?: number;
-  patrilineage?: ReferentialSubgraph
+  generationInTree?: number;
+  generationInClan?: number;
+  patrilineage?: ReferentialSubgraph;
 };
 
 export type ReferentialSubgraph = {

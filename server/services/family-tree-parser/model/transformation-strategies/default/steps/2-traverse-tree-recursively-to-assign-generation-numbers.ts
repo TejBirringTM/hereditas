@@ -22,8 +22,8 @@ type Input = TransformationStepOutput<typeof DevelopContext>;
 
 // setters
 const assignGeneration = (node: NPerson, generation?: number) => {
-  if (!node.generation && typeof generation === "number") {
-    node.generation = generation;
+  if (!node.generationInTree && typeof generation === "number") {
+    node.generationInTree = generation;
   }
 };
 
@@ -34,12 +34,12 @@ const beforeEnqueueTraverseDown = (
   const enqueuingNodes = context.currentNode.neighbours.new;
 
   enqueuingNodes.forEach((node) => {
-    if (typeof context.currentNode.node.generation === "number") {
-      const nextGeneration = context.currentNode.node.generation + 1;
+    if (typeof context.currentNode.node.generationInTree === "number") {
+      const nextGeneration = context.currentNode.node.generationInTree + 1;
       assignGeneration(node, nextGeneration);
     }
     console.debug(
-      `enqueuing (from ${from}): ${node.identity} (${node.generation})`,
+      `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
     );
   });
 };
@@ -51,12 +51,12 @@ const beforeEnqueueTraverseUp = (
   const enqueuingNodes = context.currentNode.neighbours.new;
 
   enqueuingNodes.forEach((node) => {
-    if (typeof context.currentNode.node.generation === "number") {
-      const prevGeneration = context.currentNode.node.generation - 1;
+    if (typeof context.currentNode.node.generationInTree === "number") {
+      const prevGeneration = context.currentNode.node.generationInTree - 1;
       assignGeneration(node, prevGeneration);
     }
     console.debug(
-      `enqueuing (from ${from}): ${node.identity} (${node.generation})`,
+      `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
     );
   });
 };
@@ -65,6 +65,7 @@ const beforeEnqueueTraverseUp = (
 export default declareTransformationStep(
   "traverse-tree-recursively-to-assign-generation-numbers",
   (input: Input) => {
+
     if (!input.nodes.persons.male.designatedRootAncestor) {
       throw FamilyTreeParserTransformationPipelineErrors.MissingDeclaration
         .create("A start declaration is required");
@@ -73,7 +74,7 @@ export default declareTransformationStep(
     // the primary root is the male that is asserted as root of the tree
     const primaryRoot = input.nodes.persons.male.designatedRootAncestor;
     // assert for the primary root a generation number of 1
-    primaryRoot.generation = 1;
+    primaryRoot.generationInTree = 1;
 
     // find roots and leafs
     const allRoots = input.nodes.persons.all
@@ -95,7 +96,7 @@ export default declareTransformationStep(
           );
           const contemporaries = ownGeneration(input, context.currentNode.node);
           contemporaries.forEach((node) => {
-            assignGeneration(node, context.currentNode.node.generation);
+            assignGeneration(node, context.currentNode.node.generationInTree);
           });
         },
       },
@@ -107,7 +108,7 @@ export default declareTransformationStep(
     const getUnassignedNodes = () =>
       input.nodes.persons.all.filter((
         node,
-      ) => (typeof node.generation !== "number"));
+      ) => (typeof node.generationInTree !== "number"));
     let unassignedNodes = getUnassignedNodes();
     while (unassignedNodes.length > 0 && iterationCount < MAX_ITERATIONS) {
       // traverse up from leaf nodes
@@ -122,13 +123,13 @@ export default declareTransformationStep(
               console.debug(
                 `visiting (from leaf): ${context.currentNode.node.identity}`,
               );
-              if (context.currentNode.node.generation) {
+              if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,
                   context.currentNode.node,
                 );
                 contemporaries.forEach((node) => {
-                  assignGeneration(node, context.currentNode.node.generation);
+                  assignGeneration(node, context.currentNode.node.generationInTree);
                 });
               }
             },
@@ -147,13 +148,13 @@ export default declareTransformationStep(
               console.debug(
                 `visiting (from root): ${context.currentNode.node.identity}`,
               );
-              if (context.currentNode.node.generation) {
+              if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,
                   context.currentNode.node,
                 );
                 contemporaries.forEach((node) => {
-                  assignGeneration(node, context.currentNode.node.generation);
+                  assignGeneration(node, context.currentNode.node.generationInTree);
                 });
               }
             },

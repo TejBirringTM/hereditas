@@ -62,9 +62,11 @@ import {
               }
             }
           }
-        )
-      }
+        );
 
+        n.generationInClan = n.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1;
+      }
+      
       return input;
     },
   );

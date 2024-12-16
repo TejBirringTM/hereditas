@@ -14,21 +14,21 @@ export default declareTransformationStep(
   "normalise-generation-numbers",
   (input: Input) => {
     const generationNumbers = input.nodes.persons.all.map((node) =>
-      node.generation
+      node.generationInTree
     ).filter((gen) => (typeof gen === "number"));
     const minimumGenerationNumber = Math.min(...generationNumbers);
     if (minimumGenerationNumber < 1) {
       const delta = Math.abs(minimumGenerationNumber) + 1;
       input.nodes.persons.all.forEach((node) => {
-        assert(typeof node.generation === "number");
-        node.generation = node.generation + delta;
+        assert(typeof node.generationInTree === "number");
+        node.generationInTree = node.generationInTree + delta;
       });
     }
 
     if (
       !input.nodes.persons.all.every((
         node,
-      ) => (typeof node.generation === "number" && node.generation > 0))
+      ) => (typeof node.generationInTree === "number" && node.generationInTree > 0))
     ) {
       throw FamilyTreeParserTransformationPipelineErrors.ProcessingFailed
         .create("Failed to normalise generation numbers");
@@ -40,8 +40,8 @@ export default declareTransformationStep(
       const brideIdentity = input.adjacencies.byMarriage.single.bride.get(node.identity);
       const groom = input.nodes.persons.male.$one(groomIdentity);
       const bride = input.nodes.persons.female.$one(brideIdentity);
-      if (groom && bride && groom.generation && bride.generation) {
-        node.generation = groom.generation;
+      if (groom && bride && groom.generationInTree && bride.generationInTree) {
+        node.generationInTree = groom.generationInTree;
       }
     })
     return input;

@@ -1,12 +1,12 @@
 import * as v from "@valibot/valibot";
-import { declareJsonApi } from "../../framework/main.ts";
+import { declareJsonApi } from "../../common/framework/main.ts";
 import { deflate, inflate } from "./model/tokeniser.ts";
 import {
   declareErrorResponse,
   declareSuccessResponse,
-} from "../../framework/response.ts";
-import { isRuntimeError } from "../../common/runtime-error.ts";
+} from "../../common/framework/response.ts";
 import { Status } from "@oak/oak";
+import { isRuntimeError } from "../../errors/runtime-error.ts";
 
 const tokeniserService = declareJsonApi("tokeniser");
 

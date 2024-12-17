@@ -2,6 +2,7 @@ import assert from "node:assert";
 import type { IToken } from "ebnf";
 import {
   ADOPTED_PROGENY_DECLARATION,
+  APPEND_TEXT_DECLARATION,
   FEMALE_DECLARATION,
   FEMALE_EXPRESSION,
   FEMALE_REFERENCE,
@@ -15,7 +16,6 @@ import {
   PROGENY_DECLARATION,
   START_DECLARATION,
 } from "../parse-text-to-ast/ast-token-parsers.ts";
-import familyTreeAstParserErrors from "./errors.ts";
 import {
   FamilyTreeContext,
   LAdoptedChild,
@@ -45,6 +45,7 @@ import {
   NMarriage,
   NPerson,
 } from "./types.ts";
+import { DuplicateDeclarationError, InvalidReferenceError, UnimplementedSyntaxError } from "../../../../../errors/parse-ft.ts";
 
 type StatementParser = (
   FamilyTreeContext: FamilyTreeContext,
@@ -82,9 +83,7 @@ function resolveReference<T extends Reference>(
       break;
   }
   if (!ret) {
-    throw familyTreeAstParserErrors.InvalidReference.create(
-      `Could not find referenced node: ${reference.key}`,
-    );
+    throw InvalidReferenceError.create(`Could not find referenced node: ${reference.key}`);
   }
   return ret;
 }
@@ -114,14 +113,13 @@ function resolveExpression<T extends Expression>(
 function declareMale(context: FamilyTreeContext, key: string, title: string) {
   const identity = `male:${key}` as NMale["identity"];
   if (context.maleNodes.has(identity)) {
-    throw familyTreeAstParserErrors.DuplicateDeclaration.create(
-      `Family tree already has node with identity: ${identity}`,
-    );
+    throw DuplicateDeclarationError.create(`Family tree already has node with identity: ${identity}`)
   }
   const maleNode = {
     type: "Male",
     identity,
     title: title,
+    text: [],
   } satisfies NMale;
   context.maleNodes.set(maleNode.identity, maleNode);
   return maleNode;
@@ -130,14 +128,13 @@ function declareMale(context: FamilyTreeContext, key: string, title: string) {
 function declareFemale(context: FamilyTreeContext, key: string, title: string) {
   const identity = `female:${key}` as NFemale["identity"];
   if (context.femaleNodes.has(identity)) {
-    throw familyTreeAstParserErrors.DuplicateDeclaration.create(
-      `Family tree already has node with identity: ${identity}`,
-    );
+    throw DuplicateDeclarationError.create(`Family tree already has node with identity: ${identity}`);
   }
   const femaleNode = {
     type: "Female",
     identity,
     title: title,
+    text: [],
   } satisfies NFemale;
   context.femaleNodes.set(femaleNode.identity, femaleNode);
   return femaleNode;
@@ -151,14 +148,13 @@ function declareMarriage(
 ) {
   const marriageIdentity = `marriage:${key}` as NMarriage["identity"];
   if (context.marriageNodes.has(marriageIdentity)) {
-    throw familyTreeAstParserErrors.DuplicateDeclaration.create(
-      `Family tree already has node with identity: ${marriageIdentity}`,
-    );
+    throw DuplicateDeclarationError.create(`Family tree already has node with identity: ${marriageIdentity}`);
   }
   // create marriage node and links
   const marriageNode = {
     type: "Marriage",
     identity: marriageIdentity,
+    text: [],
   } satisfies NMarriage;
   const linkGroom = {
     type: "Groom",
@@ -480,6 +476,12 @@ const statementParsers = {
     const treeRoot = resolveExpression(context, parsedToken.treeRoot);
     context.startNode = treeRoot;
   }),
+  APPEND_TEXT_DECLARATION: declareStatementParser((context, token) => {
+    const parsedToken = APPEND_TEXT_DECLARATION(token);
+    const to = parsedToken.to.type === "MARRIAGE_REFERENCE" ? resolveReference(context, parsedToken.to) : resolveExpression(context, parsedToken.to);
+    const textLines = parsedToken.textLines;
+    to.text.push(...textLines);
+  })
 } as Record<string, StatementParser>;
 
 const statementParserKeys = Object.keys(statementParsers);
@@ -490,9 +492,7 @@ export function processStatement(context: FamilyTreeContext, token: IToken) {
   assert(!!statement);
   // ensure there is a parser for the statement
   if (!statementParserKeys.includes(statement.type)) {
-    throw familyTreeAstParserErrors.UnimplementedSyntax.create(
-      `The following statement is defined but not implemented: ${statement.type}`,
-    );
+    throw UnimplementedSyntaxError.create(`The following statement is defined but not implemented: ${statement.type}`);
   } // parse the statement
   else {
     const parser = statementParsers[statement.type];

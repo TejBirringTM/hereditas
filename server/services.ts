@@ -1,4 +1,4 @@
-import { registerServices } from "./framework/main.ts";
+import { registerServices } from "./common/framework/main.ts";
 
 export default registerServices([
   (await import("./services/family-tree-parser/service.ts")).default,

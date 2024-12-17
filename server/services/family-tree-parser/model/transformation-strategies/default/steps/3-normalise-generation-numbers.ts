@@ -1,10 +1,7 @@
 import { assert } from "@std/assert";
-import {
-  declareTransformationStep,
-  TransformationStepOutput,
-} from "../../../../../../libs/transformation-pipeline.ts";
 import TraverseTreeRecursivelyToAssignGenerationNumbers from "./2-traverse-tree-recursively-to-assign-generation-numbers.ts";
-import FamilyTreeParserTransformationPipelineErrors from "../../errors.ts";
+import { declareTransformationStep, TransformationStepOutput } from "../../../../../../common/transformation-pipeline.ts";
+import { ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
 
 type Input = TransformationStepOutput<
   typeof TraverseTreeRecursivelyToAssignGenerationNumbers
@@ -30,8 +27,7 @@ export default declareTransformationStep(
         node,
       ) => (typeof node.generationInTree === "number" && node.generationInTree > 0))
     ) {
-      throw FamilyTreeParserTransformationPipelineErrors.ProcessingFailed
-        .create("Failed to normalise generation numbers");
+      throw ProcessingFailedError.create('failed to normalise generation numbers');
     }
 
     // assign generation to marriage nodes

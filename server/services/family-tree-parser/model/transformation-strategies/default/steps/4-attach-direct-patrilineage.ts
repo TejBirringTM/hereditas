@@ -1,12 +1,9 @@
 import { assert } from "@std/assert";
-import {
-    declareTransformationStep,
-    TransformationStepOutput,
-  } from "../../../../../../libs/transformation-pipeline.ts";
-  import { AnyNode} from "./libs/context/types.ts";
+  import { AnyNode, MaleIdentity} from "./libs/context/types.ts";
   import NormaliseGenerationNumbers from "./3-normalise-generation-numbers.ts";
   import { unresolveLink } from "./libs/context/main.ts";
-  import { traverseGraphDepthFirst } from "../../../../../../libs/graph-computation/traverse-graph.ts";
+  import { traverseGraphDepthFirst } from "../../../../../../common/graph-computation/traverse-graph.ts";
+  import { declareTransformationStep, TransformationStepOutput } from "../../../../../../common/transformation-pipeline.ts";
   
   type Input = TransformationStepOutput<
     typeof NormaliseGenerationNumbers
@@ -65,6 +62,13 @@ import {
         );
 
         n.generationInClan = n.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1;
+        const rootAncestor = (()=>{
+          const tmp = n.patrilineage?.nodes?.[0];
+          if (tmp && tmp.startsWith("male:")) {
+            return input.nodes.persons.male.$one(tmp as MaleIdentity) ?? undefined;
+          }
+        })();
+        n.rootAncestor = rootAncestor;
       }
       
       return input;

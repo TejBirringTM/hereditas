@@ -1,5 +1,5 @@
+import { unique } from "../../../../../../../../common/collection-utils.ts";
 import { NPerson, PersonIdentity, PipelineContext } from "../context/types.ts";
-import { unique } from "../../../../../../../../libs/collection-utils.ts";
 
 // export interface NeighbourFunctionArguments {
 //     findOneMale: GetNode<NMale>,

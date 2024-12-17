@@ -1,9 +1,5 @@
 import { assert } from "@std/assert";
 import {
-  AdjacencyMapMultiple,
-  AdjacencyMapSingular,
-} from "../../../../../../../../libs/adjacency-map.ts";
-import {
   Adjacencies,
   FemaleIdentity,
   MaleIdentity,
@@ -11,6 +7,7 @@ import {
   PersonIdentity,
   PipelineContext,
 } from "./types.ts";
+import { AdjacencyMapMultiple, AdjacencyMapSingular } from "../../../../../../../../common/adjacency-map.ts";
 
 export function developAdjacencies(
   context: Omit<PipelineContext, "adjacencies">,

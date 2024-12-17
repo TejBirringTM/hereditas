@@ -1,4 +1,4 @@
-import { declareTransformationPipeline } from "../../../../../libs/transformation-pipeline.ts";
+import { declareTransformationPipeline } from "../../../../../common/transformation-pipeline.ts";
 
 export default declareTransformationPipeline(
   "DefaultTransformationPipeline",

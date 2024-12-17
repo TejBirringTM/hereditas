@@ -27,7 +27,7 @@ export function declareRuntimeError<Name extends string>(
 ) {
   return Object.freeze({
     create: (message?: string) => new RuntimeErrorImplementation(name, message),
-    validate: (error?: { name?: unknown }) =>
+    is: (error?: { name?: unknown }) =>
       error?.name && typeof error.name === "string" && error.name === name,
   });
 }

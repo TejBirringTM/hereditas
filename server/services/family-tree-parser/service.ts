@@ -1,12 +1,12 @@
 import * as v from "@valibot/valibot";
 import parseFamilyTree from "./model/main.ts";
-import { isRuntimeError } from "../../common/runtime-error.ts";
 import { Status } from "@oak/oak";
 import {
   declareErrorResponse,
   declareJsonApi,
   declareSuccessResponse,
-} from "../../framework/main.ts";
+} from "../../common/framework/main.ts";
+import { isRuntimeError } from "../../errors/runtime-error.ts";
 
 const familyTreeParserService = declareJsonApi("family-tree-parser");
 

@@ -1,4 +1,4 @@
-import { declareStrategies } from "../../../../libs/strategy-map.ts";
+import { declareStrategies } from "../../../../common/strategy-map.ts";
 import pipelineDefault from "../transformation-strategies/default/main.ts";
 
 /**

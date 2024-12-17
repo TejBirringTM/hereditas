@@ -1,12 +1,9 @@
 import {
   traverseGraphBreadthFirst,
   VisitContext,
-} from "../../../../../../libs/graph-computation/traverse-graph.ts";
-import {
-  declareTransformationStep,
-  TransformationStepOutput,
-} from "../../../../../../libs/transformation-pipeline.ts";
-import FamilyTreeParserTransformationPipelineErrors from "../../errors.ts";
+} from "../../../../../../common/graph-computation/traverse-graph.ts";
+import { TransformationStepOutput, declareTransformationStep } from "../../../../../../common/transformation-pipeline.ts";
+import { InvalidDeclarationError, MissingDeclarationError, ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
 import DevelopContext from "./1-develop-context.ts";
 import { NPerson } from "./libs/context/types.ts";
 import {
@@ -37,6 +34,7 @@ const beforeEnqueueTraverseDown = (
     if (typeof context.currentNode.node.generationInTree === "number") {
       const nextGeneration = context.currentNode.node.generationInTree + 1;
       assignGeneration(node, nextGeneration);
+      console.log(context.rootNode.identity);
     }
     console.debug(
       `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
@@ -65,23 +63,28 @@ const beforeEnqueueTraverseUp = (
 export default declareTransformationStep(
   "traverse-tree-recursively-to-assign-generation-numbers",
   (input: Input) => {
-
     if (!input.nodes.persons.male.designatedRootAncestor) {
-      throw FamilyTreeParserTransformationPipelineErrors.MissingDeclaration
-        .create("A start declaration is required");
+      throw MissingDeclarationError.create("a start declaration is required");
     }
-
-    // the primary root is the male that is asserted as root of the tree
-    const primaryRoot = input.nodes.persons.male.designatedRootAncestor;
-    // assert for the primary root a generation number of 1
-    primaryRoot.generationInTree = 1;
 
     // find roots and leafs
     const allRoots = input.nodes.persons.all
       .filter((node) => isRootNode(input, node));
+      
     const allLeafs = input.nodes.persons.all.filter((node) =>
       isLeafNode(input, node)
     );
+
+    if (!allRoots.includes(input.nodes.persons.male.designatedRootAncestor)) {
+      throw InvalidDeclarationError.create("a start declaration must designate the first recorded male of any patrilineage");
+    }
+
+    // the primary root is the male that is asserted as root of the tree
+    const primaryRoot = input.nodes.persons.male.designatedRootAncestor;
+
+    // assert for the primary root a generation number of 1
+    primaryRoot.generationInTree = 1;
+
 
     // initial traversal to assign generation numbers from primary root
     traverseGraphBreadthFirst(
@@ -167,10 +170,7 @@ export default declareTransformationStep(
     }
 
     if (unassignedNodes.length > 0) {
-      throw FamilyTreeParserTransformationPipelineErrors.ProcessingFailed
-        .create(
-          "Processing family tree timed out, probably due to complexity of input",
-        );
+      ProcessingFailedError.create('processing family tree timed out, probably due to complexity of input');
     }
 
     return input;

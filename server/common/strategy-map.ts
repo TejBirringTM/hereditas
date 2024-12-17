@@ -1,8 +1,4 @@
-import { declareRuntimeError } from "../common/runtime-error.ts";
-
-export const strategyMapErrors = {
-  strategyNotFound: declareRuntimeError("StrategyNotFound"),
-};
+import { StrategyNotFoundError } from "../errors/strategy-map.ts";
 
 export type StrategyMap<Key extends string, Strategy> = Record<Key, Strategy>;
 export const declareStrategies = <Key extends string, Strategy>(
@@ -12,7 +8,7 @@ export const declareStrategies = <Key extends string, Strategy>(
   getStrategy: (key: Key) => {
     const strategy = strategies[key];
     if (!strategy) {
-      throw strategyMapErrors.strategyNotFound.create();
+      throw StrategyNotFoundError.create(`strategy not found: ${key}`);
     } else {
       return strategy;
     }

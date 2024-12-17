@@ -1,4 +1,4 @@
-import { declareNatural, declareString } from "../common/validation.ts";
+import { declareNatural, declareString } from "../validation.ts";
 import * as v from "@valibot/valibot";
 
 const PathSegment = declareString(

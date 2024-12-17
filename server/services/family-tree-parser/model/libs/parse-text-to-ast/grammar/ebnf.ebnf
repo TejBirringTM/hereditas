@@ -1,7 +1,7 @@
 
 FILE_GRAMMAR ::= STATEMENT_LINE*
 
-STATEMENT ::= PROGENY_DECLARATION | MARRIAGE_DECLARATION | ADOPTED_PROGENY_DECLARATION | MALE_DECLARATION | FEMALE_DECLARATION | COMMENT | START_DECLARATION
+STATEMENT ::= PROGENY_DECLARATION | MARRIAGE_DECLARATION | ADOPTED_PROGENY_DECLARATION | MALE_DECLARATION | FEMALE_DECLARATION | COMMENT | START_DECLARATION | APPEND_TEXT_DECLARATION
 STATEMENT_LINE ::= WHITESPACE* STATEMENT WHITESPACE*
 
 CR ::= #x0D /* carriage return */
@@ -21,12 +21,15 @@ ALPHABET_LOWERCASE ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
 ALPHABET_UPPERCASE ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
 ALPHABET ::= ALPHABET_LOWERCASE | ALPHABET_UPPERCASE
 
-SPECIAL_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "/" | "`" | "~"
+TEXT_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "`" | "~" | '"'
+SPECIAL_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "\" | "/" | "`" | "~"
 
 ALPHANUMERIC ::= DIGIT | ALPHABET
 CHAR ::= ALPHANUMERIC | SPECIAL_CHAR | SPACE_TAB
 
 STRING ::= '"' CHAR* '"'
+TEXTCHAR ::= ALPHANUMERIC | TEXT_CHAR | SPACE_TAB
+TEXT ::= TEXTCHAR+
 
 DECLARATION_KEY ::= (ALPHABET | NON_ZERO_DIGIT) (ALPHABET | "." | DIGIT)*
 
@@ -58,6 +61,9 @@ PROGENY_DECLARATION_KEY ::= "dsc:" DECLARATION_KEY
 PROGENY_DECLARATION ::= MARRIAGE_REFERENCE SPACE_TAB* FWD_RELATIONSHIP_ARROW_BEGIN (PROGENY_DECLARATION_KEY | "dsc") FWD_RELATIONSHIP_ARROW_END PERSON_EXPRESSION
 PROGENY_REFERENCE ::= "{" PROGENY_DECLARATION_KEY "}"
 
-START_DECLARATION ::= "START WITH " MALE_EXPRESSION
+START_DECLARATION ::= "START WITH" SPACE_TAB+ MALE_EXPRESSION
 
-COMMENT ::= "/*" (ALPHANUMERIC | SPACE_TAB)* "*/"
+COMMENT ::= "/*" TEXTCHAR* "*/"
+
+APPEND_TEXT_DECLARATION_LINE ::= TEXT NEWLINE
+APPEND_TEXT_DECLARATION ::= "APPEND" SPACE_TAB+ (PERSON_EXPRESSION | MARRIAGE_REFERENCE) SPACE_TAB* ":" (SPACE_TAB | NEWLINE)* APPEND_TEXT_DECLARATION_LINE+

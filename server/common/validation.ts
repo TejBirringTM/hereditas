@@ -1,12 +1,5 @@
 import * as v from "@valibot/valibot";
-import { declareRuntimeError } from "./runtime-error.ts";
-
-const validationErrors = {
-  ValidationFailed: (name: string, reasons: string[]) =>
-    declareRuntimeError(
-      `validation failed, invalid ${name}: ${reasons.join(", ")}`,
-    ),
-} as const;
+import { ValidationFailedError } from "../errors/validation.ts";
 
 export function declareString<TName extends string>(
   name: TName,
@@ -49,10 +42,9 @@ export function makeAssertFunction<
     if (result.success) {
       return result.output;
     } else {
-      throw validationErrors.ValidationFailed(
-        name,
-        result.issues.map((issue) => issue.message),
-      );
+      throw ValidationFailedError.create(
+        `invalid ${name}: ${result.issues.map((issue) => issue.message)}`
+      )
     }
   };
 }

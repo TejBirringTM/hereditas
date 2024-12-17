@@ -18,11 +18,15 @@ type Relationship<
 
 export type NMale = Node<"Male"> & {
   title: string;
+  text: string[];
 };
 export type NFemale = Node<"Female"> & {
   title: string;
+  text: string[];
 };
-export type NMarriage = Node<"Marriage">;
+export type NMarriage = Node<"Marriage"> & {
+  text: string[];
+};
 
 export type NPerson = NMale | NFemale;
 

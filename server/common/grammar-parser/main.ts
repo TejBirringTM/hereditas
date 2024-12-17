@@ -1,7 +1,7 @@
 import { Grammars, type IToken, TokenError } from "npm:ebnf";
-import { loadTextFile } from "../../common/file.ts";
+import { loadTextFile } from "../file.ts";
 import path from "node:path";
-import grammarParserErrors from "./errors.ts";
+import { InvalidGrammarError, InvalidInputError } from "../../errors/grammar-parser.ts";
 const Parser = Grammars.W3C.Parser;
 
 export class GrammarParser {
@@ -14,7 +14,7 @@ export class GrammarParser {
       this.parser = new Parser(this.grammar, { keepUpperRules: true });
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : undefined;
-      throw grammarParserErrors.InvalidGrammarSpec.create(errorMessage);
+      throw InvalidGrammarError.create(errorMessage);
     }
   }
 
@@ -23,11 +23,9 @@ export class GrammarParser {
     // get abstract syntax tree (AST)
     const ast = this.parser.getAST(input, targetRule);
     if (!ast && input.length === 0) {
-      throw grammarParserErrors.ItemNotFound.create("input is empty");
+      throw InvalidInputError.create("input is empty");
     } else if (!ast) {
-      throw grammarParserErrors.InvalidInputText.create(
-        "input could not parsed",
-      );
+      throw InvalidInputError.create("input could not be parsed");
     }
     // check for errors and collate them all
     const collateErrors = (token: IToken) => {
@@ -48,7 +46,7 @@ export class GrammarParser {
     // throw error if any errors present in AST
     const hasError = errors.length > 0;
     if (hasError) {
-      throw grammarParserErrors.InvalidInputText.create(errors);
+      throw InvalidInputError.create(errors);
     }
     // return the ast
     return ast;
@@ -99,9 +97,7 @@ export function recursivelyFindFirstOfType<
   }
   const result = _recursivelyFindFirstOfType(token);
   if (throwError && !result) {
-    throw grammarParserErrors.ItemNotFound.create(
-      `could not find ${type} when parsing ${token.type}`,
-    );
+    throw InvalidInputError.create(`could not find ${type} when parsing ${token.type}`);
   }
   return result as ThrowError extends true ? Exclude<typeof result, undefined>
     : typeof result;

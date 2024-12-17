@@ -1,7 +1,4 @@
-import {
-  declareTransformationStep,
-  TransformationStepOutput,
-} from "../../../../../../libs/transformation-pipeline.ts";
+import { declareTransformationStep, TransformationStepOutput } from "../../../../../../common/transformation-pipeline.ts";
 import NormaliseGenerationNumbers from "./3-normalise-generation-numbers.ts";
 import { AnyNode } from "./libs/context/types.ts";
 
@@ -23,7 +20,7 @@ export default declareTransformationStep(
     ];
     
     const links = input.links.all
-        .filter((link)=>(["Groom", "Bride", "MaritalProgeny", "AdoptedMaritalProgeny", "AdoptedChild"].includes(link.type)))
+        .filter((link)=>(["Groom", "Bride", "MaritalProgeny", "AdoptedMaritalProgeny"].includes(link.type)))
         .map((link)=>({
             fromNodeIdentity: link.fromNodeIdentity,
             toNodeIdentity: link.toNodeIdentity,

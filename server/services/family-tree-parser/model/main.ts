@@ -1,9 +1,7 @@
-import {
-  isRuntimeError,
-  wrapRuntimeError,
-} from "../../../common/runtime-error.ts";
-import { createGrammarParserFromFile } from "../../../libs/grammar-parser/main.ts";
-import { StrategyKeys } from "../../../libs/strategy-map.ts";
+import { createGrammarParserFromFile } from "../../../common/grammar-parser/main.ts";
+import { StrategyKeys } from "../../../common/strategy-map.ts";
+import { InvalidGrammarError, InvalidInputError } from "../../../errors/grammar-parser.ts";
+import { isRuntimeError, wrapRuntimeError } from "../../../errors/runtime-error.ts";
 import { transformationPipelines } from "./transformation-strategies/main.ts";
 
 interface parseFamilyTreeTextOptions {
@@ -33,6 +31,9 @@ export default async function parseFamilyTreeText(
     return output;
   } catch (e) {
     if (isRuntimeError(e)) {
+      if (InvalidGrammarError.is(e) || InvalidInputError.is(e)) {
+        throw InvalidInputError.create("Failed to parse family tree");
+      }
       throw wrapRuntimeError(e, "Failed to parse family tree");
     } else {
       throw e;

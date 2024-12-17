@@ -1,7 +1,7 @@
 import { IToken } from "ebnf";
 import { FamilyTreeContext } from "./types.ts";
 import { processStatement } from "./statement-processor.ts";
-import { recursivelyFindOfType } from "../../../../../libs/grammar-parser/main.ts";
+import { recursivelyFindOfType } from "../../../../../common/grammar-parser/main.ts";
 
 export default function parseAstToFamilyTreeContext(ast: IToken) {
   // Step 1: initialise context

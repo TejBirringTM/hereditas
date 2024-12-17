@@ -49,7 +49,7 @@ export function declareJsonApi(servicePath: TServicePath) {
       request: InferOutput<
         StrictObjectSchema<TRequestEntries, TRequestParserErrorMessage>
       >,
-    ) => Promise<ApiSuccessResult<TResponse> | ApiErrorResult>,
+    ) => Promise<ApiSuccessResult<TResponse> | ApiErrorResult>
   ) => {
     const __requestPath = _requestPath(requestPath, versionMajor);
 

@@ -1,3 +1,4 @@
+import debugOnly from "../../../../../../common/framework/debug-only.ts";
 import {
   traverseGraphBreadthFirst,
   VisitContext,
@@ -34,11 +35,10 @@ const beforeEnqueueTraverseDown = (
     if (typeof context.currentNode.node.generationInTree === "number") {
       const nextGeneration = context.currentNode.node.generationInTree + 1;
       assignGeneration(node, nextGeneration);
-      console.log(context.rootNode.identity);
     }
-    console.debug(
-      `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
-    );
+    debugOnly(()=>{
+      console.debug(`enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`);
+    });
   });
 };
 
@@ -53,9 +53,9 @@ const beforeEnqueueTraverseUp = (
       const prevGeneration = context.currentNode.node.generationInTree - 1;
       assignGeneration(node, prevGeneration);
     }
-    console.debug(
-      `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
-    );
+    debugOnly(()=>{
+      console.debug(`enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,);
+    });
   });
 };
 
@@ -94,9 +94,9 @@ export default declareTransformationStep(
         beforeEnqueue: (context) =>
           beforeEnqueueTraverseDown(context, "primary root"),
         visit(context) {
-          console.debug(
-            `visiting (from primary root): ${context.currentNode.node.identity}`,
-          );
+          debugOnly(()=>{
+            console.debug(`visiting (from primary root): ${context.currentNode.node.identity}`);
+          });
           const contemporaries = ownGeneration(input, context.currentNode.node);
           contemporaries.forEach((node) => {
             assignGeneration(node, context.currentNode.node.generationInTree);
@@ -123,9 +123,9 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseUp(context, "leaf"),
             visit(context) {
-              console.debug(
-                `visiting (from leaf): ${context.currentNode.node.identity}`,
-              );
+              debugOnly(()=>{
+                console.debug(`visiting (from leaf): ${context.currentNode.node.identity}`);
+              });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,
@@ -148,9 +148,9 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseDown(context, "root"),
             visit(context) {
-              console.debug(
-                `visiting (from root): ${context.currentNode.node.identity}`,
-              );
+              debugOnly(()=>{
+                console.debug(`visiting (from root): ${context.currentNode.node.identity}`);
+              });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,

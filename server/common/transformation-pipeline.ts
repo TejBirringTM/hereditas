@@ -1,4 +1,5 @@
 import { KebabCase, PascalCase } from "type-fest";
+import debugOnly from "./framework/debug-only.ts";
 
 type WrapTitle<T, Title> = T & {
   title: Title;
@@ -15,14 +16,18 @@ export const declareTransformationPipeline =
     ...transformationSteps: T
   ) =>
   (input: GetPipelineInput<T>): GetPipelineOutput<T> => {
-    console.debug(`Executing pipeline: ${title}`);
+    debugOnly(()=>{
+      console.debug(`Executing pipeline: ${title}`);
+    });
     // deno-lint-ignore no-explicit-any
     let c: any = chain(input);
     for (const transformationStep of transformationSteps) {
       c = c.execute(transformationStep);
     }
     //
-    console.debug(`Done executing pipeline: ${title}`);
+    debugOnly(()=>{
+      console.debug(`Done executing pipeline: ${title}`);
+    });
     // return
     return c.result;
   };
@@ -72,7 +77,9 @@ function chain<Input>(input: Input, index = 0) {
     execute: <Output>(
       transformation: TransformationStep<Input, Output, string>,
     ) => {
-      console.debug(`[${index}] => ${transformation.title}`);
+      debugOnly(()=>{
+        console.debug(`[${index}] => ${transformation.title}`);
+      });
       const result = transformation.fn(input);
       return chain(result, index + 1);
     },

@@ -13,5 +13,13 @@
     "@valibot/valibot": "jsr:@valibot/valibot@^0.42.1",
     "ebnf": "npm:ebnf@^1.9.1",
     "type-fest": "npm:type-fest@^4.30.0"
+  },
+  "deploy": {
+    "project": "977c2fe4-ce50-4205-97ba-4cb73882c60f",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }

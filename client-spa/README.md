@@ -1,50 +1,35 @@
-# React + TypeScript + Vite
+# Family Tree Visualiser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Deployment
 
-Currently, two official plugins are available:
+The Single Page Application is deployed on the Netlify platform which utilises a content delivery network (CDN) to deliver static content.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The [Netlify CLI](https://docs.netlify.com/cli/get-started/) is used to upload the built site to the platform.
 
-## Expanding the ESLint configuration
+### Steps to Deploy (Preview)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Log in to Netlify account
 
-- Configure the top-level `parserOptions` property like this:
+    `netlify login`
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+2. Build the project
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+    `npm run build`
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+3. Deploy the project (as preview)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+    `netlify deploy --site family-tree-visualiser --dir ./dist`
+
+### Steps to Deploy (Production)
+
+Once a preview has been deployed (as explained above), it will either be rejected (deleted), kept for internal use (e.g. debugging), or approved for production.
+
+The production site is served on: 
+
+`https://family-tree-visualiser.netlify.app`
+
+To publish to the production environment:
+
+1. Visit [Netlify Site Dashboard -> Deploys](https://app.netlify.com/sites/family-tree-visualiser/deploys)
+2. Select the approved Deploy Preview from the list
+3. Click 'Publish deploy'

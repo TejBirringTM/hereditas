@@ -2,7 +2,7 @@ import { Button, Flex, Modal, rem, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import ShareIcon from "../../../assets/icons/uicons-thin-straight/fi-ts-share-square.svg?react"
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import type { RootState } from '../../../store';
 import { useEffect, useRef, useState } from 'react';
 import { urlSearchKey_familyTreeToken } from '../slice';
 import { usePostHog } from 'posthog-js/react';
@@ -30,7 +30,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
 
     useEffect(()=>{
         if (opened) {
-            navigator.clipboard.writeText(shareLink)
+            void navigator.clipboard.writeText(shareLink)
             .then(()=>{
                 setTokenCopied(true);
                 console.debug("Share link copied to clipboard.");

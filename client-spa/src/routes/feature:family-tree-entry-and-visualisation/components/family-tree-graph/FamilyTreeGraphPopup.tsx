@@ -1,5 +1,5 @@
 import { Box, Text } from "@mantine/core";
-import { Node } from "../../libs/parse-family-tree-entry";
+import type { Node } from "../../libs/parse-family-tree-entry";
 import styles from "./FamilyTreeGraph.module.css"
 import appendOrdinalSuffix from "../../../../libs/append-ordinal-suffix";
 
@@ -17,7 +17,7 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
             className={styles.popup}
             style={{top, left}}
         >
-            <Text fz="lg" fw="bold">{node.title || "(No name recorded)"}</Text>
+            <Text fz="lg" fw="bold">{node.title && node.title.length > 0 ? node.title : "(No name recorded)"}</Text>
 
             <div>
                 {
@@ -38,8 +38,8 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
                 (node.text.length > 0) &&
                 <Box mt="xs">
                 {
-                    node.text.map((t)=>(
-                        <Text fz="xs" lh="1.25">{t}</Text>
+                    node.text.map((t, idx)=>(
+                        <Text fz="xs" lh="1.25" key={`txt-${idx}`}>{t}</Text>
                     ))
                 }
                 </Box>

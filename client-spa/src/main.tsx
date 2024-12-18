@@ -8,8 +8,8 @@ import store from './store'
 
 import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
-const posthogApiKey = import.meta.env.VITE_POSTHOG_PUBLIC_API_KEY;
-const posthogHostUrl = import.meta.env.VITE_POSTHOG_HOST_URL;
+const posthogApiKey = import.meta.env.VITE_POSTHOG_PUBLIC_API_KEY as string;
+const posthogHostUrl = import.meta.env.VITE_POSTHOG_HOST_URL as string;
 posthog.init(
   posthogApiKey,
   {

@@ -1,17 +1,17 @@
-import { DeepNullable } from "ts-essentials";
-import { SimulationLink, SimulationNode } from "../../types";
+import type { DeepNullable } from "ts-essentials";
+import type { SimulationLink, SimulationNode } from "../../types";
 
-const strokeTypes = {
-    solid: "0",
-    dotted: "5,5", 
-    shortDashes: "10,10",
-    longDashes: "35,10",
-} as const;
-type StrokeType = keyof typeof strokeTypes;
+// const strokeTypes = {
+//     solid: "0",
+//     dotted: "5,5", 
+//     shortDashes: "10,10",
+//     longDashes: "35,10",
+// } as const;
+// type StrokeType = keyof typeof strokeTypes;
 
 type LineMarker = "none" | "url(#filledArrow)";
 
-type TextCase = "normal" | "upper" | "lower";
+// type TextCase = "normal" | "upper" | "lower";
 type FontWeight = number | "lighter" | "normal" | "bold" | "bolder";
 type FontSize = string;
 

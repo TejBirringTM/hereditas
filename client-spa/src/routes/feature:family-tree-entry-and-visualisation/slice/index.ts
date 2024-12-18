@@ -1,6 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import parseFamilyTreeEntry, { Graph } from '../libs/parse-family-tree-entry';
-import { RootState } from '../../../store';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { Graph } from '../libs/parse-family-tree-entry';
+import parseFamilyTreeEntry from '../libs/parse-family-tree-entry';
+import type { RootState } from '../../../store';
 import { detokeniseString, tokeniseString } from '../../../libs/tokenise';
 
 export const localStorageKey_textEntry = "family-tree-user-entry";
@@ -71,14 +73,14 @@ export const initialiseFamilyTreeEntry = createAsyncThunk("familyTreeEntry/initi
   const familyTreeToken = getFamilyTreeTokenFromUrl();
   if (familyTreeToken) {
       const familyTreeEntry = await detokeniseString(familyTreeToken);
-      thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: familyTreeEntry, persistToLocalStorage: false}));
-      thunkApi.dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: false}));
+      void thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: familyTreeEntry, persistToLocalStorage: false}));
+      void thunkApi.dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: false}));
       return;
   }
   // otherwise, see if family tree has been saved to local storage
   const textEntryFromLocalStorage = localStorage.getItem(localStorageKey_textEntry);
   if (textEntryFromLocalStorage) {
-    thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: textEntryFromLocalStorage, persistToLocalStorage: false}));
+    void thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: textEntryFromLocalStorage, persistToLocalStorage: false}));
   }
 });
 
@@ -87,7 +89,7 @@ export const processFamilyTreeTextEntry = createAsyncThunk("familyTreeEntry/proc
     const _familyTreeTextEntry = selectFamilyTreeTextEntry(thunkApi.getState() as RootState);
     const graph = await parseFamilyTreeEntry(_familyTreeTextEntry);
     const token = await tokeniseString(_familyTreeTextEntry);
-    thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: _familyTreeTextEntry, persistToLocalStorage: persistTextEntryToLocalStorage}));
+    void thunkApi.dispatch(setFamilyTreeTextEntry({textEntry: _familyTreeTextEntry, persistToLocalStorage: persistTextEntryToLocalStorage}));
     return thunkApi.fulfillWithValue({
       graph,
       token

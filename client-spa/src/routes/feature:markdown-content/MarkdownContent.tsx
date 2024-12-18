@@ -13,7 +13,7 @@ export default function MarkdownContent({content}: MarkdownContentProps) {
       if (typeof content === "string") {
         setMarkdownSource(content);
       } else {
-        content.then(({default: _content})=>{
+        void content.then(({default: _content})=>{
             setMarkdownSource(_content);
         });
       }

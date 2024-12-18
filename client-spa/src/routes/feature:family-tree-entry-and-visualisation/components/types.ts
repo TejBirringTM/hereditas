@@ -1,4 +1,4 @@
-import { Link, Node } from "../libs/parse-family-tree-entry";
+import type { Link, Node } from "../libs/parse-family-tree-entry";
 
 export type NodeState = "hovered" | "selected" | "highlighted" | "normal";
 export type LinkState = "highlighted" | "normal";

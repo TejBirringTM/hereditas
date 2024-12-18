@@ -1,11 +1,9 @@
 import { Button, Menu, rem } from "@mantine/core";
 import UndoIcon from "../../../assets/icons/uicons-thin-straight/fi-ts-undo.svg?react"
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import type { RootState } from "../../../store";
 import { resetFamilyTreeEntry } from "../slice";
 import { usePostHog } from "posthog-js/react";
-import { FamilyTreeEntryGraphFunctions } from "./family-tree-graph/FamilyTreeGraph";
-import { Ref } from "react";
 
 interface ResetMenuProps {
     resetPanAndZoom?: (()=>void) | undefined

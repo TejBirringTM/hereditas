@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
-import { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree-entry";
+import type { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree-entry";
 import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceX, forceSimulation} from "d3-force";
 import {select} from "d3-selection"
 import {line} from "d3-shape"
-import {zoom as _zoom, D3ZoomEvent} from "d3-zoom";
-import { SimulationNode, SimulationLink } from "../types";
+import type { D3ZoomEvent} from "d3-zoom";
+import {zoom as _zoom} from "d3-zoom";
+import type { SimulationNode, SimulationLink } from "../types";
 import { getLinkStyle, getNodeStyle } from "./family-tree-graph-styling/node-link-style";
 import FamilyTreeGraphPopup from "./FamilyTreeGraphPopup";
 import { gridLineColour } from "./family-tree-graph-styling/grid-style";
@@ -20,7 +21,7 @@ interface FamilyTreeEntryGraphProps {
     height: number,
 }
 
-const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphProps>(({graph, width, height}, ref)=>{
+export default forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphProps>(function FamilyTreeEntryGraph({graph, width, height}, ref){
     const root = useRef<HTMLDivElement>(null);
     const [selectedNode, _selectNode] = useState<SimulationNode|null>(null);
     const [selectedNodePosition, selectNodePosition] = useState<[number, number]|null>(null);
@@ -256,7 +257,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
 
         const _forceManyBody = forceManyBody();
         const _forceCentre = forceCenter(svgWidth/2, svgHeight/2);
-        const _forceCollide = forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r as number) * 1.5));
+        const _forceCollide = forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r!) * 1.5));
         const _forceLink = forceLink(links)
                                 .strength((d)=>{
                                     switch (d.type) {
@@ -306,7 +307,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
         }
         const _forceX = forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/rootAncestors.length).strength((d) => d.type === "Male" ? 1 : 1/100);
 
-        const simulation = forceSimulation(nodes)
+        const _simulation = forceSimulation(nodes)
                             .force("link", _forceLink.id((node)=>(node as typeof nodes[0]).identity))
                             .force("charge", _forceManyBody)
                             // .force("centre", _forceCentre)
@@ -413,28 +414,28 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
                     const dx = d.target.x - d.source.x;
                     const dy = d.target.y - d.source.y;
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
-                    return d.source.x + Math.cos(angle) * (getNodeStyle(d.source).r as number);
+                    return d.source.x + Math.cos(angle) * (getNodeStyle(d.source).r!);
                 })
                 .attr("y1", (d) => {
                     if (!d.target.x || !d.target.y || !d.source.x || !d.source.y) return null;
                     const dx = d.target.x - d.source.x;
                     const dy = d.target.y - d.source.y;
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
-                    return d.source.y + Math.sin(angle) * (getNodeStyle(d.source).r as number);
+                    return d.source.y + Math.sin(angle) * (getNodeStyle(d.source).r!);
                 })
                 .attr("x2", (d) => {
                     if (!d.target.x || !d.target.y || !d.source.x || !d.source.y) return null;
                     const dx = d.source.x - d.target.x;
                     const dy = d.source.y - d.target.y;
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
-                    return d.target.x + Math.cos(angle) * (getNodeStyle(d.target).r as number);
+                    return d.target.x + Math.cos(angle) * (getNodeStyle(d.target).r!);
                 })
                 .attr("y2", (d) => {
                     if (!d.target.x || !d.target.y || !d.source.x || !d.source.y) return null;
                     const dx = d.source.x - d.target.x;
                     const dy = d.source.y - d.target.y;
                     const angle = Math.atan2(dy, dx); // calculate angle between source and target nodes
-                    return d.target.y + Math.sin(angle) * (getNodeStyle(d.target).r as number);
+                    return d.target.y + Math.sin(angle) * (getNodeStyle(d.target).r!);
                 })
         }
 
@@ -457,5 +458,3 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
         />
     </div>    
 })
-
-export default FamilyTreeEntryGraph;

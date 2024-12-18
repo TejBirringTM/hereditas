@@ -1,7 +1,7 @@
 import Color from "colorjs.io";
 import { Colour } from "../../../../../libs/colour";
 import { declareLinkStyler, declareNodeStyler } from "./types";
-import { SimulationLink, SimulationNode } from "../../types";
+import type { SimulationLink, SimulationNode } from "../../types";
 
 const defaultMaleNodeColour = new Colour(0.3801, 0.2079, 280.58);
 const defaultFemaleNodeColour = new Colour(0.5413, 0.1337, 45.59);

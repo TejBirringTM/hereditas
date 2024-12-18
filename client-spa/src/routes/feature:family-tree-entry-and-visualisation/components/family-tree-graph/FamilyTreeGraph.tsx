@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree-entry";
-import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceSimulation} from "d3-force";
+import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceX, forceSimulation} from "d3-force";
 import {select} from "d3-selection"
 import {line} from "d3-shape"
 import {zoom as _zoom, D3ZoomEvent} from "d3-zoom";
@@ -91,7 +91,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
         const svgHeight = height;
         const div = select(root.current);
         let svg = div.select<SVGElement>("svg");
-        
+
         if (!graph) {
             console.debug("No graph, therefore nothing to draw.");
             svg.remove();
@@ -102,7 +102,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
             console.debug("Drawing graph...");
         }
 
-        const numOfGenerations = Math.max(...graph.nodes.map((node)=>node.generation));
+        const numOfGenerations = Math.max(...graph.nodes.map((node)=>node.generationInTree));
         const pxPerGenerationHeight = 250;
         const pxGenerationsHeight = (numOfGenerations * pxPerGenerationHeight) + pxPerGenerationHeight;
 
@@ -168,6 +168,7 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
             linkLines
                 .attr("stroke", (d)=>getLinkStyle(d).stroke)
                 .attr("stroke-width", (d)=>getLinkStyle(d)["stroke-width"])
+                .attr("stroke-dasharray", (d)=>getLinkStyle(d)["stroke-dasharray"])
                 .attr("marker-start", (d)=>getLinkStyle(d)["marker-start"])
                 .attr("marker-end", (d)=>getLinkStyle(d)["marker-end"])
         }
@@ -257,7 +258,20 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
         const _forceCentre = forceCenter(svgWidth/2, svgHeight/2);
         const _forceCollide = forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r as number) * 1.5));
         const _forceLink = forceLink(links)
-                                .strength((d)=>((d.type === "Bride" || d.type === "Groom") ? 1 : 1/100))
+                                .strength((d)=>{
+                                    switch (d.type) {
+                                        case "Bride":
+                                            return 1;
+                                        case "Groom":
+                                            return 1;
+                                        case "MaritalProgeny":
+                                            return 1/100;
+                                        case "AdoptedMaritalProgeny":
+                                            return 1/100;
+                                        default:
+                                            return 1/100;
+                                    }   
+                                })
                                 .distance((d)=>{
                                     switch (d.type) {
                                         case "Bride":
@@ -272,14 +286,33 @@ const FamilyTreeEntryGraph = forwardRef<FamilyTreeEntryGraphFunctions, FamilyTre
                                             return 30;
                                     }
                                 });
-        const _forceY = forceY<SimulationNode>((d) => (d.generation * pxPerGenerationHeight)).strength(2);
+        const _forceY = forceY<SimulationNode>((d) => (d.generationInTree * pxPerGenerationHeight)).strength(2);
+        
+        const rootAncestors = nodes.reduce<string[]>((prev, curr) => {
+            const identity = curr.rootAncestor?.identity;
+            if (identity && !prev.includes(identity)) {
+                prev.push(identity);
+            }
+            return prev;
+        }, []);
+        const rootAncestor = (node: SimulationNode) => {
+            if (node.generationInClan === 1) {
+                return rootAncestors.indexOf(node.identity) + 1;
+            } else if (node.rootAncestor) {
+                return rootAncestors.indexOf(node.rootAncestor.identity) + 1;
+            } else {
+                return 0;
+            }
+        }
+        const _forceX = forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/rootAncestors.length).strength((d) => d.type === "Male" ? 1 : 1/100);
 
         const simulation = forceSimulation(nodes)
                             .force("link", _forceLink.id((node)=>(node as typeof nodes[0]).identity))
                             .force("charge", _forceManyBody)
-                            .force("centre", _forceCentre)
+                            // .force("centre", _forceCentre)
                             .force("collide", _forceCollide)
                             .force("y", _forceY)
+                            .force("x", _forceX)
                             .on("tick", onSimulationTick);
 
         const _nodes = gNodes.selectAll("g.node")

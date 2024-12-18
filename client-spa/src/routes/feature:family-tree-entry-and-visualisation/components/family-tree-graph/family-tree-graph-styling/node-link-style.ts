@@ -68,11 +68,11 @@ export const getNodeStyle = declareNodeStyler((node)=>{
     }
     if (node.type === "Male") {
         return {
-            r: 32,
+            r: 39,
             fill: defaultMaleNodeColour.hex,
-            "font-size": "26pt",
+            "font-size": "13pt", // "26pt",
             "font-weight": "bold",
-            text: node.type[0].toUpperCase(),
+            text: node.identity.slice(5), //node.type[0].toUpperCase(),
             "text-colour": defaultMaleNodeColour.manipulate((color)=>{
                 const newColour = color.lighten(1.5);
                 return new Color(newColour)
@@ -83,11 +83,11 @@ export const getNodeStyle = declareNodeStyler((node)=>{
     } 
     else if (node.type === "Female") {
         return {
-            r: 32,
+            r: 39,
             fill: defaultFemaleNodeColour.hex,
-            "font-size": "26pt",
+            "font-size": "13pt", // "26pt",
             "font-weight": "bold",
-            text: node.type[0].toUpperCase(),
+            text: node.identity.slice(7), // node.type[0].toUpperCase(),
             "text-colour": defaultFemaleNodeColour.manipulate((color)=>{
                 const newColour = color.lighten(1.5);
                 return new Color(newColour)
@@ -100,9 +100,9 @@ export const getNodeStyle = declareNodeStyler((node)=>{
         return {
             r: 22,
             fill: defaultMarriageNodeColour.hex,
-            "font-size": "20pt",
+            "font-size": "10pt",
             "font-weight": "normal",
-            text: node.type[0].toLowerCase(),
+            text: "mrg", // node.type[0].toLowerCase(),
             "text-colour": defaultMarriageNodeColour.manipulate((color)=>{
                 const newColour = color.darken(1.5);
                 return new Color(newColour)
@@ -123,7 +123,8 @@ export const getLinkStyle = declareLinkStyler((link)=>{
             fill: null,
             stroke: null,
             "marker-end": null,
-            "marker-start": null
+            "marker-start": null,
+            "stroke-dasharray": null,
         }
     }
     if (link.type === "Bride" || link.type === "Groom") {
@@ -133,12 +134,14 @@ export const getLinkStyle = declareLinkStyler((link)=>{
             fill: null,
             "marker-start": null,
             "marker-end": null,
+            "stroke-dasharray": null,
         }
     }
     else if (link.type === "MaritalProgeny" || link.type === "AdoptedMaritalProgeny") {
         return {
             stroke: linkStrokeColour(link, defaultProgenyLinksColour),
             "stroke-width": link.state === "highlighted" ? 6 : 4,
+            "stroke-dasharray": link.type === "AdoptedMaritalProgeny" ? "10 10" : null,
             fill: null,
             "marker-start": null,
             "marker-end": "url(#filledArrow)"

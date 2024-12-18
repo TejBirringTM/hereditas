@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Box, Text } from "@mantine/core";
 import { Node } from "../../libs/parse-family-tree-entry";
 import styles from "./FamilyTreeGraph.module.css"
 import appendOrdinalSuffix from "../../../../libs/append-ordinal-suffix";
@@ -18,12 +18,32 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
             style={{top, left}}
         >
             <Text fz="lg" fw="bold">{node.title || "(No name recorded)"}</Text>
-            {
-                node.patrilineage &&
-                    <Text fw="bold" fz="sm" fs={"italic"}>{appendOrdinalSuffix(node.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1)} generation of clan.</Text>
-            }
-            <Text fz="sm" fs={"italic"}>{appendOrdinalSuffix(node.generation)} generation in tree.</Text>
+
+            <div>
+                {
+                    node.patrilineage &&
+                        <Text fw="bold" fz="xs" fs={"italic"}>
+                            {appendOrdinalSuffix(node.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1)} generation of clan
+                            {node.rootAncestor && <span>, from {node.rootAncestor.title}</span>}
+                        </Text>
+                }
+                
+                {
+                    (node.generationInClan !== node.generationInTree) &&
+                    <Text fz="xs" fs={"italic"}>({appendOrdinalSuffix(node.generationInTree)} generation in tree)</Text>
+                }
+            </div>
             
+            {
+                (node.text.length > 0) &&
+                <Box mt="xs">
+                {
+                    node.text.map((t)=>(
+                        <Text fz="xs" lh="1.25">{t}</Text>
+                    ))
+                }
+                </Box>
+            }
         </div>
     }
 }

@@ -6,7 +6,6 @@ import Root from "./routes/Root";
 import Home from "./routes/feature:family-tree-entry-and-visualisation/Home";
 import Error from "./routes/Error";
 import MarkdownContent from "./routes/feature:markdown-content/MarkdownContent";
-import { lazy } from "react";
 
 const router = createBrowserRouter([
   {

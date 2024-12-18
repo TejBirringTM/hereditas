@@ -1,5 +1,5 @@
 import { DeepNullable } from "ts-essentials";
-import { SimulationLink, SimulationNode } from "../types";
+import { SimulationLink, SimulationNode } from "../../types";
 
 const strokeTypes = {
     solid: "0",
@@ -36,6 +36,7 @@ type BasicNodeStyle = DeepNullable<{
 type BasicLinkStyle = DeepNullable<{
     // stroke
     "stroke-width": number,
+    "stroke-dasharray": string,
     "stroke": HexColour,
     // markers
     "marker-start": LineMarker,

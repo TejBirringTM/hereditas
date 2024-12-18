@@ -59,7 +59,7 @@ export default function Home() {
 
    useEffect(()=>{
     if (graph) {
-        setSvgHeight(Math.max(...(graph as Graph).nodes.map((node)=>(node.generation))) * 350);
+        setSvgHeight(Math.max(...(graph as Graph).nodes.map((node)=>(node.generationInTree))) * 350);
     }
    }, [graph])
 

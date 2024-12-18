@@ -4,8 +4,10 @@ import * as v from "valibot";
 const baseNodeSchema = v.object({
     identity: v.string(),
     type: v.union([v.literal("Male"), v.literal("Female"), v.literal("Marriage")]),
-    generation: v.number(),
+    generationInTree: v.number(),
+    generationInClan: v.optional(v.number()),
     title: v.optional(v.string()),
+    text: v.array(v.string()),
 });
 
 export const linkSchema = v.object({
@@ -25,9 +27,7 @@ export const nodeSchema = v.object({
         nodes: v.array(baseNodeSchema.entries.identity),
         links: v.array(linkSchema)
     })),
-    numOfMarriages: v.optional(v.number()),
-    numOfChildren: v.optional(v.number()),
-    numOfAdoptedHeirs: v.optional(v.number())
+    rootAncestor: v.optional(baseNodeSchema)
 })
 
 export type Node = v.InferInput<typeof nodeSchema>;

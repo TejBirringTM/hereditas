@@ -1,6 +1,9 @@
 import { assert } from "@std/assert";
 import TraverseTreeRecursivelyToAssignGenerationNumbers from "./2-traverse-tree-recursively-to-assign-generation-numbers.ts";
-import { declareTransformationStep, TransformationStepOutput } from "../../../../../../common/transformation-pipeline.ts";
+import {
+  declareTransformationStep,
+  TransformationStepOutput,
+} from "../../../../../../common/transformation-pipeline.ts";
 import { ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
 
 type Input = TransformationStepOutput<
@@ -25,21 +28,29 @@ export default declareTransformationStep(
     if (
       !input.nodes.persons.all.every((
         node,
-      ) => (typeof node.generationInTree === "number" && node.generationInTree > 0))
+      ) => (typeof node.generationInTree === "number" &&
+        node.generationInTree > 0)
+      )
     ) {
-      throw ProcessingFailedError.create('failed to normalise generation numbers');
+      throw ProcessingFailedError.create(
+        "failed to normalise generation numbers",
+      );
     }
 
     // assign generation to marriage nodes
-    input.nodes.marriages.all.forEach((node)=>{
-      const groomIdentity = input.adjacencies.byMarriage.single.groom.get(node.identity);
-      const brideIdentity = input.adjacencies.byMarriage.single.bride.get(node.identity);
+    input.nodes.marriages.all.forEach((node) => {
+      const groomIdentity = input.adjacencies.byMarriage.single.groom.get(
+        node.identity,
+      );
+      const brideIdentity = input.adjacencies.byMarriage.single.bride.get(
+        node.identity,
+      );
       const groom = input.nodes.persons.male.$one(groomIdentity);
       const bride = input.nodes.persons.female.$one(brideIdentity);
       if (groom && bride && groom.generationInTree && bride.generationInTree) {
         node.generationInTree = groom.generationInTree;
       }
-    })
+    });
     return input;
   },
 );

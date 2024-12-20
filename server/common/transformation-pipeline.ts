@@ -16,7 +16,7 @@ export const declareTransformationPipeline =
     ...transformationSteps: T
   ) =>
   (input: GetPipelineInput<T>): GetPipelineOutput<T> => {
-    debugOnly(()=>{
+    debugOnly(() => {
       console.debug(`Executing pipeline: ${title}`);
     });
     // deno-lint-ignore no-explicit-any
@@ -25,7 +25,7 @@ export const declareTransformationPipeline =
       c = c.execute(transformationStep);
     }
     //
-    debugOnly(()=>{
+    debugOnly(() => {
       console.debug(`Done executing pipeline: ${title}`);
     });
     // return
@@ -49,9 +49,9 @@ export const declareTransformationStep = <Input, Output, Title extends string>(
     fn,
   }) satisfies TransformationStep<Input, Output, Title>;
 
-export type TransformationStepOutput<Candidate> = Candidate extends
-// deno-lint-ignore no-explicit-any
-  TransformationStep<any, infer O, any> ? O : never;
+export type TransformationStepOutput<Candidate> = Candidate extends // deno-lint-ignore no-explicit-any
+TransformationStep<any, infer O, any> ? O
+  : never;
 
 /**
  * Pipeline represents a sequential arragement of TranformationStep objects
@@ -77,7 +77,7 @@ function chain<Input>(input: Input, index = 0) {
     execute: <Output>(
       transformation: TransformationStep<Input, Output, string>,
     ) => {
-      debugOnly(()=>{
+      debugOnly(() => {
         console.debug(`[${index}] => ${transformation.title}`);
       });
       const result = transformation.fn(input);

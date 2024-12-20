@@ -7,6 +7,7 @@ import {
 } from "../../common/framework/response.ts";
 import { Status } from "@oak/oak";
 import { isRuntimeError } from "../../errors/runtime-error.ts";
+import { dumpError } from "../../common/error-handling.ts";
 
 const tokeniserService = declareJsonApi("tokeniser");
 
@@ -25,13 +26,10 @@ tokeniserService.declareRequest(
         token,
       });
     } catch (e) {
+      dumpError(e);
       if (isRuntimeError(e)) {
         return declareErrorResponse(Status.BadRequest, e.message);
       } else {
-        const errorMessage = e instanceof Error ? e.message : undefined;
-        if (errorMessage) {
-          console.error(errorMessage);
-        }
         return declareErrorResponse(
           Status.InternalServerError,
           "An unknown error occurred.",
@@ -56,13 +54,10 @@ tokeniserService.declareRequest(
         string: detoken,
       });
     } catch (e) {
+      dumpError(e);
       if (isRuntimeError(e)) {
         return declareErrorResponse(Status.BadRequest, e.message);
       } else {
-        const errorMessage = e instanceof Error ? e.message : undefined;
-        if (errorMessage) {
-          console.error(errorMessage);
-        }
         return declareErrorResponse(
           Status.InternalServerError,
           "An unknown error occurred.",

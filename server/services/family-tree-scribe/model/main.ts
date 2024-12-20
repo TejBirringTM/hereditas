@@ -6,21 +6,21 @@ interface IFamilyTreeScribe {
 }
 
 export class FamilyTreeScribe implements IFamilyTreeScribe {
-    private readonly grammar;
-    private readonly gpt;
+  private readonly grammar;
+  private readonly gpt;
 
-    constructor(grammar: string) {
-        this.grammar = grammar;
-        this.gpt = new GptO1Mini();
-    }
+  constructor(grammar: string) {
+    this.grammar = grammar;
+    this.gpt = new GptO1Mini();
+  }
 
-    async scribe(familyTreeDescription: string): Promise<string> {
-        const result = await this.gpt.complete(
-            promptV1({
-                grammar: this.grammar,
-                familyTreeDescription,
-            })
-        );
-        return result;   
-    }
+  async scribe(familyTreeDescription: string): Promise<string> {
+    const result = await this.gpt.complete(
+      promptV1({
+        grammar: this.grammar,
+        familyTreeDescription,
+      }),
+    );
+    return result;
+  }
 }

@@ -1,6 +1,9 @@
 import type { IToken } from "ebnf";
 import { assert } from "@std/assert";
-import { recursivelyFindFirstOfType, shallowFindOfType } from "../../../../../common/grammar-parser/main.ts";
+import {
+  recursivelyFindFirstOfType,
+  shallowFindOfType,
+} from "../../../../../common/grammar-parser/main.ts";
 
 type TokenParser<T> = (token: IToken) => T;
 type SomeTokenParser = TokenParser<unknown>;
@@ -176,19 +179,26 @@ export const PROGENY_DECLARATION = ((token) => {
 }) satisfies SomeTokenParser;
 
 export const APPEND_TEXT_DECLARATION = ((token) => {
-  const personExpression = MAYBE_A_(PERSON_EXPRESSION, recursivelyFindFirstOfType(token, "PERSON_EXPRESSION", false, false));
-  const marriageReference = MAYBE_A_(MARRIAGE_REFERENCE, recursivelyFindFirstOfType(token, "MARRIAGE_REFERENCE", false, false));
+  const personExpression = MAYBE_A_(
+    PERSON_EXPRESSION,
+    recursivelyFindFirstOfType(token, "PERSON_EXPRESSION", false, false),
+  );
+  const marriageReference = MAYBE_A_(
+    MARRIAGE_REFERENCE,
+    recursivelyFindFirstOfType(token, "MARRIAGE_REFERENCE", false, false),
+  );
   const appendTextTo = personExpression ?? marriageReference;
   assert(!!appendTextTo);
-  
-  const textLines = shallowFindOfType(token, "APPEND_TEXT_DECLARATION_LINE").flatMap((subtoken)=>{
-    const text = shallowFindOfType(subtoken, "TEXT");
-    return text.map((t)=>t.text);
-  });
+
+  const textLines = shallowFindOfType(token, "APPEND_TEXT_DECLARATION_LINE")
+    .flatMap((subtoken) => {
+      const text = shallowFindOfType(subtoken, "TEXT");
+      return text.map((t) => t.text);
+    });
 
   return {
     to: appendTextTo,
-    textLines
+    textLines,
   } as const;
 }) satisfies SomeTokenParser;
 

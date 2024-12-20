@@ -147,11 +147,10 @@ export function makeContext(basicContext: BasicContext) {
   return pipelineContext;
 }
 
-export function unresolveLink<L extends AnyLink>(link: ResolvedLink<L>) : L {
+export function unresolveLink<L extends AnyLink>(link: ResolvedLink<L>): L {
   return {
     type: link.type,
     fromNodeIdentity: link.fromNodeIdentity,
-    toNodeIdentity: link.toNodeIdentity
+    toNodeIdentity: link.toNodeIdentity,
   } as L;
 }
-

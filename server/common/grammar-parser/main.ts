@@ -1,7 +1,10 @@
 import { Grammars, type IToken, TokenError } from "npm:ebnf";
 import { loadTextFile } from "../file.ts";
 import path from "node:path";
-import { InvalidGrammarError, InvalidInputError } from "../../errors/grammar-parser.ts";
+import {
+  InvalidGrammarError,
+  InvalidInputError,
+} from "../../errors/grammar-parser.ts";
 const Parser = Grammars.W3C.Parser;
 
 export class GrammarParser {
@@ -97,7 +100,9 @@ export function recursivelyFindFirstOfType<
   }
   const result = _recursivelyFindFirstOfType(token);
   if (throwError && !result) {
-    throw InvalidInputError.create(`could not find ${type} when parsing ${token.type}`);
+    throw InvalidInputError.create(
+      `could not find ${type} when parsing ${token.type}`,
+    );
   }
   return result as ThrowError extends true ? Exclude<typeof result, undefined>
     : typeof result;

@@ -2,7 +2,10 @@ import * as v from "@valibot/valibot";
 import { declareJsonApi } from "../../common/framework/main.ts";
 import { FamilyTreeScribe } from "./model/main.ts";
 import { isRuntimeError } from "../../errors/runtime-error.ts";
-import { declareErrorResponse, declareSuccessResponse } from "../../common/framework/response.ts";
+import {
+  declareErrorResponse,
+  declareSuccessResponse,
+} from "../../common/framework/response.ts";
 import { Status } from "@oak/oak";
 import { loadTextFile } from "../../common/file.ts";
 import path from "node:path";
@@ -18,12 +21,16 @@ tokeniserService.declareRequest(
   }),
   async (request) => {
     try {
-        const grammar = await loadTextFile(path.resolve("services/family-tree-parser/model/libs/parse-text-to-ast/grammar/ebnf.ebnf"));
-        const scribe = new FamilyTreeScribe(grammar);
-        const result = await scribe.scribe(request.text);
-        return declareSuccessResponse({
-            result
-        });
+      const grammar = await loadTextFile(
+        path.resolve(
+          "services/family-tree-parser/model/libs/parse-text-to-ast/grammar/ebnf.ebnf",
+        ),
+      );
+      const scribe = new FamilyTreeScribe(grammar);
+      const result = await scribe.scribe(request.text);
+      return declareSuccessResponse({
+        result,
+      });
     } catch (e) {
       if (e instanceof Error) {
         console.error(e.stack);
@@ -43,6 +50,5 @@ tokeniserService.declareRequest(
     }
   },
 );
-
 
 export default tokeniserService;

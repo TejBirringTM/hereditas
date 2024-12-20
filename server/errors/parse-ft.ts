@@ -1,25 +1,25 @@
 import { declareRuntimeError } from "./runtime-error.ts";
 
 export const UnimplementedSyntaxError = declareRuntimeError(
-    "ParseFamilyTree:UnimplementedSyntaxError",
+  "ParseFamilyTree:UnimplementedSyntaxError",
 );
 
 export const InvalidReferenceError = declareRuntimeError(
-    "ParseFamilyTree:InvalidReferenceError",
+  "ParseFamilyTree:InvalidReferenceError",
 );
 
 export const DuplicateDeclarationError = declareRuntimeError(
-    "ParseFamilyTree:DuplicateDeclarationError",
+  "ParseFamilyTree:DuplicateDeclarationError",
 );
 
 export const MissingDeclarationError = declareRuntimeError(
-    "ParseFamilyTree:MissingDeclarationError",
+  "ParseFamilyTree:MissingDeclarationError",
 );
 
 export const InvalidDeclarationError = declareRuntimeError(
-    "ParseFamilyTree:InvalidDeclarationError",
+  "ParseFamilyTree:InvalidDeclarationError",
 );
 
 export const ProcessingFailedError = declareRuntimeError(
-    "ParseFamilyTree:ProcessingFailedError",
+  "ParseFamilyTree:ProcessingFailedError",
 );

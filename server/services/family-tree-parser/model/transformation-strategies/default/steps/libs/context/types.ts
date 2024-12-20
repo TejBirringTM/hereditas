@@ -1,10 +1,13 @@
-import { AdjacencyMapMultiple, AdjacencyMapSingular } from "../../../../../../../../common/adjacency-map.ts";
+import {
+  AdjacencyMapMultiple,
+  AdjacencyMapSingular,
+} from "../../../../../../../../common/adjacency-map.ts";
 import { Nullable } from "../../../../../../../../types.ts";
 import {
   AnyLink as _Link,
   AnyNode as _Node,
   FamilyTreeContext as _BasicContext,
-  NMale as _NMale
+  NMale as _NMale,
 } from "../../../../../libs/parse-ast-to-ft-context/types.ts";
 
 /* Raw Context */
@@ -15,13 +18,13 @@ export type AnyNode = _Node & {
   generationInTree?: number;
   generationInClan?: number;
   patrilineage?: ReferentialSubgraph;
-  rootAncestor?: _NMale
+  rootAncestor?: _NMale;
 };
 
 export type ReferentialSubgraph = {
-  nodes: AnyNode["identity"][],
-  links: AnyLink[]
-}
+  nodes: AnyNode["identity"][];
+  links: AnyLink[];
+};
 
 export type AnyLink = _Link;
 

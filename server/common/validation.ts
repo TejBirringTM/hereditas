@@ -43,8 +43,8 @@ export function makeAssertFunction<
       return result.output;
     } else {
       throw ValidationFailedError.create(
-        `invalid ${name}: ${result.issues.map((issue) => issue.message)}`
-      )
+        `invalid ${name}: ${result.issues.map((issue) => issue.message)}`,
+      );
     }
   };
 }

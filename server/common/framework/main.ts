@@ -52,7 +52,7 @@ export function declareJsonApi(servicePath: TServicePath) {
       request: InferOutput<
         StrictObjectSchema<TRequestEntries, TRequestParserErrorMessage>
       >,
-    ) => Promise<ApiSuccessResult<TResponse> | ApiErrorResult>
+    ) => Promise<ApiSuccessResult<TResponse> | ApiErrorResult>,
   ) => {
     const __requestPath = _requestPath(requestPath, versionMajor);
 
@@ -62,50 +62,54 @@ export function declareJsonApi(servicePath: TServicePath) {
       );
     });
 
-    return router.post(__requestPath, createDenoKvCacheMiddleware(denoKvCache, cached), async (ctx, next) => {
-      // try parse request body as a JSON object
-      let requestBody;
-      try {
-        requestBody = await ctx.request.body.json();
-      } catch (e) {
-        if (e instanceof HttpError && e.status === Status.BadRequest) {
-          ctx.response.body = ApiRequestErrors.requestBodyNotJsonError;
+    return router.post(
+      __requestPath,
+      createDenoKvCacheMiddleware(denoKvCache, cached),
+      async (ctx, next) => {
+        // try parse request body as a JSON object
+        let requestBody;
+        try {
+          requestBody = await ctx.request.body.json();
+        } catch (e) {
+          if (e instanceof HttpError && e.status === Status.BadRequest) {
+            ctx.response.body = ApiRequestErrors.requestBodyNotJsonError;
+          }
+          return;
         }
-        return;
-      }
-      // try parse request body using route- and method-specific schema
-      let request: InferOutput<typeof requestSchema>;
-      try {
-        request = parse(requestSchema, requestBody);
-      } catch (e) {
-        if (e instanceof ValiError) {
-          ctx.response.body = ApiRequestErrors.requestBodyNotValidError(
-            e.issues,
+        // try parse request body using route- and method-specific schema
+        let request: InferOutput<typeof requestSchema>;
+        try {
+          request = parse(requestSchema, requestBody);
+        } catch (e) {
+          if (e instanceof ValiError) {
+            ctx.response.body = ApiRequestErrors.requestBodyNotValidError(
+              e.issues,
+            );
+          }
+          return;
+        }
+        // get response
+        try {
+          const response = await requestHandler(request);
+          ctx.response.body = response;
+          if (response.error) {
+            ctx.response.status = response.status;
+          } else {
+            ctx.response.status = Status.OK;
+          }
+        } catch (_e) {
+          const genericErrorResponse = declareErrorResponse(
+            Status.InternalServerError,
+            "An unknown error occurred.",
           );
+          ctx.response.body = genericErrorResponse;
+          ctx.response.status = genericErrorResponse.status;
         }
-        return;
-      }
-      // get response
-      try {
-        const response = await requestHandler(request);
-        ctx.response.body = response;
-        if (response.error) {
-          ctx.response.status = response.status;
-        } else {
-          ctx.response.status = Status.OK;
-        }
-      } catch (_e) {
-        const genericErrorResponse = declareErrorResponse(
-          Status.InternalServerError,
-          "An unknown error occurred.",
-        );
-        ctx.response.body = genericErrorResponse;
-        ctx.response.status = genericErrorResponse.status;
-      }
 
-      console.debug(ctx.response.body);
-      await next();
-    });
+        console.debug(ctx.response.body);
+        await next();
+      },
+    );
   };
 
   return Object.freeze({

@@ -22,12 +22,11 @@ export type GetParamsOptions = GetQueryOptionsBase | GetQueryOptionsAsMap;
 /** Given a context, return the `.request.url.searchParams` as a `Map` of keys
  * and values of the params. */
 export function getQuery<
-R extends string,
-P extends RouteParams<R>,
-S extends State,
->
-(
-  ctx: Context<S, S> | RouterContext<R,P,S>,
+  R extends string,
+  P extends RouteParams<R>,
+  S extends State,
+>(
+  ctx: Context<S, S> | RouterContext<R, P, S>,
   options: GetQueryOptionsAsMap,
 ): Map<string, string>;
 /** Given a context, return the `.request.url.searchParams` as a record object

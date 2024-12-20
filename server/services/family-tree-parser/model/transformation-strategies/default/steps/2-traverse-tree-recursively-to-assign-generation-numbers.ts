@@ -3,8 +3,15 @@ import {
   traverseGraphBreadthFirst,
   VisitContext,
 } from "../../../../../../common/graph-computation/traverse-graph.ts";
-import { TransformationStepOutput, declareTransformationStep } from "../../../../../../common/transformation-pipeline.ts";
-import { InvalidDeclarationError, MissingDeclarationError, ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
+import {
+  declareTransformationStep,
+  TransformationStepOutput,
+} from "../../../../../../common/transformation-pipeline.ts";
+import {
+  InvalidDeclarationError,
+  MissingDeclarationError,
+  ProcessingFailedError,
+} from "../../../../../../errors/parse-ft.ts";
 import DevelopContext from "./1-develop-context.ts";
 import { NPerson } from "./libs/context/types.ts";
 import {
@@ -36,8 +43,10 @@ const beforeEnqueueTraverseDown = (
       const nextGeneration = context.currentNode.node.generationInTree + 1;
       assignGeneration(node, nextGeneration);
     }
-    debugOnly(()=>{
-      console.debug(`enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`);
+    debugOnly(() => {
+      console.debug(
+        `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
+      );
     });
   });
 };
@@ -53,8 +62,10 @@ const beforeEnqueueTraverseUp = (
       const prevGeneration = context.currentNode.node.generationInTree - 1;
       assignGeneration(node, prevGeneration);
     }
-    debugOnly(()=>{
-      console.debug(`enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,);
+    debugOnly(() => {
+      console.debug(
+        `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
+      );
     });
   });
 };
@@ -70,13 +81,15 @@ export default declareTransformationStep(
     // find roots and leafs
     const allRoots = input.nodes.persons.all
       .filter((node) => isRootNode(input, node));
-      
+
     const allLeafs = input.nodes.persons.all.filter((node) =>
       isLeafNode(input, node)
     );
 
     if (!allRoots.includes(input.nodes.persons.male.designatedRootAncestor)) {
-      throw InvalidDeclarationError.create("a start declaration must designate the first recorded male of any patrilineage");
+      throw InvalidDeclarationError.create(
+        "a start declaration must designate the first recorded male of any patrilineage",
+      );
     }
 
     // the primary root is the male that is asserted as root of the tree
@@ -84,7 +97,6 @@ export default declareTransformationStep(
 
     // assert for the primary root a generation number of 1
     primaryRoot.generationInTree = 1;
-
 
     // initial traversal to assign generation numbers from primary root
     traverseGraphBreadthFirst(
@@ -94,8 +106,10 @@ export default declareTransformationStep(
         beforeEnqueue: (context) =>
           beforeEnqueueTraverseDown(context, "primary root"),
         visit(context) {
-          debugOnly(()=>{
-            console.debug(`visiting (from primary root): ${context.currentNode.node.identity}`);
+          debugOnly(() => {
+            console.debug(
+              `visiting (from primary root): ${context.currentNode.node.identity}`,
+            );
           });
           const contemporaries = ownGeneration(input, context.currentNode.node);
           contemporaries.forEach((node) => {
@@ -123,8 +137,10 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseUp(context, "leaf"),
             visit(context) {
-              debugOnly(()=>{
-                console.debug(`visiting (from leaf): ${context.currentNode.node.identity}`);
+              debugOnly(() => {
+                console.debug(
+                  `visiting (from leaf): ${context.currentNode.node.identity}`,
+                );
               });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
@@ -132,7 +148,10 @@ export default declareTransformationStep(
                   context.currentNode.node,
                 );
                 contemporaries.forEach((node) => {
-                  assignGeneration(node, context.currentNode.node.generationInTree);
+                  assignGeneration(
+                    node,
+                    context.currentNode.node.generationInTree,
+                  );
                 });
               }
             },
@@ -148,8 +167,10 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseDown(context, "root"),
             visit(context) {
-              debugOnly(()=>{
-                console.debug(`visiting (from root): ${context.currentNode.node.identity}`);
+              debugOnly(() => {
+                console.debug(
+                  `visiting (from root): ${context.currentNode.node.identity}`,
+                );
               });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
@@ -157,7 +178,10 @@ export default declareTransformationStep(
                   context.currentNode.node,
                 );
                 contemporaries.forEach((node) => {
-                  assignGeneration(node, context.currentNode.node.generationInTree);
+                  assignGeneration(
+                    node,
+                    context.currentNode.node.generationInTree,
+                  );
                 });
               }
             },
@@ -170,7 +194,9 @@ export default declareTransformationStep(
     }
 
     if (unassignedNodes.length > 0) {
-      ProcessingFailedError.create('processing family tree timed out, probably due to complexity of input');
+      ProcessingFailedError.create(
+        "processing family tree timed out, probably due to complexity of input",
+      );
     }
 
     return input;

@@ -5,13 +5,16 @@ const config = {
   },
   external: {
     anthrophic: {
-      apiKey: Deno.env.get("ANTHROPIC_API_KEY") ?? null
+      apiKey: Deno.env.get("ANTHROPIC_API_KEY") ?? null,
     },
     openai: {
-      apiKey: Deno.env.get("OPENAI_API_KEY") ?? null
-    }
+      apiKey: Deno.env.get("OPENAI_API_KEY") ?? null,
+    },
+    airtable: {
+      apiKey: Deno.env.get("AIRTABLE_PERSONAL_ACCESS_TOKEN") ?? null,
+    },
   },
-  debugMode: !!Deno.env.get("DEBUG")
+  debugMode: !!Deno.env.get("DEBUG"),
 } as const;
 
 export default config;

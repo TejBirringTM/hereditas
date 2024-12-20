@@ -27,6 +27,8 @@
     "npm:@faker-js/faker@^9.2.0": "9.2.0",
     "npm:@types/express-serve-static-core@*": "5.0.2",
     "npm:@types/node@*": "22.5.4",
+    "npm:airtable@*": "0.12.2",
+    "npm:airtable@~0.12.2": "0.12.2",
     "npm:ebnf@*": "1.9.1",
     "npm:ebnf@^1.9.1": "1.9.1",
     "npm:openai@^4.77.0": "4.77.0",
@@ -160,6 +162,9 @@
         "form-data"
       ]
     },
+    "@types/node@14.18.63": {
+      "integrity": "sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ=="
+    },
     "@types/node@18.19.58": {
       "integrity": "sha512-2ryJttbOAWCYuZMdk4rmZZ6oqE+GSL5LxbaTVe4PCs0FUrHObZZAQL4ihMw9/cH1Pn8lSQ9TXVhsM4LrnfZ0aA==",
       "dependencies": [
@@ -191,10 +196,23 @@
         "event-target-shim"
       ]
     },
+    "abortcontroller-polyfill@1.7.8": {
+      "integrity": "sha512-9f1iZ2uWh92VcrU9Y8x+LdM4DLj75VE0MJB8zuF1iUnroEptStw+DQ8EQPMUdfe5k+PkB1uUfDQfWbhstH8LrQ=="
+    },
     "agentkeepalive@4.5.0": {
       "integrity": "sha512-5GG/5IbQQpC9FpkRGsSvZI5QYeSCzlJHdpBQntCsuTOxhKD8lqKhrleg2Yi7yvMIf82Ycmmqln9U8V9qwEiJew==",
       "dependencies": [
         "humanize-ms"
+      ]
+    },
+    "airtable@0.12.2": {
+      "integrity": "sha512-HS3VytUBTKj8A0vPl7DDr5p/w3IOGv6RXL0fv7eczOWAtj9Xe8ri4TAiZRXoOyo+Z/COADCj+oARFenbxhmkIg==",
+      "dependencies": [
+        "@types/node@14.18.63",
+        "abort-controller",
+        "abortcontroller-polyfill",
+        "lodash",
+        "node-fetch"
       ]
     },
     "asynckit@0.4.0": {
@@ -238,6 +256,9 @@
       "dependencies": [
         "ms"
       ]
+    },
+    "lodash@4.17.21": {
+      "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
     },
     "mime-db@1.52.0": {
       "integrity": "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="
@@ -441,6 +462,7 @@
       "jsr:@std/assert@1",
       "jsr:@valibot/valibot@~0.42.1",
       "npm:@faker-js/faker@^9.2.0",
+      "npm:airtable@~0.12.2",
       "npm:ebnf@^1.9.1",
       "npm:openai@^4.77.0",
       "npm:type-fest@^4.30.0"

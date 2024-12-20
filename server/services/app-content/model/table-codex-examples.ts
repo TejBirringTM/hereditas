@@ -12,4 +12,4 @@ export const recordSchema_codexExample = v.object({
     "Published": v.optional(v.boolean())
 });
 
-export const tableCodexExamples = new AirtableSync("apph4b8oGTIzV49FI", "tbloaAY6XXbvN5Wfb", {ttlInMilliseconds: config.cache.ttlInMilliseconds, selectOptions: {filterByFormula: ""}}, recordSchema_codexExample);
+export const tableCodexExamples = new AirtableSync("apph4b8oGTIzV49FI", "tbloaAY6XXbvN5Wfb", {ttlInMilliseconds: config.cache.ttlInMilliseconds, selectOptions: {filterByFormula: "{Published} = TRUE()"}}, recordSchema_codexExample);

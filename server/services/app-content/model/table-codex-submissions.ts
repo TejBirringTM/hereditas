@@ -14,4 +14,4 @@ export const recordSchema_codexSubmission = v.object({
     "Approved": v.optional(v.boolean())
 });
 
-export const tableCodexSubmissions = new AirtableSync("apph4b8oGTIzV49FI", "tblz7CyEockMSBhlw", {ttlInMilliseconds: config.cache.ttlInMilliseconds}, recordSchema_codexSubmission);
+export const tableCodexSubmissions = new AirtableSync("apph4b8oGTIzV49FI", "tblz7CyEockMSBhlw", {ttlInMilliseconds: config.cache.ttlInMilliseconds, selectOptions: { filterByFormula: "{Approved} = TRUE()" }}, recordSchema_codexSubmission);

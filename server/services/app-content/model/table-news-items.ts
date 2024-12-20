@@ -16,4 +16,4 @@ export const recordSchema_newsItem = v.object({
     "Published": v.optional(v.boolean()),
 });
 
-export const tableNewsItems = new AirtableSync("apph4b8oGTIzV49FI", "tbl9LNpWurK4GixEh", {ttlInMilliseconds: config.cache.ttlInMilliseconds}, recordSchema_newsItem);
+export const tableNewsItems = new AirtableSync("apph4b8oGTIzV49FI", "tbl9LNpWurK4GixEh", {ttlInMilliseconds: config.cache.ttlInMilliseconds, selectOptions: {filterByFormula: "{Published} = TRUE()"}}, recordSchema_newsItem);

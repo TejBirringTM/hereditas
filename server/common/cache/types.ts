@@ -2,9 +2,9 @@ import { Nullable } from "../../types.ts";
 
 export interface CacheOptions {
   /** Time-to-live in milliseconds */
-  ttl?: number;
+  ttl: number;
   /** Maximum number of entries in cache */
-  maxEntries?: number;
+  maxEntries: number;
 }
 
 export interface CacheEntry {

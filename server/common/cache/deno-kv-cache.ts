@@ -4,16 +4,14 @@ import { CacheEntry } from "./types.ts";
 import { CacheOptions, ICache } from "./types.ts";
 
 export class DenoKvCache implements ICache {
-  private readonly options: Required<CacheOptions>;
+  private readonly options: CacheOptions;
   private readonly kv: Deno.Kv;
-  constructor(kv: Deno.Kv, options: CacheOptions = {}) {
+
+  constructor(kv: Deno.Kv, options: CacheOptions) {
     this.kv = kv;
-    // Initialise with default values if no options passed
-    this.options = {
-      ttl: options.ttl || (5 * 60 * 1000), // 5 minutes in milliseconds
-      maxEntries: options.maxEntries || Infinity,
-    };
+    this.options = options;
   }
+
   async get(key: string): Promise<Nullable<unknown>> {
     const entry = await this.kv.get<CacheEntry>([key]);
 
@@ -38,12 +36,14 @@ export class DenoKvCache implements ICache {
     });
     return entry.value.value;
   }
+
   async delete(key: string, reason: string): Promise<void> {
     await this.kv.delete([key]);
     debugOnly(() => {
       console.debug(`Deleting cache entry @ '${key}' ∵ ${reason}`);
     });
   }
+
   async clear(): Promise<void> {
     console.debug("Clearing cache...");
     const iter = this.kv.list({ prefix: [] });
@@ -54,6 +54,7 @@ export class DenoKvCache implements ICache {
       console.debug("Cache cleared");
     });
   }
+
   async count(): Promise<number> {
     let count = 0;
     const iter = this.kv.list({ prefix: [] });
@@ -62,6 +63,7 @@ export class DenoKvCache implements ICache {
     }
     return count;
   }
+
   // async stats() {
   //     const iter = this.kv.list({ prefix: [] });
   //     const entries : Record<string, unknown> = {};
@@ -69,6 +71,7 @@ export class DenoKvCache implements ICache {
   //         console.debug(i);
   //     }
   // }
+
   /**
    * LRU
    * Evict oldest entry based on timestamp
@@ -89,6 +92,7 @@ export class DenoKvCache implements ICache {
       await this.kv.delete(oldestKey);
     }
   }
+  
   async set(key: string, value: unknown): Promise<void> {
     const entry: CacheEntry = {
       value,

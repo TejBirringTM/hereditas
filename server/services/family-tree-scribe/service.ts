@@ -10,6 +10,7 @@ import path from "node:path";
 const tokeniserService = declareJsonApi("family-tree-scribe");
 
 tokeniserService.declareRequest(
+  false,
   ["scribe"],
   1,
   v.strictObject({

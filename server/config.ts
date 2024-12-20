@@ -10,7 +10,8 @@ const config = {
     openai: {
       apiKey: Deno.env.get("OPENAI_API_KEY") ?? null
     }
-  }
+  },
+  debugMode: !!Deno.env.get("DEBUG")
 } as const;
 
 export default config;

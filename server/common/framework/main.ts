@@ -23,6 +23,8 @@ import {
   type TVersionMajor,
 } from "./paths.ts";
 import debugOnly from "./debug-only.ts";
+import { createDenoKvCacheMiddleware } from "../cache/deno-kv-cache-middleware.ts";
+import { denoKvCache } from "./cache.ts";
 
 export function declareJsonApi(servicePath: TServicePath) {
   const __servicePath = _servicePath(servicePath);
@@ -39,6 +41,7 @@ export function declareJsonApi(servicePath: TServicePath) {
       | undefined,
     TResponse extends object,
   >(
+    cached: boolean,
     requestPath: TRequestPath,
     versionMajor: TVersionMajor,
     requestSchema: StrictObjectSchema<
@@ -59,7 +62,7 @@ export function declareJsonApi(servicePath: TServicePath) {
       );
     });
 
-    return router.post(__requestPath, async (ctx) => {
+    return router.post(__requestPath, createDenoKvCacheMiddleware(denoKvCache, cached), async (ctx, next) => {
       // try parse request body as a JSON object
       let requestBody;
       try {
@@ -99,6 +102,9 @@ export function declareJsonApi(servicePath: TServicePath) {
         ctx.response.body = genericErrorResponse;
         ctx.response.status = genericErrorResponse.status;
       }
+
+      console.debug(ctx.response.body);
+      await next();
     });
   };
 

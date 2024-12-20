@@ -11,6 +11,7 @@ import { isRuntimeError } from "../../errors/runtime-error.ts";
 const tokeniserService = declareJsonApi("tokeniser");
 
 tokeniserService.declareRequest(
+  true,
   ["tokenise-string"],
   1,
   v.strictObject({
@@ -41,6 +42,7 @@ tokeniserService.declareRequest(
 );
 
 tokeniserService.declareRequest(
+  true,
   ["detokenise-string"],
   1,
   v.strictObject({

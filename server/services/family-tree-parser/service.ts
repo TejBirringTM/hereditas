@@ -11,6 +11,7 @@ import { isRuntimeError } from "../../errors/runtime-error.ts";
 const familyTreeParserService = declareJsonApi("family-tree-parser");
 
 familyTreeParserService.declareRequest(
+  true,
   ["parse"],
   1,
   v.strictObject({ text: v.string() }),

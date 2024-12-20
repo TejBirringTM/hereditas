@@ -3,6 +3,8 @@ import config from "./config.ts";
 import services from "./services.ts";
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
+console.dir(config, {depth: Infinity});
+
 const app = new Application();
 
 app.use(oakCors({

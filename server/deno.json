@@ -4,7 +4,7 @@
     "run": "deno run --watch --allow-env --allow-net --allow-read --unstable-kv main.ts",
     "lint": "deno lint",
     "format": "deno fmt",
-    "unit-test": "deno test --allow-env --env-file --allow-net"
+    "unit-test": "DEBUG=true deno test --allow-env --env-file --allow-net"
   },
   "imports": {
     "@deno-library/compress": "jsr:@deno-library/compress@^0.5.2",

@@ -23,7 +23,7 @@ export class DenoKvCache implements ICache {
     }
 
     // Check if entry has expired
-    if (Date.now() - entry.value.timestamp > this.options.ttl) {
+    if (Date.now() - entry.value.timestamp > this.options.ttlInMilliseconds) {
       debugOnly(() => {
         console.debug(`Cache hit, but expired @ '${key}'`);
       });
@@ -92,7 +92,7 @@ export class DenoKvCache implements ICache {
       await this.kv.delete(oldestKey);
     }
   }
-  
+
   async set(key: string, value: unknown): Promise<void> {
     const entry: CacheEntry = {
       value,

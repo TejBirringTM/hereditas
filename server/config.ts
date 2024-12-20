@@ -3,6 +3,9 @@ const config = {
   cors: {
     origin: Deno.env.get("CORS_ORIGIN") ?? "*",
   },
+  cache: {
+    ttlInMilliseconds: parseInt(Deno.env.get("CACHE_TTL_MS") ?? "3_600_000") // default: 1 hour in milliseconds
+  },
   external: {
     anthrophic: {
       apiKey: Deno.env.get("ANTHROPIC_API_KEY") ?? null,

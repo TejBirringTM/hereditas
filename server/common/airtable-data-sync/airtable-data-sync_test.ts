@@ -1,5 +1,5 @@
 import * as v from "@valibot/valibot";
-import { TableSync } from "./main.ts";
+import { AirtableSync } from "./main.ts";
 import { assert } from "@std/assert";
 import { sleep } from "../sleep.ts";
 
@@ -13,7 +13,7 @@ const TEST_RECORD_SCHEMA = v.object({
 const TTL = 0.5*60*1000; /* 30 secs in milliseconds */
 
 Deno.test(async function AirtableDataSync(){
-    const tableSync = new TableSync(TEST_BASE_ID, TEST_TABLE_NAME, {ttlInMilliseconds: TTL}, TEST_RECORD_SCHEMA);
+    const tableSync = new AirtableSync(TEST_BASE_ID, TEST_TABLE_NAME, {ttlInMilliseconds: TTL}, TEST_RECORD_SCHEMA);
     let records = await tableSync.records();
     const ts1 = tableSync.lastFetch;
     assert(records.length > 0);

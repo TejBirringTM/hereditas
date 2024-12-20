@@ -3,14 +3,13 @@ import { airtableRecords } from "../airtable/main.ts";
 import { FieldSet, SelectOptions } from "airtable";
 import debugOnly from "../framework/debug-only.ts";
 import { ReadonlyDeep } from "type-fest";
-import { assert } from "@std/assert";
 
 interface TableSyncOptions {
     selectOptions?: SelectOptions<FieldSet>;
     ttlInMilliseconds: number;
 }
 
-export class TableSync<
+export class AirtableSync<
   TEntries extends v.ObjectEntries,
   TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined,
 > {

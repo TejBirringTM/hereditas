@@ -23,6 +23,7 @@ const defaultTheme = createTheme({
         fontFamily: fontFamilyHeadings,
         textWrap: "pretty"
     },
+    fontSmoothing: true,
 
     colors: {
         "teal": ["#809DAE", "#68889B", "#597B8F", "#517387", "#4B6D81", "#456579", "#3D5A6C", "#2F4958", "#1B303B", "#030E16"],
@@ -39,7 +40,9 @@ const defaultTheme = createTheme({
     white: "#FCFCFB",
 
     // border radius
-    defaultRadius: "lg"
+    defaultRadius: "lg",
+
+    
 });
 
 export default defaultTheme;

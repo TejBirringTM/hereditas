@@ -11,6 +11,7 @@
     "analyze": "vite-bundle-visualizer -t network"
   },
   "dependencies": {
+    "@mantine/carousel": "^7.15.1",
     "@mantine/core": "^7.13.4",
     "@mantine/hooks": "^7.13.4",
     "@reduxjs/toolkit": "^2.3.0",

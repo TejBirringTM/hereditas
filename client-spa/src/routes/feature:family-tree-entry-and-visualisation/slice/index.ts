@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {Graph, parseFamilyTree} from '../libs/parse-family-tree';
+import {type Graph, parseFamilyTree} from '../libs/parse-family-tree';
 import {scribeFamilyTree} from '../libs/scribe-family-tree';
 import type { RootState } from '../../../store';
 import { detokeniseString, tokeniseString } from '../../../libs/tokenise';

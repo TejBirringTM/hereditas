@@ -2,7 +2,7 @@ import { AspectRatio, Box, Button, Card, Divider, Flex, Grid, Image, Pill, Text,
 import { useEffect } from "react";
 import { fetchContentCodexExamples } from "../../content/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
+import type { AppDispatch, RootState } from "../../store";
 import CalendarIcon from "../../assets/icons/uicons-solid-straight/fi-ss-calendar-day.svg?react";
 import UserIcon from "../../assets/icons/uicons-solid-straight/fi-ss-user.svg?react";
 import PageTitle from "../../components/PageTitle";
@@ -41,7 +41,7 @@ export default function HomeAtrium() {
             <Grid gutter={{base: "lg", md: "lg"}} mb="lg">
             {
                 records?.map((r)=>(
-                    <Grid.Col span={{base: 12, lg: 6, xl: 4}}>
+                    <Grid.Col span={{base: 12, lg: 6, xl: 4}} key={`example-codex-${r.id}`}>
 
                         <Card shadow="md" bg="softer-warm.9" c="white">
                             <Card.Section py="sm" px="md">
@@ -82,8 +82,8 @@ export default function HomeAtrium() {
                                 
                                     {r.Tags && r.Tags.length > 0 &&
                                         <Flex gap="xs" mt="sm">
-                                            {r.Tags.map((tag)=>(
-                                                <Pill size="xs" bg="navy.5" c="white">{tag}</Pill>
+                                            {r.Tags.map((tag, idx)=>(
+                                                <Pill size="xs" bg="navy.5" c="white" key={`example-codex-${r.id}-tag-#${idx}`}>{tag}</Pill>
                                             ))}
                                         </Flex>
                                     }

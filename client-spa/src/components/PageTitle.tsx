@@ -1,4 +1,4 @@
-import { Box, DefaultMantineColor, StyleProp, Text, Title } from "@mantine/core";
+import { Box, type DefaultMantineColor, type StyleProp, Text, Title } from "@mantine/core";
 
 interface PageTitleProps {
     title: string,

@@ -1,4 +1,4 @@
-import { Box, Center, Paper, Title } from "@mantine/core";
+import { Box, Center, Paper } from "@mantine/core";
 import React, { useRef } from "react";
 import { useNavigate, type To } from "react-router-dom";
 

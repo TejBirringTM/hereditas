@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import * as v from "valibot";
 type Nullable<T> = T | null;
 import { type RootState } from '../../store';
@@ -44,7 +44,9 @@ const schemaCodexExample = v.object({
 });
 type CodexExample = v.InferOutput<typeof schemaCodexExample>;
 
-interface FamilyTreeSubmission {}
+interface FamilyTreeSubmission {
+  id: string,
+}
 
 const schemaNewsItem = v.object({
     id: v.string(),
@@ -64,9 +66,9 @@ type NewsItem = v.InferOutput<typeof schemaNewsItem>;
 const contentSlice = createSlice({
     name: 'content',
     initialState: {
-      codexExamples: null as Nullable<Array<CodexExample>>,
-      codexSubmissions: null as Nullable<Array<FamilyTreeSubmission>>,
-      newsItems: null as Nullable<Array<NewsItem>>
+      codexExamples: null as Nullable<CodexExample[]>,
+      codexSubmissions: null as Nullable<FamilyTreeSubmission[]>,
+      newsItems: null as Nullable<NewsItem[]>
     },
     reducers: {  
       setCodexExamples: (state, action: PayloadAction<{codexExamples: CodexExample[]}>) => {

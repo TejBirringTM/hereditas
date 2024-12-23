@@ -1,10 +1,10 @@
 import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, Text, rem, useMatches } from "@mantine/core";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { useLoaderData } from "react-router-dom";
 import PageTitle from "../components/PageTitle";
 import MarkdownContent from "../components/feature:markdown-content/MarkdownContent";
 import DownloadsIcon from "../assets/icons/uicons-solid-straight/fi-ss-file-download.svg?react";
-import ImagesIcon from "../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
+// import ImagesIcon from "../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
 import DownCaretIcon from "../assets/icons/uicons-solid-straight/fi-ss-caret-down.svg?react";
 import CalendarIcon from "../assets/icons/uicons-solid-straight/fi-ss-calendar-day.svg?react";
 import { Carousel } from "@mantine/carousel";
@@ -59,7 +59,7 @@ export default function Novitate() {
                     </Menu.Target>
                     <Menu.Dropdown>
                         {
-                            record.Downloads && record.Downloads.map((download, idx)=>(
+                            record.Downloads?.map((download, idx)=>(
                                 <Menu.Item leftSection={<DownloadsIcon style={{ width: rem(14), height: rem(14) }} fill="currentColor" />} onClick={()=>downloadFile(download.url, {filename: download.filename, newTab: true})} key={`${record.id}-dload#${idx+1}`}>
                                     {download.filename}
                                 </Menu.Item>   
@@ -99,13 +99,14 @@ export default function Novitate() {
                 <Box hidden={!showImagesCol}>
                     <Flex direction="column" gap="md">
                         {
-                            record.Images && record.Images.map((image)=>(
+                            record.Images?.map((image, idx)=>(
                                 // <AspectRatio ratio={1080 / 720} mx="auto">
                                     <Image
                                         src={image.url}
                                         alt={image.filename}
                                         fit="cover"
                                         radius="lg"
+                                        key={`col-img-#${idx}`}
                                     />
                                 // </AspectRatio>
                             ))
@@ -116,8 +117,8 @@ export default function Novitate() {
                     <Card style={{borderRadius: "var(--mantine-radius-default)"}} withBorder shadow="sm">
                         <Carousel withIndicators style={{cursor: "ew-resize"}}>
                         { 
-                            record.Images && record.Images.map((image, idx)=>(
-                                <Carousel.Slide>
+                            record.Images?.map((image, idx)=>(
+                                <Carousel.Slide key={`crsl-img-#${idx}`}>
                                     <AspectRatio ratio={1080 / 720} mx="auto">
                                         <Image
                                             src={image.url}

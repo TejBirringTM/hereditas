@@ -1,8 +1,8 @@
-import { AspectRatio, Box, Button, Card, Divider, Flex, Grid, Image, Menu, rem, Text, Title } from "@mantine/core";
+import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, rem, Text } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { fetchContentNewsItems } from "../content/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
+import type { AppDispatch, RootState } from "../store";
 import { useEffect } from "react";
 import ImagesIcon from "../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
 import DownloadsIcon from "../assets/icons/uicons-solid-straight/fi-ss-file-download.svg?react";

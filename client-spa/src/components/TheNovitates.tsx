@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, rem, Text } from "@mantine/core";
+import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, rem, Skeleton, Text } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { fetchContentNewsItems } from "../content/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +38,15 @@ export default function TheNewsItems() {
             />
 
             <Grid mt="lg" gutter={{base: "lg", md: "lg"}} mb="1rem">
+            {
+                (!records || records.length === 0) && (
+                    Array.from({length: 5}).map((_, idx)=>(
+                        <Grid.Col span={{base: 12, md: 6, xl: 4}} key={`novitas-sk-#${idx}`}>
+                            <Skeleton h={300} w={"100%"} />
+                        </Grid.Col>
+                    ))
+                )
+            }                
             {
                 records?.map((r)=>(
                     <Grid.Col span={{base: 12, md: 6, xl: 4}} key={r.id}>

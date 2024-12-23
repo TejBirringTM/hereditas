@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, Card, Divider, Flex, Grid, Image, Pill, Text, Title } from "@mantine/core";
+import { AspectRatio, Box, Button, Card, Divider, Flex, Grid, Image, Pill, Skeleton, Text, Title } from "@mantine/core";
 import { useEffect } from "react";
 import { fetchContentCodexExamples } from "../../content/slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +39,15 @@ export default function HomeAtrium() {
             <Divider my="lg" />
 
             <Grid gutter={{base: "lg", md: "lg"}} mb="lg">
+            {
+                (!records || records.length === 0) && (
+                    Array.from({length: 7}).map((_,idx)=>(
+                        <Grid.Col span={{base: 12, md: 6, xl: 4}} key={`example-codex-sk-#${idx}`}>
+                            <Skeleton h={300} w={"100%"} />
+                        </Grid.Col>
+                    ))
+                )
+            }
             {
                 records?.map((r)=>(
                     <Grid.Col span={{base: 12, lg: 6, xl: 4}} key={`example-codex-${r.id}`}>

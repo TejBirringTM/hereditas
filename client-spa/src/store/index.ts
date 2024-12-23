@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import familyTreeEntry from '../routes/feature:family-tree-entry-and-visualisation/slice';
+import content from "../content/slice"
 
 const store = configureStore({
     reducer: {
-        familyTreeEntry
+        familyTreeEntry,
+        content
     }
 });
 

@@ -1,3 +1,0 @@
-# Our Story
-
-abc

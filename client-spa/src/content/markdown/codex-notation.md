@@ -1,4 +1,4 @@
-# User's Guide
+# Codex Notation
 
 Tapestry•Family is a tool to generate and share interactive visualisations of family trees.
 

@@ -1,4 +1,4 @@
-import type { Link, Node } from "../libs/parse-family-tree-entry";
+import type { Link, Node } from "../libs/parse-family-tree";
 
 export type NodeState = "hovered" | "selected" | "highlighted" | "normal";
 export type LinkState = "highlighted" | "normal";
@@ -10,4 +10,3 @@ export type SimulationNode = Node & d3.SimulationNodeDatum & {
 export type SimulationLink = Link & d3.SimulationLinkDatum<SimulationNode> & {
     state: LinkState
 }
-

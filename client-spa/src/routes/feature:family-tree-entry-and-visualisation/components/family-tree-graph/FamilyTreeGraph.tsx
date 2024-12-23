@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
-import type { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree-entry";
+import type { Graph as FamilyTreeGraph } from "../../libs/parse-family-tree";
 import {forceManyBody, forceCenter, forceCollide, forceLink, forceY, forceX, forceSimulation} from "d3-force";
 import {select} from "d3-selection"
 import {line} from "d3-shape"
@@ -305,7 +305,7 @@ export default forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphPro
                 return 0;
             }
         }
-        const _forceX = forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/rootAncestors.length).strength((d) => d.type === "Male" ? 1 : 1/100);
+        const _forceX = forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/(rootAncestors.length + 1)).strength((d) => d.type === "Male" ? 1 : 1/100);
 
         const _simulation = forceSimulation(nodes)
                             .force("link", _forceLink.id((node)=>(node as typeof nodes[0]).identity))

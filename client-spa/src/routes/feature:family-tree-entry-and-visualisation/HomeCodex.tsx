@@ -1,8 +1,7 @@
-import { Box, Button, Flex, rem, Textarea } from "@mantine/core";
+import { Anchor, Box, Button, Flex, rem, Text, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../store";
-import { setFamilyTreeTextEntry, processFamilyTreeTextEntry, initialiseFamilyTreeEntry} from "./slice";
+import { setCodex, processCodex, initialiseFamilyTreeEntry} from "./slice";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
 import type { FamilyTreeEntryGraphFunctions } from "./components/family-tree-graph/FamilyTreeGraph";
@@ -15,11 +14,11 @@ import ResetMenu from "./components/ResetMenu";
 import { usePostHog } from "posthog-js/react";
 import defaultTheme from "../../assets/themes/default-theme";
 
-export default function Home() {
+export default function Codex() {
    const dispatch = useDispatch<AppDispatch>();
 
-   const textEntry = useSelector((state: RootState)=>{
-      return state.familyTreeEntry.textEntry;
+   const codex = useSelector((state: RootState)=>{
+      return state.familyTreeEntry.codex;
    });
 
    const graph = useSelector((state: RootState)=>{
@@ -42,17 +41,17 @@ export default function Home() {
    const posthog = usePostHog();
 
    function updateTextEntry(event: ChangeEvent<HTMLTextAreaElement>) {
-        void dispatch(setFamilyTreeTextEntry({textEntry: event.currentTarget.value, persistToLocalStorage: false}));
-        posthog.capture("set family tree text entry (from user input)");
+        void dispatch(setCodex({codex: event.currentTarget.value, persistToLocalStorage: false}));
+        // posthog.capture("set family tree text entry (from user input)");
    }
 
    function processEntry() {
-        void dispatch(processFamilyTreeTextEntry({persistTextEntryToLocalStorage: true}));
+        void dispatch(processCodex({persistTextEntryToLocalStorage: true}));
         posthog.capture("process (parse to graph and tokenise) family tree entry");
    }
 
    useEffect(()=>{
-        if (state === "unknown") {
+        if (state === "start") {
             posthog.capture("navigate to home page");
             void dispatch(initialiseFamilyTreeEntry());
         }
@@ -67,11 +66,12 @@ export default function Home() {
    const ftree = useRef<FamilyTreeEntryGraphFunctions>(null);
 
     return (<Box px={{base: rem(10), sm: rem(20)}}>
-         <p>
-            Enter your family tree below using the syntax described <NavLink to="users-guide">here</NavLink> and then press the &lsquo;Visualise&rsquo; button.
-         </p>
+         <Text size="md" mt="xs" mb="md">
+            Enter a lineage using the notation described <Anchor href="/codex/notation" underline="always" target="_blank">here</Anchor>, then click &lsquo;Visualise&rsquo; to reveal family tree.
+        </Text>
+
          <Flex direction="column" gap="lg">
-            <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={textEntry} disabled={state === "drawn"} fw={500} styles={{input: {fontFamily: defaultTheme.fontFamilyMonospace, fontSize: "1.05rem", lineHeight: 1.35, paddingTop: "0.85rem", paddingBottom: "0.85rem"}}} />
+            <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={codex} disabled={state === "drawn"} fw={500} styles={{input: {fontFamily: defaultTheme.fontFamilyMonospace, fontSize: "1.05rem", lineHeight: 1.35, paddingTop: "0.85rem", paddingBottom: "0.85rem"}}} />
             
             <Flex direction={{base: "column-reverse", sm: "row"}} justify="end" gap="md">
                 <ResetMenu />
@@ -82,9 +82,9 @@ export default function Home() {
                 {/*  */}
                 <Button 
                     size="lg" 
-                    disabled={state !== "editing" || textEntry.length === 0} 
+                    disabled={state !== "editing" || codex.length === 0} 
                     onClick={processEntry}
-                    color="patina.6"
+                    color="softer-warm.9"
                 >
                     Visualise
                 </Button>

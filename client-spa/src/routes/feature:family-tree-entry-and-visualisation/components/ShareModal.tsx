@@ -1,11 +1,12 @@
 import { Button, Flex, Modal, rem, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import ShareIcon from "../../../assets/icons/uicons-thin-straight/fi-ts-share-square.svg?react"
+import ShareIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-share-square.svg?react"
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../store';
 import { useEffect, useRef, useState } from 'react';
-import { urlSearchKey_familyTreeToken } from '../slice';
+
 import { usePostHog } from 'posthog-js/react';
+import { codexShareLink } from '../libs/codex-share-link';
 
 
 interface ShareModalProps {
@@ -20,10 +21,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
 
     const shareLink = useSelector((state: RootState)=>{
         const token = state.familyTreeEntry.token;
-        const baseUrl = window.location.origin;
-        const url = new URL(baseUrl);
-        url.searchParams.append(urlSearchKey_familyTreeToken, token); // ftt = family tree token
-        return url.toString();
+        return codexShareLink(token);
     });
 
     const posthog = usePostHog();
@@ -56,7 +54,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
             }
             <TextInput value={shareLink} mt="xs" mb="lg" readOnly ref={textInputRef} />
             <Flex justify="flex-end">
-                <Button onClick={close} color="patina.6">Done</Button>
+                <Button onClick={close} color="softer-warm.9">Done</Button>
             </Flex>
         </Modal> 
 
@@ -65,7 +63,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
             disabled={disabled} 
             leftSection={<ShareIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />}
             onClick={open} 
-            color="patina.6"
+            color="softer-warm.9"
         >
             Share
         </Button>

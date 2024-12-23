@@ -1,5 +1,5 @@
 import { Box, Text } from "@mantine/core";
-import type { Node } from "../../libs/parse-family-tree-entry";
+import type { Node } from "../../libs/parse-family-tree";
 import styles from "./FamilyTreeGraph.module.css"
 import appendOrdinalSuffix from "../../../../libs/append-ordinal-suffix";
 

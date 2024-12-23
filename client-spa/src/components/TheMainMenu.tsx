@@ -1,25 +1,30 @@
 import { Button, Divider, Flex, NavLink } from '@mantine/core';
 import TheAdvertisementsSection from './feature:advertisements/TheAdvertisementsSection';
+import { useLocation, matchPath } from 'react-router-dom';
 
 export default function TheMenuMain() {
+    const location = useLocation();
+
     return (
             <Flex direction="column" justify="space-between" h="100%" p="sm" styles={{root: {overflowY: "auto"}}}>
                 <div>
-                    <NavLink label="Scribe ut..." description="Record a lineage here">
-                        <NavLink label="Codex" description="Enter a lineage using precise notation" href="/codex" />
-                        <NavLink label="Sermo" description="Enter a lineage using everyday words (EXPERIMENTAL)" href="/sermo" />
+                    <NavLink label="Scribe ut..." description="Record a lineage here" active={!!matchPath("/codex", location.pathname) || !!matchPath("/sermo", location.pathname)} >
+                        <NavLink label="Codex" description="Enter a lineage using precise notation" href="/codex" active={!!matchPath("/codex/*", location.pathname)} />
+                        <NavLink label="Sermo" description="Enter a lineage using everyday words (EXPERIMENTAL)" href="/sermo" active={!!matchPath("/sermo/*", location.pathname)} />
                     </NavLink>
-                    <NavLink label="Atrium Familiarum" description="Discover ancestral lineages" href="/atrium" />
+                    <NavLink label="Atrium Familiarum" description="Discover ancestral lineages" href="/atrium" active={!!matchPath("/atrium/*", location.pathname)} />
                     <Divider my="sm" />
 
-                    <NavLink label="About Us">
+                    <NavLink label="About Us" active={!!matchPath("/about/*", location.pathname)} >
                         <NavLink label="Principia" 
                         description="Our foundations and purpose"
                         href="/about/principia" 
+                        active={!!matchPath("/about/principia", location.pathname)} 
                     />
                         <NavLink label="Auguria" 
                         description="Our vision for the future, including product roadmap, planned features, and more"
                         href="/about/auguria" 
+                        active={!!matchPath("/about/auguria", location.pathname)} 
                     />
                     </NavLink>
 

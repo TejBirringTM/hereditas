@@ -61,8 +61,6 @@ const schemaNewsItem = v.object({
 });
 type NewsItem = v.InferOutput<typeof schemaNewsItem>;
 
-
-
 const contentSlice = createSlice({
     name: 'content',
     initialState: {
@@ -108,7 +106,7 @@ export default contentSlice.reducer;
     }
   });
 
-  export function fetchCodexExamples() {
+  function fetchCodexExamples() {
       return fetch(`${import.meta.env.VITE_SERVER_URL ?? "*"}/services/app-content/codex-examples/v1`, {
           method: "POST",
           headers: {
@@ -161,23 +159,3 @@ export default contentSlice.reducer;
         }
     })
 }
-//   export const initialiseFamilyTreeEntry = createAsyncThunk("familyTreeEntry/initialiseFamilyTreeEntry", async (_, thunkApi)=>{
-//     // see if family tree token has been passed to the url
-//     const familyTreeToken = getFamilyTreeTokenFromUrl();
-//     if (familyTreeToken) {
-//         const familyTreeEntry = await detokeniseString(familyTreeToken);
-//         void thunkApi.dispatch(setActa({acta: "", persistToLocalStorage: false}));
-//         void thunkApi.dispatch(setCodex({codex: familyTreeEntry, persistToLocalStorage: false}));
-//         void thunkApi.dispatch(processCodex({persistTextEntryToLocalStorage: false}));
-//         return;
-//     }
-//     // otherwise, see if family tree info has been saved to local storage
-//     const codexFromLocalStorage = localStorage.getItem(localStorageKey_codex);
-//     const actaFromLocalStorage = localStorage.getItem(localStorageKey_acta);
-//     if (codexFromLocalStorage) {  
-//       void thunkApi.dispatch(setCodex({codex: codexFromLocalStorage, persistToLocalStorage: false}));
-//     }
-//     if (actaFromLocalStorage) {
-//       void thunkApi.dispatch(setActa({acta: actaFromLocalStorage, persistToLocalStorage: false}));
-//     }
-//   });

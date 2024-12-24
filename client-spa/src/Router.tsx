@@ -3,16 +3,28 @@ import {
     RouterProvider,
   } from "react-router-dom";
 import Root from "./routes/Root";
-import HomeSermo from "./routes/feature:family-tree-entry-and-visualisation/HomeSermo";
-import HomeCodex from "./routes/feature:family-tree-entry-and-visualisation/HomeCodex";
 import ErrorElement from "./routes/Error";
-import MarkdownContent from "./components/feature:markdown-content/MarkdownContent";
 import Home from "./routes/Home";
-import HomeAtrium from "./routes/feature:family-tree-directory/HomeAtrium";
-import Novitas from "./routes/Novitas";
 import store from "./store";
 import { fetchContentNewsItems } from "./content/slice";
-import { Box } from "@mantine/core";
+import { lazy, Suspense } from "react";
+import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
+
+export const lazyLoad = (
+  component: React.ComponentType,
+  Layout?: React.ComponentType<{ children: React.ReactNode }>
+ ) => {
+  const Component = component;
+  return () => (  
+    <Suspense fallback={<div>Loading...</div>}>
+      {Layout ? (
+        <Layout>{<Component />}</Layout>
+      ) : (
+        <Component />
+      )}
+    </Suspense>
+  );
+ };
 
 const router = createBrowserRouter([
   {
@@ -27,7 +39,7 @@ const router = createBrowserRouter([
       // Novitates -> Novitas
       {
         path: "novitas/:recordId",
-        element: <Novitas />,
+        element: lazyLoad(lazy(()=>import('./routes/Novitas')))(),
         async loader({params}) {
           await store.dispatch(fetchContentNewsItems());
           const state = store.getState();
@@ -45,52 +57,42 @@ const router = createBrowserRouter([
       // Sermo
       {
         path: "sermo",
-        element: <HomeSermo />
+        element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-entry-and-visualisation/HomeSermo')))()
       },
       // Codex
       {
           path: "codex",
-          element: <HomeCodex />
+          element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-entry-and-visualisation/HomeCodex')))()
       },
       {
         path: "codex/notation",
-        element: (
-          <Box px={{base: 0, sm:"1rem"}}>
-            <MarkdownContent content={import("./content/markdown/codex-notation.md?raw")} />
-          </Box>
-        )
+        element: lazyLoad(lazy(()=>import('./content/markdown/codex-notation.md')), MarkdownPageLayout)()
       },
       // Atrium Familiarum
       {
         path: "atrium",
-        element: <HomeAtrium />
+        element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-directory/HomeAtrium')))()
       },
       // About Us
       {
         path: "about/principia",
-        element: (
-            <Box px={{base: 0, sm:"1rem"}}>
-              <MarkdownContent content={import("./content/markdown/about/principia.md?raw")} />
-            </Box>
-          )
+        element: lazyLoad(lazy(()=>import('./content/markdown/about/principia.md')), MarkdownPageLayout)()
       },
       {
         path: "about/auguria",
-        element: (
-            <Box px={{base: 0, sm:"1rem"}}>
-              <MarkdownContent content={import("./content/markdown/about/auguria.md?raw")} />
-            </Box>
-          )
+        element: lazyLoad(lazy(()=>import('./content/markdown/about/auguria.md')), MarkdownPageLayout)()
+      },
+      // Advertisement      
+      {
+        path: "advertise",
+        element: lazyLoad(lazy(()=>import('./content/markdown/purchase-advertisement-slot.mdx')), MarkdownPageLayout)()
+      },
+      {
+        path: "advertise/terms",
+        element: lazyLoad(lazy(()=>import('./content/markdown/terms-and-conditions/advertisement.md')), MarkdownPageLayout)()
       },
       // Terms and Conditions
-      {
-        path: "terms/advertisement",
-        element: (
-            <Box px={{base: 0, sm:"1rem"}}>
-              <MarkdownContent content={import("./content/markdown/terms-and-conditions/advertisement.md?raw")} />
-            </Box>
-          )
-      }
+      // ...
       // Policies
       // ...
     ]

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRemark } from 'react-remark';
-import styles from "./MarkdownContent.module.css";
+import { Box } from '@mantine/core';
 
 interface MarkdownContentProps {
     content: string | Promise<{default: string}>
@@ -19,7 +19,7 @@ export default function MarkdownContent({content}: MarkdownContentProps) {
       }
     }, [content, setMarkdownSource]);
   
-    return <div className={styles['markdown-content']}>
+    return <Box>
         {reactContent}
-    </div>;
+    </Box>;
 }

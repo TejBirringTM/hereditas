@@ -23,18 +23,21 @@ export default function Novitate() {
 
     return (<Box px={{base: 0, sm:"1rem"}}>
         <PageTitle 
+            backRoute={"/"}
             top={`${record.Category}:`}
             topColour="softer-warm.9"
             title={record.Title ?? ''}
             titleColour="softer-warm.9"
             descriptionColour="navy.7"
+            infoBox={<>
+                <Flex direction="row" align="center" gap="0.3rem" c="neutral.9" opacity={0.8}>
+                    <CalendarIcon fill="currentColor" height={16} width={16} opacity={0.76} />
+                    <Text size="xs" >{new Date(record.Created).toLocaleDateString()}</Text>
+                </Flex>
+            </>}
         />
         
-        <Flex direction="row" gap={{base: "md", sm: "xl"}} mb="lg">
-            <Flex direction="row" align="center" gap="0.3rem" c="navy.7" opacity={0.8}>
-                <CalendarIcon fill="currentColor" height={16} width={16} opacity={0.76} />
-                <Text size="xs" >{new Date(record.Created).toLocaleDateString()}</Text>
-            </Flex>
+        <Flex direction="row" gap={{base: "md", sm: "xl"}} mb="lg" mt="md">
             { 
                 // record.Images && record.Images.length > 0 &&
                 // <Flex direction="row" align="center" gap="0.3rem" c="navy.7" opacity={0.8}>
@@ -53,7 +56,7 @@ export default function Novitate() {
                 record.Downloads && record.Downloads.length > 0 &&
                 <Menu shadow="md" width={250}>
                     <Menu.Target>
-                        <Button size="xs" variant="filled" bg="navy.7" style={{flexShrink: 0}} rightSection={<DownCaretIcon width={14} style={{fill: "white"}} />}>
+                        <Button size="xs" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} rightSection={<DownCaretIcon width={14} style={{fill: "white"}} />}>
                             Downloads ({record.Downloads.length})
                         </Button>
                     </Menu.Target>

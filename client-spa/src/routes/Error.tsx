@@ -25,7 +25,7 @@ export default function Error() {
                             <Flex direction="column" align="center" px="xs">
                                 <Title c="neutral.1" opacity={0.9} size={rem(42)} mb="xs">Not Found</Title>
                                 <Text c="gray.1" size="lg" fw="bold" lh={1.15} style={{textAlign: "center"}} mb="xs">
-                                    Please accept our sincere apologies.
+                                    Please accept our apologies.
                                 </Text>
                                 <Text c="gray.1" size="lg" lh={1.15} mb="xl" style={{textAlign: "center"}} fw="bold">
                                     We could not find the resource you are looking for.

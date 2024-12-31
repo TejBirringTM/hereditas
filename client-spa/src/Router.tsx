@@ -84,7 +84,7 @@ const router = createBrowserRouter([
       },
       // Advertisement      
       {
-        path: "advertise",
+        path: "advertise/slot/:slotNumber",
         element: lazyLoad(lazy(()=>import('./content/markdown/purchase-advertisement-slot.mdx')), MarkdownPageLayout)()
       },
       {

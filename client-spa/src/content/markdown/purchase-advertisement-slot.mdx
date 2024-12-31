@@ -1,0 +1,89 @@
+import {Flex, Button, Switch, Anchor, Text} from "@mantine/core"
+import { useState } from "react"
+import { useParams } from "react-router-dom";
+import useWindowOpener from "../../libs/window-opener";
+import slots from "../../data/advertisement-slots";
+
+export function SlotTitle({format}) {
+    const params = useParams();
+    if (params.slotNumber && slots?.[params.slotNumber]) {
+        const content = format ? format(slots[params.slotNumber].title) : slots[params.slotNumber].title;
+        return <>{content}</>
+    } else return null;
+}
+
+export function AdvertiseForm() {
+    const params = useParams();
+    const [tAndC, setTandC] = useState();
+    const slot = slots?.[params.slotNumber];
+    if (!slot) {
+        return <>
+            <Text>This slot ('{params?.slotNumber}') is unavailable.</Text>
+        </>;
+    }
+    const windowOpener = useWindowOpener();
+    function navigatePayLink() {
+        windowOpener.openSecureWindow(slot.paymentLink);
+    }
+
+    return <>
+        <Flex direction="column" align="start" gap="lg">
+            <Text size="md" m={0}>
+                Advertise on <strong>{slot.title}</strong>
+            </Text>
+            <Switch 
+                label={
+                    <>
+                        I have read and fully accept the <Anchor href="/advertise/terms" target="_blank" inherit>Terms & Conditions of Advertisement</Anchor>
+                    </>
+                } 
+                size="md"
+                color="teal.2" 
+                onChange={(event)=>setTandC(event.currentTarget.checked)}
+            />
+
+            <Button size="xl" color="teal.2" disabled={!tAndC} onClick={navigatePayLink}>
+                Advertise Now (£300<sub>/month</sub>)
+            </Button>
+        </Flex>
+    </>
+}
+
+# Partner with Precision<SlotTitle format={(title)=>`: Advertise on ${title}`} />
+
+Aligning your brand with Hereditas means connecting with a dedicated community of genealogists, historians, and academics who value precision and permanence in their work. Our platform's unique Codex notation system attracts users who regularly return to document and share family histories, creating enduring interactive visualisations that remain accessible through our encoded sharing system.
+
+Hereditas' engaged audience represents a highly educated demographic interested in historical preservation, academic research, and technological innovation - making Hereditas an ideal platform for companies offering related services or products. The evergreen nature of our shared family trees ensures your sponsorship reaches not just current users, but future generations exploring their ancestral connections.
+
+## Why Sponsorship Is Important
+
+Hereditas remains committed to providing the genealogy platform free of charge, ensuring that precise family history codices and accompanying visualisations are accessible to all. Your sponsorship directly supports:
+
+- Maintaining our interactive visualisation engine
+- Hosting encoded family trees
+- Developing new features for enhanced historical documentation
+- Preserving our unique sharing system that keeps family histories accessible forever
+
+By partnering with Hereditas, you help preserve family legacies while connecting with a growing community of dedicated genealogists and academics. Support our mission to keep precise family history documentation freely available to future generations.
+
+## How Sponsorship Works
+
+### 1. Choose Your Placement
+Browse our website to find available advertising slots marked "Advertise Here".
+
+### 2. Review Specifications
+Click any slot to view detailed information about its placement, dimensions, and audience reach. You'll see customized metrics and engagement data specific to that location.
+
+### 3. Secure Your Spot
+Once you've selected your preferred placement and completed payment, your slot is reserved immediately.
+
+### 4. Personal Onboarding
+Within 24 hours, a dedicated member of our team will contact you to:
+
+    - Guide you through content requirements
+    - Help optimize your message for our audience
+    - Ensure your advertisement aligns with our platform's aesthetic
+    - Schedule your campaign's launch
+
+### Get Started!
+<AdvertiseForm />

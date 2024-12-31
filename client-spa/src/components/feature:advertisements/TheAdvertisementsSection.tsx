@@ -1,12 +1,12 @@
 import { Flex } from "@mantine/core";
-import EmptyAdvertisementSquare from "./EmptyAdvertisementSquare";
+import EmptyAdvertisementSlot from "./EmptyAdvertisementSlot";
 
 export default function TheAdvertisementsSection() {
     return (
         <Flex direction="column" gap="md" my="lg" opacity={0.65}>
-            <EmptyAdvertisementSquare />
-            <EmptyAdvertisementSquare />
-            <EmptyAdvertisementSquare />
+            <EmptyAdvertisementSlot slotNumber={1} />
+            <EmptyAdvertisementSlot slotNumber={2} />
+            <EmptyAdvertisementSlot slotNumber={3} />
         </Flex>
     )
 }

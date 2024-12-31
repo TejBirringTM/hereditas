@@ -1,9 +1,11 @@
 import { Button, Divider, Flex, NavLink } from '@mantine/core';
 import TheAdvertisementsSection from './feature:advertisements/TheAdvertisementsSection';
 import { useLocation, matchPath } from 'react-router-dom';
+import useWindowOpener from '../libs/window-opener';
 
 export default function TheMenuMain() {
     const location = useLocation();
+    const windowOpener = useWindowOpener();
 
     return (
             <Flex direction="column" justify="space-between" h="100%" p="sm" styles={{root: {overflowY: "auto"}}}>
@@ -28,7 +30,7 @@ export default function TheMenuMain() {
                     />
                     </NavLink>
 
-                    <Button w="100%" mt="sm" color='navy.6'>Support our Work</Button>
+                    <Button w="100%" mt="sm" color='navy.6' onClick={()=>windowOpener.openSecureWindow("https://buy.stripe.com/28o9BJ6Y15XT36wbIL")}>Support our Work (£7.99)</Button>
 
                     <Divider my="sm" />
 

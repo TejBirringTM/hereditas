@@ -1,4 +1,4 @@
-# Advertisement Terms & Conditions
+# Terms & Conditions of Advertisement
 
 ## Content Requirements and Refund Policy
 

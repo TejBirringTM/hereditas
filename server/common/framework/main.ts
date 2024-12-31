@@ -105,8 +105,6 @@ export function declareJsonApi(servicePath: TServicePath) {
           ctx.response.body = genericErrorResponse;
           ctx.response.status = genericErrorResponse.status;
         }
-
-        console.debug(ctx.response.body);
         await next();
       },
     );

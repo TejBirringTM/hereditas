@@ -15,7 +15,7 @@ import { tableNewsItems } from "./model/table-news-items.ts";
 const appContentService = declareJsonApi("app-content");
 
 appContentService.declareRequest(
-  true,
+  false,
   ["codex-examples"],
   1,
   v.strictObject({}),
@@ -40,7 +40,7 @@ appContentService.declareRequest(
 );
 
 appContentService.declareRequest(
-    true,
+    false,
     ["codex-submissions"],
     1,
     v.strictObject({}),
@@ -49,8 +49,8 @@ appContentService.declareRequest(
         const records = await tableCodexSubmissions.records();
         for (const record of records) {
             const r = record as WritableDeep<typeof record>;
-            if (r["Hide Presenter Email"]) {
-                r["Presenter Email"] = undefined;
+            if (r["Hide Presenter's Email"]) {
+                r["Presenter's Email"] = undefined;
             }
         }
         return declareSuccessResponse({
@@ -71,7 +71,7 @@ appContentService.declareRequest(
   );
 
   appContentService.declareRequest(
-    true,
+    false,
     ["news-items"],
     1,
     v.strictObject({}),

@@ -7,24 +7,43 @@ import ErrorElement from "./routes/Error";
 import Home from "./routes/Home";
 import store from "./store";
 import { fetchContentNewsItems } from "./content/slice";
-import { lazy, Suspense } from "react";
+import { JSXElementConstructor, lazy, Suspense } from "react";
 import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
+import { renderComponentMap } from "./components/feature:markdown-content/render-component-mapping";
 
-export const lazyLoad = (
+export const lazyLoad = <
+  T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
+>(
   component: React.ComponentType,
-  Layout?: React.ComponentType<{ children: React.ReactNode }>
+  componentProps?: React.ComponentProps<T>,
+  layout?: React.ComponentType<{ children: React.ReactNode }>
  ) => {
   const Component = component;
+  const Layout = layout;
+
   return () => (  
     <Suspense fallback={<div>Loading...</div>}>
       {Layout ? (
         <Layout>{<Component />}</Layout>
       ) : (
-        <Component />
+        <Component {...componentProps} />
       )}
     </Suspense>
   );
  };
+
+ const lazyLoadMdx = (
+  component: React.ComponentType<any>,
+ ) => {
+  const Component = component;
+  return () => (  
+    <Suspense fallback={<div>Loading...</div>}>
+      <MarkdownPageLayout>
+        <Component components={renderComponentMap} />
+      </MarkdownPageLayout>
+    </Suspense>
+  ); 
+ }
 
 const router = createBrowserRouter([
   {
@@ -66,7 +85,7 @@ const router = createBrowserRouter([
       },
       {
         path: "codex/notation",
-        element: lazyLoad(lazy(()=>import('./content/markdown/codex-notation.md')), MarkdownPageLayout)()
+        element: lazyLoadMdx(lazy(()=>import('./content/markdown/codex-notation.md')))()
       },
       // Atrium Familiarum
       {
@@ -76,20 +95,20 @@ const router = createBrowserRouter([
       // About Us
       {
         path: "about/principia",
-        element: lazyLoad(lazy(()=>import('./content/markdown/about/principia.md')), MarkdownPageLayout)()
+        element: lazyLoadMdx(lazy(()=>import('./content/markdown/about/principia.md')))()
       },
       {
         path: "about/auguria",
-        element: lazyLoad(lazy(()=>import('./content/markdown/about/auguria.mdx')), MarkdownPageLayout)()
+        element: lazyLoadMdx(lazy(()=>import('./content/markdown/about/auguria.mdx')))()
       },
       // Advertisement      
       {
         path: "advertise/slot/:slotNumber",
-        element: lazyLoad(lazy(()=>import('./content/markdown/purchase-advertisement-slot.mdx')), MarkdownPageLayout)()
+        element: lazyLoadMdx(lazy(()=>import('./content/markdown/purchase-advertisement-slot.mdx')))()
       },
       {
         path: "advertise/terms",
-        element: lazyLoad(lazy(()=>import('./content/markdown/terms-and-conditions/advertisement.md')), MarkdownPageLayout)()
+        element: lazyLoadMdx(lazy(()=>import('./content/markdown/terms-and-conditions/advertisement.md')))()
       },
       // Terms and Conditions
       // ...

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useRemark } from 'react-remark';
+import React from 'react';
 import styles from "./MarkdownPageLayout.module.css";
 
 interface MarkdownContentProps {

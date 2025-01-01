@@ -260,7 +260,7 @@ More details
 - Missing marriage declarations before progeny
 - Incorrect spacing in references
 
-### Best Practices
+### Best Practices for Error Prevention
 
 - Review all keys for consistency
 - Ensure each relationship reference exists

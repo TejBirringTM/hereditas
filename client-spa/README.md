@@ -1,4 +1,4 @@
-# Family Tree Visualiser
+# Hereditas SPA (Single-Page Application)
 
 ## Environment
 
@@ -33,7 +33,7 @@ The [Netlify CLI](https://docs.netlify.com/cli/get-started/) is used to upload t
 
 3. Deploy the project (as preview)
 
-    `netlify deploy --site family-tree-visualiser --dir ./dist`
+    `netlify deploy --site hereditas --dir ./dist`
 
 ### Steps to Deploy (Production)
 
@@ -41,13 +41,13 @@ Once a preview has been deployed (as explained above), it will either be rejecte
 
 The production site is served on:
 
-`https://family-tree-visualiser.netlify.app`
+`https://hereditas.netlify.app`
 
 #### Option 1: Promote a Deployment Preview to Production
 
 To promote a deployment preview to a production deployment:
 
-1. Visit [Netlify Site Dashboard -> Deploys](https://app.netlify.com/sites/family-tree-visualiser/deploys)
+1. Visit [Netlify Site Dashboard -> Deploys](https://app.netlify.com/sites/hereditas/deploys)
 2. Select the approved Deploy Preview from the list
 3. Click 'Publish deploy'
 
@@ -55,4 +55,4 @@ To promote a deployment preview to a production deployment:
 
 Alternatively, the following command may be used to create a production deployment directly:
 
-`netlify deploy --site family-tree-visualiser --dir ./dist`
+`netlify deploy --site hereditas --dir ./dist --prod`

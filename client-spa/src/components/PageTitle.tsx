@@ -1,5 +1,6 @@
 import { Box, Button, type DefaultMantineColor, Flex, px, rem, type StyleProp, Text, Title } from "@mantine/core";
-import { To, useNavigate } from "react-router-dom";
+import type { To} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CaretLeft from "../assets/icons/uicons-solid-straight/fi-ss-caret-left.svg?react";
 
 interface PageTitleProps {

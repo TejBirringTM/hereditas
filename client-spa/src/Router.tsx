@@ -7,11 +7,13 @@ import ErrorElement from "./routes/Error";
 import Home from "./routes/Home";
 import store from "./store";
 import { fetchContentNewsItems } from "./content/slice";
-import { JSXElementConstructor, lazy, Suspense } from "react";
+import type { JSXElementConstructor} from "react";
+import { lazy, Suspense } from "react";
 import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
-import { renderComponentMap } from "./components/feature:markdown-content/render-component-mapping";
+import { type RenderComponentMap, renderComponentMap } from "./components/feature:markdown-content/render-component-mapping";
 
-export const lazyLoad = <
+const lazyLoad = <
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
 >(
   component: React.ComponentType,
@@ -21,28 +23,32 @@ export const lazyLoad = <
   const Component = component;
   const Layout = layout;
 
-  return () => (  
-    <Suspense fallback={<div>Loading...</div>}>
-      {Layout ? (
-        <Layout>{<Component />}</Layout>
-      ) : (
-        <Component {...componentProps} />
-      )}
-    </Suspense>
-  );
+  return function LazyLoaded() {
+    return (  
+      <Suspense fallback={<div>Loading...</div>}>
+        {Layout ? (
+          <Layout>{<Component />}</Layout>
+        ) : (
+          <Component {...componentProps} />
+        )}
+      </Suspense>
+    )
+  }
  };
 
  const lazyLoadMdx = (
-  component: React.ComponentType<any>,
+  component: React.ComponentType<{components: RenderComponentMap}>,
  ) => {
   const Component = component;
-  return () => (  
-    <Suspense fallback={<div>Loading...</div>}>
-      <MarkdownPageLayout>
-        <Component components={renderComponentMap} />
-      </MarkdownPageLayout>
-    </Suspense>
-  ); 
+  return function LazyLoadedMdx() {
+    return (  
+      <Suspense fallback={<div>Loading...</div>}>
+        <MarkdownPageLayout>
+          <Component components={renderComponentMap} />
+        </MarkdownPageLayout>
+      </Suspense>
+    ); 
+  }
  }
 
 const router = createBrowserRouter([

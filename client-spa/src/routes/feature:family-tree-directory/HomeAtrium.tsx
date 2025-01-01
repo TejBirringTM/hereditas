@@ -30,7 +30,7 @@ export default function HomeAtrium() {
     return (
         <Box px={{base: 0, sm:"1rem"}}>
             <PageTitle 
-                title="Attrium Familiarum"
+                title="Atrium Familiarum"
                 titleColour="softer-warm.9"
                 description="Explore ancestries compiled and curated by distinguished Hereditas scholars and visitors." 
                 descriptionColour="navy.7"

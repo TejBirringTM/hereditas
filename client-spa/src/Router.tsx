@@ -80,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "about/auguria",
-        element: lazyLoad(lazy(()=>import('./content/markdown/about/auguria.md')), MarkdownPageLayout)()
+        element: lazyLoad(lazy(()=>import('./content/markdown/about/auguria.mdx')), MarkdownPageLayout)()
       },
       // Advertisement      
       {

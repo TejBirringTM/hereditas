@@ -1,0 +1,62 @@
+import {Button} from "@mantine/core";
+import useWindowOpener from '../../../libs/window-opener';
+
+export function leaveFeedback() {
+  const windowOpener = useWindowOpener();
+  windowOpener.openSecureWindow("https://hereditas.canny.io/");
+}
+
+export function becomeAPatron() {
+  const windowOpener = useWindowOpener();
+  windowOpener.openSecureWindow("https://buy.stripe.com/28o9BJ6Y15XT36wbIL");
+}
+
+# Auguria
+
+## Immediate Horizons (6 months)
+
+- Enhanced visualisation, organised neatly by branch
+- Printing capabilities
+- AI-based text to codex generation (Sermo)
+- Extended codex notation patterns to support greater number of relationships
+- Extended codex notation patterns to append information about individuals and relationships:
+  - Date and time support (ISO 8601)
+  - Location support (name with WGS 84 coordinates)
+- Export options for academic citation
+
+## Near Future (6 to 12 months)
+
+- Advanced search and filtering capabilities
+  - search and filter in visualisation, with synchronous highlighting in Codex
+  - search and filter across Atrium Familiarum
+- Extended notation for recording historical sources and references
+- Historical date format support (Julian, Chinese, Islamic calendars)
+
+## Future Aspirations (beyond 12 months)
+
+- Improved mobile interface for tree exploration
+- Integration with common academic citation systems
+- Machine-assisted validation of genealogical patterns
+- Cross-reference system between related family trees
+- Enhanced visualisation of geographic presence and movement across generations
+- Collaborative features
+
+## Community-Requested Features
+
+Hereditas grows through the wisdom of its community. We provide a dedicated platform where users can propose, discuss, and vote on new features. This democratic approach ensures our development aligns with the real needs of genealogists, historians, and family researchers. 
+
+Every suggestion shapes how future generations will document and visualise their family histories. Your expertise guide our pursuit of genealogical precision.
+
+<Button size="xl" color="teal.2" onClick={leaveFeedback}>Leave Feedback</Button>
+
+## Research Initiatives
+
+- Collaboration with academic institutions on genealogical notation standards
+- Development of formal verification methods for family relationships
+- Studies on optimal visualisation of complex family structures
+
+## Your Role in Our Future
+
+As a community-driven platform, we value your input in shaping Hereditas' future. Share your suggestions through our feedback system or become a patron to support these developments.
+
+<Button size="xl" color="teal.2" onClick={becomeAPatron}>Become a Patron</Button>

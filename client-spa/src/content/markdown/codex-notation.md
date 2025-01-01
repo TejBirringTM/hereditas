@@ -1,128 +1,285 @@
-# Codex Notation
+# The Codex Notation
 
-Tapestry•Family is a tool to generate and share interactive visualisations of family trees.
+## Table of Contents
 
-To use, simply enter genealogical data using the syntax detailed below and click [Visualise].
+1. [Introduction](#introduction)
+2. [Basic Syntax](#basic-syntax)
+3. [Declaring Individuals](#declaring-individuals)
+4. [Relationships](#relationships)
+5. [Additional Information](#additional-information)
+6. [Document Structure](#document-structure)
+7. [Best Practices](#best-practices)
+8. [Common Patterns](#common-patterns)
+9. [Error Prevention](#error-prevention)
+10. [Advanced Usage](#advanced-usage)
 
-For more information about Tapestry•Family, [click here.](/about/what-is-tapestry•family)
+## Introduction
 
-## Basic Usage
+The Codex Notation is Hereditas' precise language for recording family relationships. It combines mathematical rigor with intuitive readability, allowing complex family trees to be documented with accuracy while remaining accessible.
 
-1. Visit [The Atelier.](/)
+### Key Features
 
-2. Enter genealogical data in the text box.
+- Line-based declarations
+- Distinct notation for males and females
+- Clear relationship markers:
+  - marriages
+  - progeny (from marriage)
+  - adoptions (from marriage, or from individual)
+- Flexible text annotation system
 
-3. Click the [Visualise] button.
+## Basic Syntax
 
-4. Like what you see? Generate a *share link* by clicking on the [Share] button.
-   
-   Aside from sharing your visualisation with others, you can also use the share link to continue working on the same family tree later.
-   Simply store the share link in a safe location (such as a note-taking application).
+### Core Rules
 
-   To return to editing genealogical data *after* a visualisation has been generated, click the [Reset] button followed by the [Visualisation only] option from the drop-down menu.
+1. Each major declaration must be on its own line
+2. Declarations can contain in-line declarations
+3. All keys must start with a letter or non-zero digit
+4. Keys can contain letters, digits, and periods
 
-5. Want to start afresh? Click the [Reset] button followed by the [Everything] option from the drop-down menu.
+### Declaration Types
 
-## Syntax
+- Person declarations (male/female)
+- Relationship declarations (marriage/progeny/adoption)
+- Start declarations
+- Text appendments
+- Comments
 
-A family tree is described using line-by-line declarations.
+## Declaring Individuals
 
-It is important that each declaration listed below is on a separate line. Some declarations may contain *in-line declarations.*
+### Male Declarations
 
-All possible declarations are described below.
+```text
+[key: "name"]    /* Declaration */
+[key]            /* Reference to the existing declaration 'key' */
 
-As Tapestry•Family continues to grow, more declarations will be added to ensure that the greatest amount of geneological data can be captured and visualised. To stay up to date, make sure to check this section regularly.
+Examples:
+[augustus: "Augustus Caesar"]
+[tiberius.son: "Tiberius Julius Caesar"]
+```
 
-### Declaring People
+#### Rules for Males
 
-#### Male Individuals
+- Uses square brackets `[]`
+- No spaces in keys
+- Names must be in quotes
+- References use only the key
 
-To declare a male individual, use the following template:
+### Female Declarations
 
-`[<key>: "<name>"]`
+```text
+(key: "name")    /* Declaration */
+(key)            /* Reference */
 
-In later declarations, the declared male may be referenced using: `[<key>]`
+Examples:
+(livia: "Livia Drusilla")
+(julia.major: "Julia the Elder")
+```
 
-###### Remember:
+#### Rules for Females
 
-* _Male declarations use square brackets._
-* _In declarations or references pertaining to individuals, the `<key>` __can not__ be padded with any spaces._
+- Uses round brackets `()`
+- No spaces in keys
+- Names must be in quotes
+- References use only the key
 
-#### Female Individuals
+## Relationships
 
-To declare a female individual, use the following template:
+### Marriage Declarations
 
-`(<key>: "<name>")`
+```text
+/* Basic form */
+[male] ---{mrg}--- (female)
 
-In later declarations, the declared female may be referenced using: `(<key>)`
+/* With specific key, if it needs to be referenced later */
+[male] ---{mrg:key}--- (female)
 
-###### Remember:
+/* Reference */
+{mrg:key}
+```
 
-* _Female declarations use round brackets._
-* _In declarations or references pertaining to individuals, the `<key>` __can not__ be padded with any spaces._
+#### Marriage Rules
 
-### Declaring Relationships
+- Direction doesn't matter (bride/groom order is flexible)
+- Can use multiple dashes for visual clarity
+- Spaces allowed around relationship markers
+- Keys must be prefixed with `mrg:`
 
-#### Spousal Relationships
+### Progeny Declarations
 
-##### Marriages
+```text
+/* Basic form */
+{mrg:parents} --{dsc}--> [child]
 
-To declare a marital relationship, use the following template in between a reference (or in-line declaration) for the groom and a reference (or in-line declaration) for the bride:
+/* With specific key, if descent needs to be referenced */
+{mrg:parents} --{dsc:heir1}--> [child]
 
-`-{mrg:<key>}-`
+/* Reference */
+{dsc:heir1}
+```
 
-It does not matter who is referenced (or in-line declared) first, it may be the groom _or_ the bride.
+#### Progeny Rules
 
-In later declarations, the declared marriage may be referenced using: `{mrg:<key>}`
+- Must start from a marriage reference
+- Arrow indicates direction (parent to child)
+- Keys must be prefixed with `dsc:`
 
-###### Remember:
+### Adoption Declarations
 
-* _Relationship declarations use curly brackets._
-* _Marriage declarations use keys that are prefixed with `mrg`._
-* _In declarations pertaining to relationships, the `<key>` (inclusive of the prefix) __can__ be padded with any number of spaces._
-* _In references pertaining to relationships, the `<key>` (inclusive of the prefix) __can not__ be padded with any spaces._
-* _Relationship declarations __can__ use any number of dashes (`-`) to represent connecting lines._
-* _Relationship declarations __can__ be padded with any number of spaces before the starting dash (`-`)._
-* _Relationship declarations __can__ be padded with any number of spaces after the ending dash (`-`)._
+```text
+/* From individual */
+[adopter] --{adp}--> [adoptee]
 
-#### Successor Relationships
+/* From couple */
+{mrg:couple} --{adp}--> [adoptee]
 
-##### Progeny
+/* With specific key */
+[adopter] --{adp:succession1}--> [adoptee]
 
-To declare issue from a couple, use the following template in between a reference to the spousal relationship representing the progenitors (such as a marriage), and a reference (or in-line declaration) for a person as progeny:
+/* Reference */
+{adp:succession1}
+```
 
-`-{dsc:<key>}->`
+#### Adoption Rules
 
-A progenitor-progeny relationship must always begins with a reference to the spousal relationship representing the progenitors.
+- Can start from individual *or* marriage reference
+- Arrow indicates direction (adopter to adoptee)
+- Keys must be prefixed with `adp:`
 
-In later declarations, the declared progenitor-progeny relationship may be referenced using: `{dsc:<key>}`
+## Additional Information
 
-###### Remember:
+### Start Declarations
 
-* _Relationship declarations use curly brackets._
-* _Progenitor-progeny declarations use keys that are prefixed with `desc`._
-* _In declarations pertaining to relationships, the `<key>` (inclusive of the prefix) __can__ be padded with any number of spaces._
-* _In references pertaining to relationships, the `<key>` (inclusive of the prefix) __can not__ be padded with any spaces._
-* _Relationship declarations __can__ use any number of dashes (`-`) to represent connecting lines._
-* _Relationship declarations __can__ be padded with any number of spaces before the starting dash (`-`)._
-* _Relationship declarations __can__ be padded with any number of spaces after the ending chevron (`>`)._
+A start declaration is mandatory. This declaration is used to indicate the root ancestor (i.e. the first recorded ancestor) of the primary line of descent for visualisation.
 
-##### Adopted Heirs
+```text
+START WITH [augustus: "Augustus Caesar"]
+```
 
-To declare an heir by adoption, use the following template in between a reference to either an individual adopter or a spousal relationship representing a couple as the joint adopters, and a reference (or in-line declaration) for a person as the adoptee:
+- Required at beginning of document
+- Only one per document
+- Establishes root of primary family tree
 
-`-{adp:<key>}->`
+### Biographical Information
 
-An adopter-adoptee relationship must always begins with a reference to the individual adopter/testator _or_ a reference to the spousal relationship representing the couple as the joint adopters/testators.
+This declaration is used to append textual information to a reference.
 
-In later declarations, the declared adopter-adoptee relationship may be referenced using: `{adp:<key>}`
+```text
+APPEND [augustus]:
+Born 63 BCE in Rome
+Became Princeps in 27 BCE
+Died 14 CE at Nola
 
-###### Remember:
+APPEND {mrg:imperial1}:
+Marriage celebrated in 38 BCE
+Political alliance
+```
 
-* _Relationship declarations use curly brackets._
-* _Adopter-adoptee declarations use keys that are prefixed with `adp`._
-* _In declarations pertaining to relationships, the `<key>` (inclusive of the prefix) __can__ be padded with any number of spaces._
-* _In references pertaining to relationships, the `<key>` (inclusive of the prefix) __can not__ be padded with any spaces._
-* _Relationship declarations __can__ use any number of dashes (`-`) to represent connecting lines._
-* _Relationship declarations __can__ be padded with any number of spaces before the starting dash (`-`)._
-* _Relationship declarations __can__ be padded with any number of spaces after the ending chevron (`>`)._
+### Comments
+
+The purpose of comments is to make a codex readable.
+
+```text
+/* This is a single-line comment */
+```
+
+**Note:** Currently, multi-line comments are not supported.
+
+## Document Structure
+
+The following example depicts the structure for a typical codex:
+
+```text
+START WITH [augustus: "Augustus"]
+
+/* Marriage with in-line declarations */
+[augustus: "Augustus"] ---{mrg:imp1}--- (livia: "Livia")
+
+/* Child declaration */
+{mrg:imp1} --{dsc:heir1}--> [tiberius: "Tiberius"]
+
+/* Adoption */
+[augustus] --{adp:succession1}--> [tiberius]
+
+/* Biographical information */
+APPEND [augustus]:
+Details about Augustus
+More details
+```
+
+## Best Practices
+
+### Naming Conventions
+
+- Use consistent key patterns:
+
+  ```text
+  [augustus.heir1: "Gaius Caesar"]
+  [augustus.heir2: "Lucius Caesar"]
+  ```
+
+- Use meaningful relationship keys:
+
+  ```text
+  [antoninus] ---{mrg:ant.first}--- (faustina1)
+  [antoninus] ---{mrg:ant.second}--- (faustina2)
+  ```
+
+### Organisation
+
+1. Start with root declaration
+2. Group marriages by generation
+3. Declare children after parents
+4. Use comments to separate branches
+
+## Common Patterns
+
+### Multiple Marriages
+
+```text
+[claudius] ---{mrg:cl.first}--- (messalina)
+[claudius] ---{mrg:cl.second}--- (agrippina)
+
+{mrg:cl.first} --{dsc:cl.heir1}--> [britannicus]
+{mrg:cl.second} --{dsc:cl.heir2}--> [nero]
+```
+
+### Adoption Chains
+
+```text
+[caesar] --{adp:jul.succession1}--> [augustus]
+[augustus] --{adp:jul.succession2}--> [tiberius]
+```
+
+## Error Prevention
+
+### Common Mistakes
+
+- Missing start declaration
+- Inconsistent key references
+- Unclosed brackets/quotes
+- Missing marriage declarations before progeny
+- Incorrect spacing in references
+
+### Best Practices
+
+- Review all keys for consistency
+- Ensure each relationship reference exists
+- Match brackets
+- Verify all referenced persons are declared
+- Test spacing in references
+
+## Advanced Usage
+
+### Extended Character Support
+
+- Support for diacritical marks:
+  
+  ā, ē, ī, ō, ū, ṅ, ṭ, ḍ, ṛ
+
+### Complex Structures
+
+- Multiple adoptions
+- Cross-generation marriages
+- Parallel family lines
+- Historical annotations
+- Multiple patrilineages in one family tree

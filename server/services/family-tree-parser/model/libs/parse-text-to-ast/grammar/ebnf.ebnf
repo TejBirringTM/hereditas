@@ -17,8 +17,8 @@ DIGIT ::= "0" | NON_ZERO_DIGIT
 HEX ::= DIGIT | "A" | "B" | "C" | "D" | "E" | "F"
 NATURAL_NUMBER ::= NON_ZERO_DIGIT DIGIT* 
 
-ALPHABET_LOWERCASE ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "ā" | "ē" | "ī" | "ō" | "ū" | "ṅ" | "ṭ" | "ḍ" | "ṛ"
-ALPHABET_UPPERCASE ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+ALPHABET_LOWERCASE ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "ā" | "ē" | "ī" | "ō" | "ū" | "ṇ" | "ṅ" | "ṭ" | "ḍ" | "ṛ"
+ALPHABET_UPPERCASE ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "Ā" | "Ē" | "Ī" | "Ō" | "Ū" | "Ṇ" | "Ṅ" | "Ṭ" | "Ḍ" | "Ṛ"
 ALPHABET ::= ALPHABET_LOWERCASE | ALPHABET_UPPERCASE
 
 TEXT_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "`" | "~" | '"'

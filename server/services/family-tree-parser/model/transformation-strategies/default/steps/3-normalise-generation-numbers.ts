@@ -5,6 +5,7 @@ import {
   TransformationStepOutput,
 } from "../../../../../../common/transformation-pipeline.ts";
 import { ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
+import { NPerson } from "./libs/context/types.ts";
 
 type Input = TransformationStepOutput<
   typeof TraverseTreeRecursivelyToAssignGenerationNumbers
@@ -51,6 +52,16 @@ export default declareTransformationStep(
         node.generationInTree = groom.generationInTree;
       }
     });
+
+    input.nodes.persons.all.forEach((node) => {
+      const adoptedChildrenIdentities = input.adjacencies.byPerson.multiple.adoptedChildren.get(node.identity);
+      const adoptedChildren = input.nodes.persons.$many(...adoptedChildrenIdentities).filter((_node)=>_node.generationInTree) as (NPerson & { generationInTree: number} )[];
+      const lowestGenerationNumber = Math.min(...adoptedChildren.map((_node)=>_node.generationInTree));
+      adoptedChildren.forEach((_node)=>{
+        _node.generationInTree = lowestGenerationNumber;
+      });
+    });
+
     return input;
   },
 );

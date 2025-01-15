@@ -1,7 +1,6 @@
-
 FILE_GRAMMAR ::= STATEMENT_LINE*
 
-STATEMENT ::= PROGENY_DECLARATION | MARRIAGE_DECLARATION | ADOPTED_PROGENY_DECLARATION | MALE_DECLARATION | FEMALE_DECLARATION | COMMENT | START_DECLARATION | APPEND_TEXT_DECLARATION
+STATEMENT ::= APPEND_TEXT_DECLARATION | PROGENY_DECLARATION | MARRIAGE_DECLARATION | ADOPTED_PROGENY_DECLARATION | MALE_DECLARATION | FEMALE_DECLARATION | COMMENT | START_DECLARATION
 STATEMENT_LINE ::= WHITESPACE* STATEMENT WHITESPACE*
 
 CR ::= #x0D /* carriage return */
@@ -17,18 +16,25 @@ DIGIT ::= "0" | NON_ZERO_DIGIT
 HEX ::= DIGIT | "A" | "B" | "C" | "D" | "E" | "F"
 NATURAL_NUMBER ::= NON_ZERO_DIGIT DIGIT* 
 
-ALPHABET_LOWERCASE ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "ā" | "ē" | "ī" | "ō" | "ū" | "ṇ" | "ṅ" | "ṭ" | "ḍ" | "ṛ"
-ALPHABET_UPPERCASE ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "Ā" | "Ē" | "Ī" | "Ō" | "Ū" | "Ṇ" | "Ṅ" | "Ṭ" | "Ḍ" | "Ṛ"
-ALPHABET ::= ALPHABET_LOWERCASE | ALPHABET_UPPERCASE
+ALPHABET_LOWERCASE ::= [#x0061-#x007A] | [#x00DF-#x00F6] | [#x00F8-#x00FF] | [#x0101-#x0137] | [#x0138-#x0148] | [#x0149-#x017E] | [#x017F] | [#x0180-#x01BA] | [#x01BB] | [#x01BC-#x01BF] | [#x01C0-#x01C3] | [#x01C4-#x01CD] | [#x1E00-#x1E95] | [#x1E96-#x1E9F] | [#x1EA0-#x1EF9]
 
-TEXT_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "`" | "~" | '"'
-SPECIAL_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "\" | "/" | "`" | "~"
+ALPHABET_UPPERCASE ::= [#x0041-#x005A] | [#x00C0-#x00D6] | [#x00D8-#x00DE] | [#x0100-#x0136] | [#x0139-#x0147] | [#x014A-#x017D] | [#x0181-#x0182] | [#x0184-#x0186] | [#x0187-#x0189] | [#x018A-#x018F] | [#x1E00-#x1E94] | [#x1EA0-#x1EF8]
+
+DIACRITICAL_MARKS ::= [#x0300-#x036F] | [#x1AB0-#x1AFF] | [#x1DC0-#x1DFF] | [#x20D0-#x20FF] | [#xFE20-#xFE2F] | [#x1CD0-#x1CFA] | [#x0900-#x0903] | [#x093A-#x094F] | [#x0980-#x0983] | [#x09BE-#x09CC] | [#x0E31] | [#x0E34-#x0E3A] | [#x0E47-#x0E4E] | [#x1031-#x1037] | [#x103A-#x103E] | [#x0F18-#x0F19] | [#x0F35] | [#x0F37] | [#x0F39] | [#x0F71-#x0F7E] | [#x0F80-#x0F84] | [#x064B-#x0655] | [#x0670]
+
+ALPHABET ::= (ALPHABET_LOWERCASE | ALPHABET_UPPERCASE) DIACRITICAL_MARKS?
+
+BASE_CHAR ::= "#" | "@" | "$" | "%" | "^" | "&" | "(" | ")" | "-" | "_" | "+" | "=" | "{" | "}" | "[" | "]" | ":" | ";" | "'" | "<" | ">" | "," | "." | "?" | "\" | "`" | "~"
+TEXT_CHAR ::= BASE_CHAR | "*" | "/" | '"'
+STRING_CHAR ::= BASE_CHAR | "*" | "/"
+COMMENT_CHAR ::= BASE_CHAR | '"'
 
 ALPHANUMERIC ::= DIGIT | ALPHABET
-CHAR ::= ALPHANUMERIC | SPECIAL_CHAR | SPACE_TAB
+CHAR ::= ALPHANUMERIC | STRING_CHAR | SPACE_TAB
 
 STRING ::= '"' CHAR* '"'
 TEXTCHAR ::= ALPHANUMERIC | TEXT_CHAR | SPACE_TAB
+COMMENTCHAR ::= ALPHANUMERIC | COMMENT_CHAR | SPACE_TAB
 TEXT ::= TEXTCHAR+
 
 DECLARATION_KEY ::= (ALPHABET | NON_ZERO_DIGIT) (ALPHABET | "." | DIGIT)*
@@ -63,7 +69,7 @@ PROGENY_REFERENCE ::= "{" PROGENY_DECLARATION_KEY "}"
 
 START_DECLARATION ::= "START WITH" SPACE_TAB+ MALE_EXPRESSION
 
-COMMENT ::= "/*" TEXTCHAR* "*/"
+COMMENT ::= "/*" COMMENTCHAR* "*/"
 
 APPEND_TEXT_DECLARATION_LINE ::= TEXT NEWLINE
-APPEND_TEXT_DECLARATION ::= "APPEND" SPACE_TAB+ (PERSON_EXPRESSION | MARRIAGE_REFERENCE) SPACE_TAB* ":" (SPACE_TAB | NEWLINE)* APPEND_TEXT_DECLARATION_LINE+
+APPEND_TEXT_DECLARATION ::= "APPEND TEXT" SPACE_TAB+ (PERSON_EXPRESSION | MARRIAGE_REFERENCE) SPACE_TAB* ":" (SPACE_TAB | NEWLINE)* APPEND_TEXT_DECLARATION_LINE+

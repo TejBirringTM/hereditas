@@ -112,7 +112,7 @@ export const getNodeStyle = declareNodeStyler((node)=>{
         }
     }
     else {
-        throw Error("Unrecognised node type!");
+        throw Error(`Unrecognised node type! ${node.type}`);
     }
 });
 
@@ -137,17 +137,17 @@ export const getLinkStyle = declareLinkStyler((link)=>{
             "stroke-dasharray": null,
         }
     }
-    else if (link.type === "MaritalProgeny" || link.type === "AdoptedMaritalProgeny") {
+    else if (link.type === "MaritalProgeny" || link.type === "AdoptedMaritalProgeny" || link.type === "AdoptedChild") {
         return {
             stroke: linkStrokeColour(link, defaultProgenyLinksColour),
             "stroke-width": link.state === "highlighted" ? 6 : 4,
-            "stroke-dasharray": link.type === "AdoptedMaritalProgeny" ? "10 10" : null,
+            "stroke-dasharray": (link.type === "AdoptedMaritalProgeny" || link.type === "AdoptedChild") ? "10 10" : null,
             fill: null,
             "marker-start": null,
             "marker-end": "url(#filledArrow)"
         }
     }
     else {
-        throw Error("Unrecognised link type!");
+        throw Error(`Unrecognised link type! ${link.type}`);
     }
 })

@@ -17,7 +17,11 @@ export const linkSchema = v.object({
         v.literal("Bride"),
         v.literal("Groom"),
         v.literal("MaritalProgeny"),
-        v.literal("AdoptedMaritalProgeny")
+        v.literal("AdoptedMaritalProgeny"),
+        v.literal("Parent"),
+        v.literal("AdoptiveParent"),
+        v.literal("Child"),
+        v.literal("AdoptedChild")
     ]),
 });
 
@@ -25,13 +29,20 @@ export const nodeSchema = v.object({
     ...baseNodeSchema.entries,
     patrilineage: v.optional(v.object({
         nodes: v.array(baseNodeSchema.entries.identity),
-        links: v.array(linkSchema)
+        links: v.array(linkSchema),
     })),
     rootAncestor: v.optional(baseNodeSchema)
 })
+
+export const statsSchema = v.object({
+    rootNodes: v.array(v.string()),
+    nRootNodes: v.number()
+});
 
 export type Node = v.InferInput<typeof nodeSchema>;
 export type NodeType = Node["type"];
 
 export type Link = v.InferInput<typeof linkSchema>;
 export type LinkType = Link["type"];
+
+export type Stats = v.InferInput<typeof statsSchema>;

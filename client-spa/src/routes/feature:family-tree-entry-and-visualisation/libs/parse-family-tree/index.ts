@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { linkSchema, nodeSchema } from "./graph-schema";
+import { linkSchema, nodeSchema, statsSchema } from "./graph-schema";
 
 const errorResponseBodySchema = v.object({
     success: v.literal(false),
@@ -13,7 +13,8 @@ const successResponseBodySchema = v.object({
     error: v.literal(false),
     data: v.object({
         nodes: v.array(nodeSchema),
-        links: v.array(linkSchema)
+        links: v.array(linkSchema),
+        stats: statsSchema
     })
 });
 

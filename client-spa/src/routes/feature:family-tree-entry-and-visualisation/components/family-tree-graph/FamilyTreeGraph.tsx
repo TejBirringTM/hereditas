@@ -247,7 +247,20 @@ export default forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphPro
             state: "normal"
         }));
 
-        const links = graph.links.map((link)=>({
+        const links = graph.links
+            .filter((link)=>{
+                const exclude = ["Parent", "AdoptiveParent", "Child"].includes(link.type);
+                if (exclude) { return false }
+
+                if (link.type === "AdoptedChild") {
+                    if (graph.links.find((_link)=>(_link.type === "AdoptedMaritalProgeny" && _link.toNodeIdentity === link.toNodeIdentity))) {
+                        return false;
+                    }
+                }
+
+                return true;
+            })
+            .map((link)=>({
             ...link, 
             index: undefined,
             source: link.fromNodeIdentity as unknown as SimulationNode,
@@ -256,7 +269,7 @@ export default forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphPro
         })) satisfies SimulationLink[];
 
         const _forceManyBody = forceManyBody();
-        const _forceCentre = forceCenter(svgWidth/2, svgHeight/2);
+        const _forceCentre = graph.stats.nRootNodes > 1 ? null : forceCenter(svgWidth/2, svgHeight/2);
         const _forceCollide = forceCollide<SimulationNode>((d)=>((d.type === "Marriage") ? 0 : (getNodeStyle(d).r!) * 1.5));
         const _forceLink = forceLink(links)
                                 .strength((d)=>{
@@ -305,12 +318,12 @@ export default forwardRef<FamilyTreeEntryGraphFunctions, FamilyTreeEntryGraphPro
                 return 0;
             }
         }
-        const _forceX = forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/(rootAncestors.length + 1)).strength((d) => d.type === "Male" ? 1 : 1/100);
+        const _forceX = graph.stats.nRootNodes > 1 ? forceX<SimulationNode>((d) => rootAncestor(d) * svgWidth/(rootAncestors.length + 1)).strength((d) => d.type === "Male" ? 1 : 1/100) : null;
 
         const _simulation = forceSimulation(nodes)
                             .force("link", _forceLink.id((node)=>(node as typeof nodes[0]).identity))
                             .force("charge", _forceManyBody)
-                            // .force("centre", _forceCentre)
+                            .force("centre", _forceCentre)
                             .force("collide", _forceCollide)
                             .force("y", _forceY)
                             .force("x", _forceX)

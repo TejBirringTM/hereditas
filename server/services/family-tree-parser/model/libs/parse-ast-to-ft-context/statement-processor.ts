@@ -332,7 +332,9 @@ function declareAdoptiveProgeny(
 ) {
   // resolve parents (groom and bride of marriage)
   const father = (() => {
-    if (marriageOrIndividual.type === "Male") {
+    if (marriageOrIndividual.type === "Female") {
+      return null;
+    } else if (marriageOrIndividual.type === "Male") {
       return marriageOrIndividual;
     } else {
       const linkGroom = context.links.find((
@@ -346,9 +348,31 @@ function declareAdoptiveProgeny(
       assert(male);
       return male;
     }
-  })() satisfies NMale;
+  })() satisfies NMale | null;
+
+  if (father) {
+    const linkFather = {
+      type: "AdoptiveFather",
+      fromNodeIdentity: child.identity,
+      toNodeIdentity: father.identity,
+    } satisfies LAdoptiveFather;
+    const linkFather1 = {
+      type: "AdoptiveParent",
+      fromNodeIdentity: child.identity,
+      toNodeIdentity: father.identity,
+    } satisfies LAdoptiveParent;
+    const linkChildToFather = {
+      type: "AdoptedChild",
+      fromNodeIdentity: father.identity,
+      toNodeIdentity: child.identity,
+    } satisfies LAdoptedChild;
+    context.links.push(linkFather, linkFather1, linkChildToFather);
+  }
 
   const mother = (() => {
+    if (marriageOrIndividual.type === "Male") {
+      return null;
+    }
     if (marriageOrIndividual.type === "Female") {
       return marriageOrIndividual;
     } else {
@@ -363,7 +387,26 @@ function declareAdoptiveProgeny(
       assert(female);
       return female;
     }
-  })() satisfies NFemale;
+  })() satisfies NFemale | null;
+
+  if (mother) {
+    const linkMother = {
+      type: "AdoptiveMother",
+      fromNodeIdentity: child.identity,
+      toNodeIdentity: mother.identity,
+    } satisfies LAdoptiveMother;
+    const linkMother1 = {
+      type: "AdoptiveParent",
+      fromNodeIdentity: child.identity,
+      toNodeIdentity: mother.identity,
+    } satisfies LAdoptiveParent;
+    const linkChildToMother = {
+      type: "AdoptedChild",
+      fromNodeIdentity: mother.identity,
+      toNodeIdentity: child.identity,
+    } satisfies LAdoptedChild;
+    context.links.push(linkMother, linkMother1, linkChildToMother);
+  }
 
   // create progenitor/progeny links
   if (marriageOrIndividual.type === "Marriage") {
@@ -380,66 +423,41 @@ function declareAdoptiveProgeny(
     context.links.push(linkMaritalProgeny, linkMaritalProgenitor);
   }
 
-  // create parentage links
-  const linkMother = {
-    type: "AdoptiveMother",
-    fromNodeIdentity: child.identity,
-    toNodeIdentity: mother.identity,
-  } satisfies LAdoptiveMother;
-  const linkFather = {
-    type: "AdoptiveFather",
-    fromNodeIdentity: child.identity,
-    toNodeIdentity: father.identity,
-  } satisfies LAdoptiveFather;
-  const linkMother1 = {
-    type: "AdoptiveParent",
-    fromNodeIdentity: child.identity,
-    toNodeIdentity: mother.identity,
-  } satisfies LAdoptiveParent;
-  const linkFather1 = {
-    type: "AdoptiveParent",
-    fromNodeIdentity: child.identity,
-    toNodeIdentity: father.identity,
-  } satisfies LAdoptiveParent;
-  context.links.push(linkMother, linkMother1, linkFather, linkFather1);
-
   // create child links
-  const linkChildToMother = {
-    type: "AdoptedChild",
-    fromNodeIdentity: mother.identity,
-    toNodeIdentity: child.identity,
-  } satisfies LAdoptedChild;
-  const linkChildToFather = {
-    type: "AdoptedChild",
-    fromNodeIdentity: father.identity,
-    toNodeIdentity: child.identity,
-  } satisfies LAdoptedChild;
-  context.links.push(linkChildToMother, linkChildToFather);
-
   if (child.type === "Male") {
-    const linkSonToMother = {
-      type: "AdoptedSon",
-      fromNodeIdentity: mother.identity,
-      toNodeIdentity: child.identity,
-    } satisfies LAdoptedSon;
-    const linkSonToFather = {
-      type: "AdoptedSon",
-      fromNodeIdentity: father.identity,
-      toNodeIdentity: child.identity,
-    } satisfies LAdoptedSon;
-    context.links.push(linkSonToMother, linkSonToFather);
+    if (mother) {
+      const linkSonToMother = {
+        type: "AdoptedSon",
+        fromNodeIdentity: mother.identity,
+        toNodeIdentity: child.identity,
+      } satisfies LAdoptedSon;
+      context.links.push(linkSonToMother);
+    }
+    if (father) {
+      const linkSonToFather = {
+        type: "AdoptedSon",
+        fromNodeIdentity: father.identity,
+        toNodeIdentity: child.identity,
+      } satisfies LAdoptedSon;
+      context.links.push(linkSonToFather);
+    }
   } else if (child.type === "Female") {
-    const linkDaughterToMother = {
-      type: "AdoptedDaughter",
-      fromNodeIdentity: mother.identity,
-      toNodeIdentity: child.identity,
-    } satisfies LAdoptedDaughter;
-    const linkDaughterToFather = {
-      type: "AdoptedDaughter",
-      fromNodeIdentity: father.identity,
-      toNodeIdentity: child.identity,
-    } satisfies LAdoptedDaughter;
-    context.links.push(linkDaughterToMother, linkDaughterToFather);
+    if (mother) {
+      const linkDaughterToMother = {
+        type: "AdoptedDaughter",
+        fromNodeIdentity: mother.identity,
+        toNodeIdentity: child.identity,
+      } satisfies LAdoptedDaughter;
+      context.links.push(linkDaughterToMother);
+    }
+    if (father) {
+      const linkDaughterToFather = {
+        type: "AdoptedDaughter",
+        fromNodeIdentity: father.identity,
+        toNodeIdentity: child.identity,
+      } satisfies LAdoptedDaughter;
+      context.links.push(linkDaughterToFather);
+    }
   }
 }
 

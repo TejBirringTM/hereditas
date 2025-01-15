@@ -17,12 +17,12 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
             className={styles.popup}
             style={{top, left}}
         >
-            <Text fz="lg" fw="bold">{node.title && node.title.length > 0 ? node.title : "(No name recorded)"}</Text>
+            <Text fz="lg" fw="bold" lh="1.25" mb="xs">{node.title && node.title.length > 0 ? node.title : "(No name recorded)"}</Text>
 
             <div>
                 {
-                    node.patrilineage &&
-                        <Text fw="bold" fz="xs" fs={"italic"}>
+                    node.patrilineage && node.patrilineage.nodes.length > 0 &&
+                        <Text fw="bold" fz="xs" fs={"italic"} lh="1.25">
                             {appendOrdinalSuffix(node.patrilineage.nodes.filter((n)=>n.startsWith("male")).length + 1)} generation of clan
                             {node.rootAncestor && <span>, from {node.rootAncestor.title}</span>}
                         </Text>
@@ -39,7 +39,7 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
                 <Box mt="xs">
                 {
                     node.text.map((t, idx)=>(
-                        <Text fz="xs" lh="1.25" key={`txt-${idx}`}>{t}</Text>
+                        <Text fz="xs" lh="1.25" mb="xs" key={`txt-${idx}`}>{t}</Text>
                     ))
                 }
                 </Box>

@@ -5,7 +5,7 @@ import {
   InvalidGrammarError,
   InvalidInputError,
 } from "../../errors/grammar-parser.ts";
-const Parser = Grammars.W3C.Parser;
+const Parser = Grammars.W3C.Parser; // uses: https://www.w3.org/TR/2008/REC-xml-20081126/#sec-notation
 
 export class GrammarParser {
   private readonly grammar;

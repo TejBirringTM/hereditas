@@ -25,7 +25,16 @@ export default declareTransformationStep(
     const links = input.links.all
       .filter((
         link,
-      ) => (["Groom", "Bride", "MaritalProgeny", "AdoptedMaritalProgeny", "Child", "AdoptedChild", "Parent", "AdoptiveParent"]
+      ) => ([
+        "Groom",
+        "Bride",
+        "MaritalProgeny",
+        "AdoptedMaritalProgeny",
+        "Child",
+        "AdoptedChild",
+        "Parent",
+        "AdoptiveParent",
+      ]
         .includes(link.type))
       )
       .map((link) => ({
@@ -35,19 +44,19 @@ export default declareTransformationStep(
       }));
 
     const rootNodeIdentities = input.nodes.persons.all
-          .filter((node) => node.type==="Male" && isRootNode(input, node))
-          .map((node) => node.identity);
+      .filter((node) => node.type === "Male" && isRootNode(input, node))
+      .map((node) => node.identity);
 
     const output = {
       nodes,
       links,
       stats: {
         rootNodes: rootNodeIdentities,
-        nRootNodes: rootNodeIdentities.length
+        nRootNodes: rootNodeIdentities.length,
       },
-      tree: input.tree
+      tree: input.tree,
     };
-    
+
     return output;
   },
 );

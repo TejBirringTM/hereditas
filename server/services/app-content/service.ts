@@ -70,29 +70,29 @@ const appContentService = declareJsonApi("app-content");
 //     },
 //   );
 
-  appContentService.declareRequest(
-    false,
-    ["content"],
-    1,
-    v.strictObject({}),
-    async (_request) => {
-      try {
-        const records = await tableContent.records();
-        return declareSuccessResponse({
-          records
-        });
-      } catch (e) {
-        dumpError(e);
-        if (isRuntimeError(e)) {
-          return declareErrorResponse(Status.BadRequest, e.message);
-        } else {
-          return declareErrorResponse(
-            Status.InternalServerError,
-            "An unknown error occurred.",
-          );
-        }
+appContentService.declareRequest(
+  false,
+  ["content"],
+  1,
+  v.strictObject({}),
+  async (_request) => {
+    try {
+      const records = await tableContent.records();
+      return declareSuccessResponse({
+        records,
+      });
+    } catch (e) {
+      dumpError(e);
+      if (isRuntimeError(e)) {
+        return declareErrorResponse(Status.BadRequest, e.message);
+      } else {
+        return declareErrorResponse(
+          Status.InternalServerError,
+          "An unknown error occurred.",
+        );
       }
-    },
-  );
+    }
+  },
+);
 
 export default appContentService;

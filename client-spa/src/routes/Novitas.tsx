@@ -28,7 +28,7 @@ export default function Novitate() {
     const dispatch = useDispatch<AppDispatch>();;
 
     async function visualiseCodex(recordId: string, codex: string) {
-        await dispatch(setCodex({codex, persistToLocalStorage: false}));
+        void dispatch(setCodex({codex, persistToLocalStorage: false}));
         await dispatch(processCodex({persistTextEntryToLocalStorage: false}));
         posthog.capture("process family tree entry from content", {
             recordId,
@@ -100,7 +100,7 @@ export default function Novitate() {
             {
                 record.Codex &&
                 (
-                    <Button size="xs" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} onClick={()=>visualiseCodex(record.id, record.Codex ?? "")}>
+                    <Button size="xs" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} onClick={()=>void visualiseCodex(record.id, record.Codex ?? "")}>
                             View Lineage
                     </Button>
                 )   

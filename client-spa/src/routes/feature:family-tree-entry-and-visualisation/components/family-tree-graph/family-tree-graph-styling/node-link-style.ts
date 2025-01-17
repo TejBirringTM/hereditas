@@ -112,7 +112,7 @@ export const getNodeStyle = declareNodeStyler((node)=>{
         }
     }
     else {
-        throw Error(`Unrecognised node type! ${node.type}`);
+        throw Error("Unrecognised node type!");
     }
 });
 

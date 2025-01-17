@@ -94,23 +94,23 @@ export default function TheNovitates() {
                                 }
                                 <Text fw="bold" lh={0.89} ff="heading" size="xl" c="white">{r.Title}</Text>
                                 {
-                                    r.Content && r.Content.trim().length > 0 && (r.Images && r.Images.length > 0 || r.Downloads && r.Downloads.length > 0) && (
+                                    (r.Content && r.Content.trim().length > 0) && (r.Images && r.Images.length > 0 || r.Downloads && r.Downloads.length > 0) && (
                                         <Flex mt="md" gap="lg">
-                                        { 
-                                           r.Images && r.Images.length > 0 &&
-                                            <Flex direction="row" align="center" gap="0.3rem" opacity={0.75}>
-                                                <ImagesIcon fill="currentColor" height={16} width={16} opacity={0.76} />
-                                                <Text size="xs">{r.Images.length}</Text>
-                                            </Flex>
-                                        }
-                                        { 
-                                            r.Downloads && r.Downloads.length > 0 &&
-                                            <Flex direction="row" align="center" gap="0.3rem" opacity={0.75}>
-                                                <DownloadsIcon fill="currentColor" height={16} width={16} opacity={0.76} />
-                                                <Text size="xs" >{r.Downloads.length}</Text>
-                                            </Flex>
-                                        }
-                                    </Flex>
+                                            { 
+                                            r.Images && r.Images.length > 0 &&
+                                                <Flex direction="row" align="center" gap="0.3rem" opacity={0.75}>
+                                                    <ImagesIcon fill="currentColor" height={16} width={16} opacity={0.76} />
+                                                    <Text size="xs">{r.Images.length}</Text>
+                                                </Flex>
+                                            }
+                                            { 
+                                                r.Downloads && r.Downloads.length > 0 &&
+                                                <Flex direction="row" align="center" gap="0.3rem" opacity={0.75}>
+                                                    <DownloadsIcon fill="currentColor" height={16} width={16} opacity={0.76} />
+                                                    <Text size="xs" >{r.Downloads.length}</Text>
+                                                </Flex>
+                                            }
+                                        </Flex>
                                     )
                                 }
 

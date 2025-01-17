@@ -54,10 +54,17 @@ export default declareTransformationStep(
     });
 
     input.nodes.persons.all.forEach((node) => {
-      const adoptedChildrenIdentities = input.adjacencies.byPerson.multiple.adoptedChildren.get(node.identity);
-      const adoptedChildren = input.nodes.persons.$many(...adoptedChildrenIdentities).filter((_node)=>_node.generationInTree) as (NPerson & { generationInTree: number} )[];
-      const lowestGenerationNumber = Math.min(...adoptedChildren.map((_node)=>_node.generationInTree));
-      adoptedChildren.forEach((_node)=>{
+      const adoptedChildrenIdentities = input.adjacencies.byPerson.multiple
+        .adoptedChildren.get(node.identity);
+      const adoptedChildren = input.nodes.persons.$many(
+        ...adoptedChildrenIdentities,
+      ).filter((_node) =>
+        _node.generationInTree
+      ) as (NPerson & { generationInTree: number })[];
+      const lowestGenerationNumber = Math.min(
+        ...adoptedChildren.map((_node) => _node.generationInTree),
+      );
+      adoptedChildren.forEach((_node) => {
         _node.generationInTree = lowestGenerationNumber;
       });
     });

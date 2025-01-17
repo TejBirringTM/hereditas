@@ -48,27 +48,33 @@ interface FamilyTreeSubmission {
   id: string,
 }
 
-const schemaNewsItem = v.object({
+const schemaContentRecord = v.object({
     id: v.string(),
     Title: v.optional(v.string()),
-    Content: v.optional(v.string()),
+    Type: v.optional(v.union([
+      v.literal("Product Update"),
+      v.literal("Lineage"),
+      v.literal("Article"),
+    ])),
     Tags: v.optional(v.array(v.string())),
+    Content: v.optional(v.string()),
     Downloads: v.optional(v.array(airtableDownloadSchema)),
     Images: v.optional(v.array(airtableDownloadSchema)),
     "Feature Image": v.optional(v.array(airtableDownloadSchema)),
-    Category: v.optional(v.string()),
     Created: v.string(),
     "Last Modified": v.optional(v.string()),
     "Published": v.optional(v.boolean()),
+    Codex: v.optional(v.string()),
+    "Author Names": v.optional(v.array(v.string())),
 });
-type NewsItem = v.InferOutput<typeof schemaNewsItem>;
+type ContentRecord = v.InferOutput<typeof schemaContentRecord>;
 
 const contentSlice = createSlice({
     name: 'content',
     initialState: {
       codexExamples: null as Nullable<CodexExample[]>,
       codexSubmissions: null as Nullable<FamilyTreeSubmission[]>,
-      newsItems: null as Nullable<NewsItem[]>
+      content: null as Nullable<ContentRecord[]>
     },
     reducers: {  
       setCodexExamples: (state, action: PayloadAction<{codexExamples: CodexExample[]}>) => {
@@ -77,19 +83,19 @@ const contentSlice = createSlice({
       setCodexSubmissions: (state, action: PayloadAction<{codexSubmissions: CodexExample[]}>) => {
         state.codexSubmissions = action.payload.codexSubmissions;
       },
-      setNewsItems: (state, action: PayloadAction<{newsItems: NewsItem[]}>) => {
-        state.newsItems = action.payload.newsItems;
+      setContent: (state, action: PayloadAction<{contentRecords: ContentRecord[]}>) => {
+        state.content = action.payload.contentRecords;
       },
     },
     selectors: {
       selectCodexExamples: (state)=>state.codexExamples,
       selectCodexSubmissions: (state)=>state.codexSubmissions,
-      selectNewsItems: (state)=>state.newsItems,
+      selectContent: (state)=>state.content,
     }
   });
 
-export const {setCodexExamples, setCodexSubmissions, setNewsItems} = contentSlice.actions;
-export const {selectCodexExamples, selectCodexSubmissions, selectNewsItems} = contentSlice.selectors;
+export const {setCodexExamples, setCodexSubmissions, setContent} = contentSlice.actions;
+export const {selectCodexExamples, selectCodexSubmissions, selectContent} = contentSlice.selectors;
 export default contentSlice.reducer;
 
   export const fetchContentCodexExamples = createAsyncThunk("content/fetch/codex-examples", async (_, thunkApi)=>{
@@ -100,11 +106,11 @@ export default contentSlice.reducer;
     }
   });
 
-  export const fetchContentNewsItems = createAsyncThunk("content/fetch/news-items", async (_, thunkApi)=>{
-    const newsItems = selectNewsItems(thunkApi.getState() as RootState);
-    if (!newsItems) {
-        const records = await fetchNewsItems();
-        thunkApi.dispatch(setNewsItems({newsItems: records}));
+  export const fetchContent = createAsyncThunk("content/fetch/content", async (_, thunkApi)=>{
+    const content = selectContent(thunkApi.getState() as RootState);
+    if (!content) {
+        const records = await fetchContentFromServer();
+        thunkApi.dispatch(setContent({contentRecords: records}));
     }
   });
 
@@ -135,8 +141,8 @@ export default contentSlice.reducer;
       })
   }
 
-  export function fetchNewsItems() {
-    return fetch(`${import.meta.env.VITE_SERVER_URL ?? "*"}/services/app-content/news-items/v1`, {
+  export function fetchContentFromServer() {
+    return fetch(`${import.meta.env.VITE_SERVER_URL ?? "*"}/services/app-content/content/v1`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -149,7 +155,7 @@ export default contentSlice.reducer;
       console.debug(json)
         const parseResult = v.safeParse(v.object({
               data: v.object({
-                  records: v.array(schemaNewsItem)
+                  records: v.array(schemaContentRecord)
               })
           }), json);
           console.debug(parseResult);

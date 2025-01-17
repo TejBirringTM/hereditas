@@ -30,7 +30,7 @@ export default function TheMenuMain() {
                     />
                     </NavLink>
 
-                    <Button w="100%" mt="sm" color='navy.6' onClick={()=>windowOpener.openSecureWindow("https://buy.stripe.com/28o9BJ6Y15XT36wbIL")}>Support our Work (£7.99)</Button>
+                    <Button w="100%" mt="sm" color='navy.6' onClick={()=>windowOpener.openSecureWindow("https://buy.stripe.com/28o9BJ6Y15XT36wbIL")}>Support our Work</Button>
 
                     <Divider my="sm" />
 

@@ -14,7 +14,8 @@ const successResponseBodySchema = v.object({
     data: v.object({
         nodes: v.array(nodeSchema),
         links: v.array(linkSchema),
-        stats: statsSchema
+        stats: statsSchema,
+        tree: v.array(v.any())
     })
 });
 

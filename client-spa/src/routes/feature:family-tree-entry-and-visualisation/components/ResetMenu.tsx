@@ -60,15 +60,15 @@ export default function ResetMenu({resetPanAndZoom}: ResetMenuProps) {
   
         <Menu.Dropdown>
           {resetPanAndZoom && 
-            <Menu.Item disabled={state !== "drawn"} onClick={clearPanAndZoom}>
+            <Menu.Item disabled={state !== "drawn"} onClick={clearPanAndZoom} lh={1.15}>
               Clear zoom
             </Menu.Item>
           } 
-          <Menu.Item disabled={state !== "drawn"} onClick={clearVisualisation}>
+          <Menu.Item disabled={state !== "drawn"} onClick={clearVisualisation} lh={1.15}>
             Clear visualisation
           </Menu.Item>
           <Menu.Divider />
-          <Menu.Item disabled={codex.length === 0 && acta.length === 0} onClick={clearVisualisationAndTextEntry}>
+          <Menu.Item disabled={codex.length === 0 && acta.length === 0} onClick={clearVisualisationAndTextEntry} lh={1.15}>
             Clear everything
           </Menu.Item>
         </Menu.Dropdown>

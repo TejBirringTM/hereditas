@@ -6,7 +6,7 @@ import Root from "./routes/Root";
 import ErrorElement from "./routes/Error";
 import Home from "./routes/Home";
 import store from "./store";
-import { fetchContentNewsItems } from "./content/slice";
+import { fetchContent } from "./content/slice";
 import type { JSXElementConstructor} from "react";
 import { lazy, Suspense } from "react";
 import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
@@ -66,10 +66,10 @@ const router = createBrowserRouter([
         path: "novitas/:recordId",
         element: lazyLoad(lazy(()=>import('./routes/Novitas')))(),
         async loader({params}) {
-          await store.dispatch(fetchContentNewsItems());
+          await store.dispatch(fetchContent());
           const state = store.getState();
           const recordId = params.recordId;
-          const record = state.content.newsItems?.find((r)=>r.id === recordId);    
+          const record = state.content.content?.find((r)=>r.id === recordId);    
           if (record) {
             return {
               record

@@ -1,6 +1,6 @@
 import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, rem, Skeleton, Text } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { fetchContentNewsItems } from "../content/slice";
+import { fetchContent } from "../content/slice";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store";
 import { useEffect } from "react";
@@ -12,20 +12,20 @@ import PageTitle from "./PageTitle";
 import { useNavigate } from "react-router-dom";
 import { downloadFile } from "../libs/download-file";
 
-export default function TheNewsItems() {
+export default function TheNovitates() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const records = useSelector((state: RootState)=>{
-        return state.content.newsItems;
+        return state.content.content;
      });
 
      useEffect(()=>{
-        void dispatch(fetchContentNewsItems());
+        void dispatch(fetchContent());
      });
 
     function navigateToItem(recordId: string) {
-        navigate(`novitas/${recordId}`);
+        navigate(`/novitas/${recordId}`);
     }
 
     return (
@@ -40,7 +40,7 @@ export default function TheNewsItems() {
             <Grid mt="lg" gutter={{base: "lg", md: "lg"}} mb="1rem">
             {
                 (!records || records.length === 0) && (
-                    Array.from({length: 5}).map((_, idx)=>(
+                    Array.from({length: 6}).map((_, idx)=>(
                         <Grid.Col span={{base: 12, md: 6, xl: 4}} key={`novitas-sk-#${idx}`}>
                             <Skeleton h={300} w={"100%"} />
                         </Grid.Col>
@@ -89,8 +89,8 @@ export default function TheNewsItems() {
                         <Card.Section inheritPadding bg="softer-warm.9" c="neutral.1">
                             <Box mt="md" mb="lg">
                                 {
-                                    r.Category &&
-                                    <Text opacity={0.75} lh={1.15} style={{letterSpacing: "-0.033rem"}}>{r.Category}</Text>
+                                    r.Type &&
+                                    <Text opacity={0.75} lh={1.15} style={{letterSpacing: "-0.033rem"}}>New {r.Type}</Text>
                                 }
                                 <Text fw="bold" lh={0.89} ff="heading" size="xl" c="white">{r.Title}</Text>
                                 {
@@ -142,7 +142,7 @@ export default function TheNewsItems() {
                                             <Menu.Dropdown>
                                                 {
                                                     r.Downloads.map((download, idx)=>(
-                                                        <Menu.Item leftSection={<DownloadsIcon style={{ width: rem(14), height: rem(14) }} fill="currentColor" />} onClick={()=>downloadFile(download.url, {filename: download.filename, newTab: true})} key={`${r.id}-dload#${idx+1}`}>
+                                                        <Menu.Item leftSection={<DownloadsIcon style={{ width: rem(14), height: rem(14) }} fill="currentColor" />} onClick={()=>downloadFile(download.url, {filename: download.filename, newTab: true})} key={`${r.id}-dload#${idx+1}`} lh={1.15}>
                                                             {download.filename}
                                                         </Menu.Item>   
                                                     ))

@@ -1,5 +1,5 @@
 import { assert } from "@std/assert";
-import TraverseTreeRecursivelyToAssignGenerationNumbers from "./2-traverse-tree-recursively-to-assign-generation-numbers.ts";
+import AssignGenerationNumbers from "./2-assign-generation-numbers.ts";
 import {
   declareTransformationStep,
   TransformationStepOutput,
@@ -8,7 +8,7 @@ import { ProcessingFailedError } from "../../../../../../errors/parse-ft.ts";
 import { NPerson } from "./libs/context/types.ts";
 
 type Input = TransformationStepOutput<
-  typeof TraverseTreeRecursivelyToAssignGenerationNumbers
+  typeof AssignGenerationNumbers
 >;
 
 export default declareTransformationStep(

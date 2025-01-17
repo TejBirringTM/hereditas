@@ -43,11 +43,11 @@ const beforeEnqueueTraverseDown = (
       const nextGeneration = context.currentNode.node.generationInTree + 1;
       assignGeneration(node, nextGeneration);
     }
-    debugOnly(() => {
-      console.debug(
-        `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
-      );
-    });
+    // debugOnly(() => {
+    //   console.debug(
+    //     `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
+    //   );
+    // });
   });
 };
 
@@ -62,17 +62,17 @@ const beforeEnqueueTraverseUp = (
       const prevGeneration = context.currentNode.node.generationInTree - 1;
       assignGeneration(node, prevGeneration);
     }
-    debugOnly(() => {
-      console.debug(
-        `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
-      );
-    });
+    // debugOnly(() => {
+    //   console.debug(
+    //     `enqueuing (from ${from}): ${node.identity} (${node.generationInTree})`,
+    //   );
+    // });
   });
 };
 
 // the transformation:
 export default declareTransformationStep(
-  "traverse-tree-recursively-to-assign-generation-numbers",
+  "assign-generation-numbers",
   (input: Input) => {
     if (!input.nodes.persons.male.designatedRootAncestor) {
       throw MissingDeclarationError.create("a start declaration is required");
@@ -106,11 +106,11 @@ export default declareTransformationStep(
         beforeEnqueue: (context) =>
           beforeEnqueueTraverseDown(context, "primary root"),
         visit(context) {
-          debugOnly(() => {
-            console.debug(
-              `visiting (from primary root): ${context.currentNode.node.identity}`,
-            );
-          });
+          // debugOnly(() => {
+          //   console.debug(
+          //     `visiting (from primary root): ${context.currentNode.node.identity}`,
+          //   );
+          // });
           const contemporaries = ownGeneration(input, context.currentNode.node);
           contemporaries.forEach((node) => {
             assignGeneration(node, context.currentNode.node.generationInTree);
@@ -137,11 +137,11 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseUp(context, "leaf"),
             visit(context) {
-              debugOnly(() => {
-                console.debug(
-                  `visiting (from leaf): ${context.currentNode.node.identity}`,
-                );
-              });
+              // debugOnly(() => {
+              //   console.debug(
+              //     `visiting (from leaf): ${context.currentNode.node.identity}`,
+              //   );
+              // });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,
@@ -167,11 +167,11 @@ export default declareTransformationStep(
             beforeEnqueue: (context) =>
               beforeEnqueueTraverseDown(context, "root"),
             visit(context) {
-              debugOnly(() => {
-                console.debug(
-                  `visiting (from root): ${context.currentNode.node.identity}`,
-                );
-              });
+              // debugOnly(() => {
+              //   console.debug(
+              //     `visiting (from root): ${context.currentNode.node.identity}`,
+              //   );
+              // });
               if (context.currentNode.node.generationInTree) {
                 const contemporaries = ownGeneration(
                   input,

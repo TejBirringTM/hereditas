@@ -2,11 +2,12 @@ import {
   declareTransformationStep,
   TransformationStepOutput,
 } from "../../../../../../common/transformation-pipeline.ts";
-import NormaliseGenerationNumbers from "./3-normalise-generation-numbers.ts";
+import AttachTree from "./5-attach-tree.ts";
 import { AnyNode } from "./libs/context/types.ts";
+import { isRootNode } from "./libs/family-tree-traversal/neighbour-functions.ts";
 
 type Input = TransformationStepOutput<
-  typeof NormaliseGenerationNumbers
+  typeof AttachTree
 >;
 
 type N = AnyNode & {
@@ -24,7 +25,7 @@ export default declareTransformationStep(
     const links = input.links.all
       .filter((
         link,
-      ) => (["Groom", "Bride", "MaritalProgeny", "AdoptedMaritalProgeny"]
+      ) => (["Groom", "Bride", "MaritalProgeny", "AdoptedMaritalProgeny", "Child", "AdoptedChild", "Parent", "AdoptiveParent"]
         .includes(link.type))
       )
       .map((link) => ({
@@ -32,10 +33,21 @@ export default declareTransformationStep(
         toNodeIdentity: link.toNodeIdentity,
         type: link.type,
       }));
+
+    const rootNodeIdentities = input.nodes.persons.all
+          .filter((node) => node.type==="Male" && isRootNode(input, node))
+          .map((node) => node.identity);
+
     const output = {
       nodes,
       links,
+      stats: {
+        rootNodes: rootNodeIdentities,
+        nRootNodes: rootNodeIdentities.length
+      },
+      tree: input.tree
     };
+    
     return output;
   },
 );

@@ -39,6 +39,76 @@ export const statsSchema = v.object({
     nRootNodes: v.number()
 });
 
+const treeMaleBaseSchema = v.object({
+    identity: v.string(),
+    title: v.string(),
+    text: v.array(v.string()),
+    gender: v.literal("Male"),
+    generationInClan: v.optional(v.number())
+});
+const treeFemaleBaseSchema = v.object({
+    identity: v.string(),
+    title: v.string(),
+    text: v.array(v.string()),
+    gender: v.literal("Female"), 
+    generationInClan: v.optional(v.number())
+});
+type TreeMaleBase = v.InferInput<typeof treeMaleBaseSchema>;
+type TreeFemaleBase = v.InferInput<typeof treeFemaleBaseSchema>;
+export type TreeMale = TreeMaleBase & {
+    marriages: TreeMarriage[]
+};
+export type TreeFemale = TreeFemaleBase & {
+    marriages: TreeMarriage[]
+};
+export type TreeMarriage = {
+    groom: TreeMaleBase,
+    bride: TreeFemaleBase,
+    progeny: Array<TreeMale | TreeFemale>,
+    adoptedProgeny: Array<TreeMale | TreeFemale>,
+    expanded?: boolean
+}
+
+const marriageSchema : v.GenericSchema<TreeMarriage> = v.pipe(
+    v.object({
+    groom: treeMaleBaseSchema,
+    bride: treeFemaleBaseSchema,
+    progeny: v.array(v.union([
+        v.object({
+            ...treeMaleBaseSchema.entries,
+            marriages: v.array(v.lazy(()=>marriageSchema))
+        }),
+        v.object({
+            ...treeFemaleBaseSchema.entries,
+            marriages: v.array(v.lazy(()=>marriageSchema))
+        })
+    ])),
+    adoptedProgeny: v.array(v.union([
+        v.object({
+            ...treeMaleBaseSchema.entries,
+            marriages: v.array(v.lazy(()=>marriageSchema))
+        }),
+        v.object({
+            ...treeFemaleBaseSchema.entries,
+            marriages: v.array(v.lazy(()=>marriageSchema))
+        })
+    ])),
+    expanded: v.optional(v.boolean()),
+    }),
+    v.rawTransform((ctx)=>{
+        ctx.dataset.value.expanded = false;
+        return ctx.dataset.value;
+    })
+);
+
+export const treeSchema = v.array(
+    v.object({
+        ...treeMaleBaseSchema.entries,
+        marriages: v.array(marriageSchema)
+    }
+));
+export type Tree = v.InferInput<typeof treeSchema>;
+
 export type Node = v.InferInput<typeof nodeSchema>;
 export type NodeType = Node["type"];
 

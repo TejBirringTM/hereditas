@@ -1,4 +1,4 @@
-import { Anchor, Box, Button, Flex, rem, Text, Textarea } from "@mantine/core";
+import { Anchor, Box, Button, Flex, rem, Table, Tabs, Text, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store";
 import { setCodex, processCodex, initialiseFamilyTreeEntry} from "./slice";
@@ -13,6 +13,7 @@ import ShareModal from "./components/ShareModal";
 import ResetMenu from "./components/ResetMenu";
 import { usePostHog } from "posthog-js/react";
 import defaultTheme from "../../assets/themes/default-theme";
+import FamilyTreeEntryTree from "./components/family-tree-tree/FamilyTreeTree";
 
 export default function Codex() {
    const dispatch = useDispatch<AppDispatch>();
@@ -96,7 +97,26 @@ export default function Codex() {
                 </Alert>
             }
 
-            <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} ref={ftree} />
+            {
+                graph && 
+                <Tabs variant="pills" radius="lg" defaultValue="graph" color="patina.5">
+                    <Tabs.List>
+                        <Tabs.Tab value="graph">Graph</Tabs.Tab>
+                        <Tabs.Tab value="tree">Tree</Tabs.Tab>
+                    </Tabs.List>
+
+                    <Tabs.Panel value="graph" mt="sm">
+                        <FamilyTreeEntryGraph graph={graph} width={viewportWidth} height={svgHeight} ref={ftree} />
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="tree" mt="sm">
+                        <FamilyTreeEntryTree graph={graph} />
+                    </Tabs.Panel>
+                </Tabs>
+            }
+
+            
+            
          </Flex>
     </Box>)
 }

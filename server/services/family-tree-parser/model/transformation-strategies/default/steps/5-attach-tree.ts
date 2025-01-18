@@ -8,6 +8,8 @@ import { isRootNode } from "./libs/family-tree-traversal/neighbour-functions.ts"
 import { NMarriage } from "./libs/context/types.ts";
 import { NFemale } from "./libs/context/types.ts";
 import { assert } from "@std/assert";
+import { testators } from "./libs/family-tree-traversal/neighbour-functions.ts";
+import { number } from "@valibot/valibot";
 
 type Input = TransformationStepOutput<
   typeof AttachDirectPatrilineage
@@ -16,27 +18,45 @@ type Input = TransformationStepOutput<
 export default declareTransformationStep(
   "attach-tree",
   (input: Input) => {
-    type TreeNodeFemale = NFemale & {
-      marriages: TreeNodeMarriage[];
+    type TreeNodeFemale = {
+      identity: NFemale["identity"],
+      title: string,
+      text: string[],
+      gender: "Female",
+      marriages: TreeNodeMarriage[],
+      generationInClan?: number
     };
-    type TreeNodeMale = NMale & {
+    type TreeNodeMale = {
+      identity: NMale["identity"],
+      title: string,
+      text: string[],
+      gender: "Male",
       marriages: TreeNodeMarriage[];
+      generationInClan?: number
     };
     type TreeNodeMarriage = NMarriage & {
       progeny: (TreeNodeFemale | TreeNodeMale)[];
       adoptedProgeny: (TreeNodeFemale | TreeNodeMale)[];
-      groom: Omit<TreeNodeMale, "marriages">;
-      bride: Omit<TreeNodeFemale, "marriages">;
+      groom: Omit<TreeNodeMale, "marriages" | "generationInClan">;
+      bride: Omit<TreeNodeFemale, "marriages" | "generationInClan">
     };
 
-    const maleToTreeNode = (male: NMale): TreeNodeMale => ({
-      ...male,
+    const maleToTreeNode = (male: Input["nodes"]["persons"]["male"]["all"][0]): TreeNodeMale => ({
+      identity: male.identity,
+      title: male.title,
+      text: male.text,
+      gender: "Male",
       marriages: [],
+      generationInClan: male.generationInClan,
     });
 
-    const femaleToTreeNode = (female: NFemale): TreeNodeFemale => ({
-      ...female,
+    const femaleToTreeNode = (female: Input["nodes"]["persons"]["female"]["all"][0]): TreeNodeFemale => ({
+      identity: female.identity,
+      title: female.title,
+      text: female.text,
+      gender: "Female",
       marriages: [],
+      generationInClan: female.generationInClan
     });
 
     const males = input.nodes.persons.male.all.map((male) =>
@@ -74,23 +94,23 @@ export default declareTransformationStep(
         adoptedProgeny,
         groom: {
           identity: groom.identity,
-          type: groom.type,
           title: groom.title,
           text: groom.text,
+          gender: "Male",
         },
         bride: {
           identity: bride.identity,
-          type: bride.type,
           title: bride.title,
           text: bride.text,
+          gender: "Female",
         },
-      };
+      } satisfies TreeNodeMarriage;
       groom.marriages.push(mrg);
       bride.marriages.push(mrg);
       return mrg;
     });
 
-    const tree: TreeNodeMale[] = males.filter((male) => isRootNode(input, male))
+    const tree: TreeNodeMale[] = males.filter((male) => testators(input, male.identity).length === 0)
       .map((current) => {
         const marriageIdentities = input.adjacencies.byPerson.multiple.marriages
           .get(current.identity);
@@ -105,7 +125,7 @@ export default declareTransformationStep(
 
     return {
       ...input,
-      tree,
+      tree
     };
   },
 );

@@ -80,10 +80,10 @@ const router = createBrowserRouter([
         }
       },
       // Sermo
-      {
-        path: "sermo",
-        element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-entry-and-visualisation/HomeSermo')))()
-      },
+      // {
+      //   path: "sermo",
+      //   element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-entry-and-visualisation/HomeSermo')))()
+      // },
       // Codex
       {
           path: "codex",

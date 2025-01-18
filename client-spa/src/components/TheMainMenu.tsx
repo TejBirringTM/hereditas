@@ -12,7 +12,7 @@ export default function TheMenuMain() {
                 <div>
                     <NavLink label="Scribe ut..." description="Record a lineage here" active={!!matchPath("/codex", location.pathname) || !!matchPath("/sermo", location.pathname)} >
                         <NavLink label="Codex" description="Enter a lineage using precise notation" href="/codex" active={!!matchPath("/codex/*", location.pathname)} />
-                        <NavLink label="Sermo" description="Enter a lineage using everyday words (EXPERIMENTAL)" href="/sermo" active={!!matchPath("/sermo/*", location.pathname)} />
+                        <NavLink label="Sermo" description="Enter a lineage using everyday words (EXPERIMENTAL)" href="/sermo" active={!!matchPath("/sermo/*", location.pathname)} disabled />
                     </NavLink>
                     <NavLink label="Atrium Familiarum" description="Discover ancestral lineages" href="/atrium" active={!!matchPath("/atrium/*", location.pathname)} />
                     <Divider my="sm" />

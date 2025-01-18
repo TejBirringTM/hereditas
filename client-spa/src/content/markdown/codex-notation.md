@@ -11,7 +11,7 @@
 7. [Best Practices](#best-practices)
 8. [Common Patterns](#common-patterns)
 9. [Error Prevention](#error-prevention)
-10. [Advanced Usage](#advanced-usage)
+<!-- 10. [Advanced Usage](#advanced-usage) -->
 
 ## Introduction
 
@@ -164,12 +164,12 @@ START WITH [augustus: "Augustus Caesar"]
 This declaration is used to append textual information to a reference.
 
 ```text
-APPEND [augustus]:
+APPEND TEXT [augustus]:
 Born 63 BCE in Rome
 Became Princeps in 27 BCE
 Died 14 CE at Nola
 
-APPEND {mrg:imperial1}:
+APPEND TEXT {mrg:imperial1}:
 Marriage celebrated in 38 BCE
 Political alliance
 ```
@@ -201,7 +201,7 @@ START WITH [augustus: "Augustus"]
 [augustus] --{adp:succession1}--> [tiberius]
 
 /* Biographical information */
-APPEND [augustus]:
+APPEND TEXT [augustus]:
 Details about Augustus
 More details
 ```
@@ -268,13 +268,12 @@ More details
 - Verify all referenced persons are declared
 - Test spacing in references
 
+<!-- 
 ## Advanced Usage
 
 ### Extended Character Support
 
-- Support for diacritical marks:
-  
-  ā, ē, ī, ō, ū, ṅ, ṭ, ḍ, ṛ
+- Support for diacritical marks
 
 ### Complex Structures
 
@@ -282,4 +281,5 @@ More details
 - Cross-generation marriages
 - Parallel family lines
 - Historical annotations
-- Multiple patrilineages in one family tree
+- Multiple patrilineages in one family tree 
+-->

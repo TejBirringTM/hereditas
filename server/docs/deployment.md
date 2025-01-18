@@ -34,7 +34,7 @@ To check the status of the project:
 
 ### Create a new deployment
 
-deployctl deploy --project hereditas --exclude **/node_modules --entrypoint main.ts
+deployctl deploy --project hereditas --entrypoint main.ts
 
 ### Delete a deployment
 

@@ -151,7 +151,7 @@ export function createDenoKvCacheMiddleware<
 
     // Process request and cache if success response
     await next();
-    console.debug(ctx.response.body);
+    console.dir(ctx.response.body, { depth: Infinity });
 
     if (ctx.response.status === 200) {
       const size = await getJsonSize(ctx.response.body);

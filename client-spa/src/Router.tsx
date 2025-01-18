@@ -11,6 +11,7 @@ import type { JSXElementConstructor} from "react";
 import { lazy, Suspense } from "react";
 import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
 import { type RenderComponentMap, renderComponentMap } from "./components/feature:markdown-content/render-component-mapping";
+import InfiniteProgressBar from "./components/InfiniteProgressBar";
 
 const lazyLoad = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,7 +26,7 @@ const lazyLoad = <
 
   return function LazyLoaded() {
     return (  
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<InfiniteProgressBar />}>
         {Layout ? (
           <Layout>{<Component />}</Layout>
         ) : (
@@ -41,8 +42,8 @@ const lazyLoad = <
  ) => {
   const Component = component;
   return function LazyLoadedMdx() {
-    return (  
-      <Suspense fallback={<div>Loading...</div>}>
+    return (
+      <Suspense fallback={<InfiniteProgressBar />}>
         <MarkdownPageLayout>
           <Component components={renderComponentMap} />
         </MarkdownPageLayout>

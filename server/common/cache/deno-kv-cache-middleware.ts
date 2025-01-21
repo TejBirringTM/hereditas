@@ -23,7 +23,7 @@ function getJsonSizeSync(value: unknown): number {
   if (value instanceof RegExp) {
     value = {
       source: value.source,
-      flags: value.flags
+      flags: value.flags,
     };
   }
 
@@ -32,22 +32,24 @@ function getJsonSizeSync(value: unknown): number {
     value = {
       name: value.name,
       message: value.message,
-      stack: value.stack
+      stack: value.stack,
     };
   }
 
   // Handle ArrayBuffer and TypedArrays
   if (value instanceof ArrayBuffer || ArrayBuffer.isView(value)) {
-    value = Array.from(new Uint8Array(value instanceof ArrayBuffer ? value : value.buffer));
+    value = Array.from(
+      new Uint8Array(value instanceof ArrayBuffer ? value : value.buffer),
+    );
   }
 
   // Handle function by taking its string representation
-  if (typeof value === 'function') {
+  if (typeof value === "function") {
     value = value.toString();
   }
 
   // Handle symbol by taking its description
-  if (typeof value === 'symbol') {
+  if (typeof value === "symbol") {
     value = value.description;
   }
 
@@ -90,7 +92,11 @@ async function getJsonSize(value: unknown): Promise<number> {
     const obj: Record<string, unknown> = {};
     for (const [key, val] of value.entries()) {
       if (val instanceof File || val instanceof Blob) {
-        obj[key] = { name: val instanceof File ? val.name : 'blob', size: val.size, type: val.type };
+        obj[key] = {
+          name: val instanceof File ? val.name : "blob",
+          size: val.size,
+          type: val.type,
+        };
       } else {
         obj[key] = val;
       }

@@ -4,7 +4,7 @@ const config = {
     origin: Deno.env.get("CORS_ORIGIN") ?? "*",
   },
   cache: {
-    ttlInMilliseconds: parseInt(Deno.env.get("CACHE_TTL_MS") ?? "3_600_000") // default: 1 hour in milliseconds
+    ttlInMilliseconds: parseInt(Deno.env.get("CACHE_TTL_MS") ?? "3_600_000"), // default: 1 hour in milliseconds
   },
   external: {
     anthrophic: {

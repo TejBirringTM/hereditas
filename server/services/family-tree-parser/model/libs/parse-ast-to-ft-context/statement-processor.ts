@@ -105,11 +105,11 @@ function resolveExpression<T extends Expression>(
   let ret: any;
   if (expression.type === "MALE_DECLARATION") {
     ret = declareMale(context, expression.key, expression.title, {
-      redacted: expression.redacted
+      redacted: expression.redacted,
     });
   } else if (expression.type === "FEMALE_DECLARATION") {
     ret = declareFemale(context, expression.key, expression.title, {
-      redacted: expression.redacted
+      redacted: expression.redacted,
     });
   } else if (
     expression.type === "MALE_REFERENCE" ||
@@ -120,7 +120,12 @@ function resolveExpression<T extends Expression>(
   return ret;
 }
 
-function declareMale(context: FamilyTreeContext, key: string, title: string, attributes: {redacted: boolean}) {
+function declareMale(
+  context: FamilyTreeContext,
+  key: string,
+  title: string,
+  attributes: { redacted: boolean },
+) {
   const identity = `male:${key}` as NMale["identity"];
   if (context.maleNodes.has(identity)) {
     throw DuplicateDeclarationError.create(
@@ -132,13 +137,18 @@ function declareMale(context: FamilyTreeContext, key: string, title: string, att
     identity,
     title: title,
     text: [],
-    attributes
+    attributes,
   } satisfies NMale;
   context.maleNodes.set(maleNode.identity, maleNode);
   return maleNode;
 }
 
-function declareFemale(context: FamilyTreeContext, key: string, title: string, attributes: {redacted: boolean}) {
+function declareFemale(
+  context: FamilyTreeContext,
+  key: string,
+  title: string,
+  attributes: { redacted: boolean },
+) {
   const identity = `female:${key}` as NFemale["identity"];
   if (context.femaleNodes.has(identity)) {
     throw DuplicateDeclarationError.create(
@@ -150,7 +160,7 @@ function declareFemale(context: FamilyTreeContext, key: string, title: string, a
     identity,
     title: title,
     text: [],
-    attributes
+    attributes,
   } satisfies NFemale;
   context.femaleNodes.set(femaleNode.identity, femaleNode);
   return femaleNode;
@@ -471,13 +481,13 @@ const statementParsers = {
   MALE_DECLARATION: declareStatementParser((context, token) => {
     const parsedToken = MALE_DECLARATION(token);
     declareMale(context, parsedToken.key, parsedToken.title, {
-      redacted: parsedToken.redacted
+      redacted: parsedToken.redacted,
     });
   }),
   FEMALE_DECLARATION: declareStatementParser((context, token) => {
     const parsedToken = FEMALE_DECLARATION(token);
     declareFemale(context, parsedToken.key, parsedToken.title, {
-      redacted: parsedToken.redacted
+      redacted: parsedToken.redacted,
     });
   }),
   MARRIAGE_DECLARATION: declareStatementParser((context, token) => {

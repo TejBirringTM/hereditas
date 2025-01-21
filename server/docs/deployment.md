@@ -42,14 +42,12 @@ deployctl deploy --project hereditas --entrypoint main.ts
 
 ## Production Deployment
 
-Only one deployment points to the production URL
-(`https://hereditas.deno.dev`). In order to promote a deployment to
-production, visit the
-[dashboard](https://dash.deno.com/projects/hereditas/deployments)
-and select 'Promote to Production' on the chosen deployment.
+Only one deployment points to the production URL (`https://hereditas.deno.dev`).
+In order to promote a deployment to production, visit the
+[dashboard](https://dash.deno.com/projects/hereditas/deployments) and select
+'Promote to Production' on the chosen deployment.
 
 ## Deployment Environment
 
-Visit the
-[dashboard](https://dash.deno.com/projects/hereditas/settings) in
+Visit the [dashboard](https://dash.deno.com/projects/hereditas/settings) in
 order to change environment variables exposed to deployments.

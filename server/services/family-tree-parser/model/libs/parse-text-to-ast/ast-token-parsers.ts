@@ -14,17 +14,22 @@ export const MAYBE_A_ = <T>(parser: TokenParser<T>, token?: IToken) =>
 export const MALE_DECLARATION = ((token) => {
   const key =
     recursivelyFindFirstOfType(token, "DECLARATION_KEY", false, true).text;
-  
+
   const title = recursivelyFindFirstOfType(token, "STRING", false, true).text
     .slice(1, -1);
-  
-  const redacted = !!recursivelyFindFirstOfType(token, "REDACTED_ATTRIBUTE", false, false);
+
+  const redacted = !!recursivelyFindFirstOfType(
+    token,
+    "REDACTED_ATTRIBUTE",
+    false,
+    false,
+  );
 
   return {
     type: "MALE_DECLARATION",
     key,
     title,
-    redacted
+    redacted,
   } as const;
 }) satisfies SomeTokenParser;
 
@@ -58,13 +63,18 @@ export const FEMALE_DECLARATION = ((token) => {
   const title = recursivelyFindFirstOfType(token, "STRING", false, true).text
     .slice(1, -1);
 
-  const redacted = !!recursivelyFindFirstOfType(token, "REDACTED_ATTRIBUTE", false, false);
-  
+  const redacted = !!recursivelyFindFirstOfType(
+    token,
+    "REDACTED_ATTRIBUTE",
+    false,
+    false,
+  );
+
   return {
     type: "FEMALE_DECLARATION",
     key,
     title,
-    redacted
+    redacted,
   } as const;
 }) satisfies SomeTokenParser;
 

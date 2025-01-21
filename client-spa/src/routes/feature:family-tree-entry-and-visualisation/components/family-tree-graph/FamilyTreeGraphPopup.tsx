@@ -17,8 +17,12 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
             className={styles.popup}
             style={{top, left}}
         >
-            <Text fz="lg" fw="bold" lh="1.25" mb="xs">{node.title && node.title.length > 0 ? node.title : "(No name recorded)"}</Text>
-
+            <Text fz="lg" fw="bold" lh="1.25" mb="xs">
+                {node.title && node.title.length > 0 ? node.title : "(No name recorded)"}
+            </Text>
+            {
+                node.attributes?.redacted && <Text size="sm" fw="bold">Redacted for brevity (out of scope).</Text>
+            }
             <div>
                 {
                     node.patrilineage && node.patrilineage.nodes.length > 0 &&

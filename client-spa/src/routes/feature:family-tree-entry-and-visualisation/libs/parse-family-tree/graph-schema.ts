@@ -1,6 +1,10 @@
 
 import * as v from "valibot";
 
+const personNodeAttributes = v.object({
+    redacted: v.optional(v.boolean())
+});
+
 const baseNodeSchema = v.object({
     identity: v.string(),
     type: v.union([v.literal("Male"), v.literal("Female"), v.literal("Marriage")]),
@@ -8,6 +12,7 @@ const baseNodeSchema = v.object({
     generationInClan: v.optional(v.number()),
     title: v.optional(v.string()),
     text: v.array(v.string()),
+    attributes: v.optional(personNodeAttributes)
 });
 
 export const linkSchema = v.object({
@@ -44,14 +49,16 @@ const treeMaleBaseSchema = v.object({
     title: v.string(),
     text: v.array(v.string()),
     gender: v.literal("Male"),
-    generationInClan: v.optional(v.number())
+    generationInClan: v.optional(v.number()),
+    attributes: v.optional(personNodeAttributes)
 });
 const treeFemaleBaseSchema = v.object({
     identity: v.string(),
     title: v.string(),
     text: v.array(v.string()),
     gender: v.literal("Female"), 
-    generationInClan: v.optional(v.number())
+    generationInClan: v.optional(v.number()),
+    attributes: v.optional(personNodeAttributes)
 });
 type TreeMaleBase = v.InferInput<typeof treeMaleBaseSchema>;
 type TreeFemaleBase = v.InferInput<typeof treeFemaleBaseSchema>;

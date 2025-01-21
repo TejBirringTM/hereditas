@@ -24,6 +24,9 @@ function PersonNode(props: PersonNodeProps) {
                 {name || (adopted ? '(No name recorded; adopted.)' : '(No name recorded.)')}
                 { adopted && name.length > 0 && <span>&nbsp;(adopted.)</span>}
             </Title>
+            { node.attributes?.redacted && 
+                <Text fw="bold" c="navy.5" size="lg">Redacted for brevity (out of scope).</Text>
+            }
             {
                 node.text && node.text.length > 0 &&    
                 node.text.map((txt, idx)=>(
@@ -65,6 +68,12 @@ function MarriageNode({node, highlight, count}: MarriageNodeProps) {
                     { name || "no name recorded."}
                 </Title>
                 {
+                    node.bride.text && node.bride.text.length > 0 &&    
+                    node.bride.text.map((txt, idx)=>(
+                        <Text size="xs" key={`${node.bride.identity}-paragraph-#${idx+1}`} pb={(node.bride.text.length > 1 && idx < node.bride.text.length - 1) ? 'xs' : undefined}>{txt}</Text>
+                    ))
+                }
+                {
                     nTotalProgeny > 0 ?
                         <>
                             <Title order={6}><em>Progeny from { name || (count ? `Wife ${count}` : 'Wife')}:</em></Title>
@@ -81,7 +90,7 @@ function MarriageNode({node, highlight, count}: MarriageNodeProps) {
                                 }
                             </Box>
                         </> :
-                        <Title order={6}><em>No progeny recorded from { name || `Wife ${count}`}.</em></Title>
+                        <Title order={6}><em>No progeny recorded from { name || (count ? `Wife ${count}` : 'Wife')}.</em></Title>
                 }
             </Box>
         )

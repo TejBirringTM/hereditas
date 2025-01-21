@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Graph } from "../../libs/parse-family-tree";
-import { TreeMale, Tree, TreeMarriage, TreeFemale } from "../../libs/parse-family-tree/graph-schema";
-import { Box, Text, Title, PolymorphicComponentProps, BoxComponentProps } from "@mantine/core";
+import type { Graph } from "../../libs/parse-family-tree";
+import type { TreeMale, Tree, TreeMarriage, TreeFemale } from "../../libs/parse-family-tree/graph-schema";
+import { Box, Text, Title, type PolymorphicComponentProps, type BoxComponentProps } from "@mantine/core";
 import appendOrdinalSuffix from "../../../../libs/append-ordinal-suffix";
 import { Colour } from "../../../../libs/colour";
 

@@ -1,4 +1,4 @@
-import { Anchor, Box, Button, Flex, rem, Table, Tabs, Text, Textarea } from "@mantine/core";
+import { Anchor, Box, Button, Flex, rem, Tabs, Text, Textarea } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store";
 import { setCodex, processCodex, initialiseFamilyTreeEntry} from "./slice";

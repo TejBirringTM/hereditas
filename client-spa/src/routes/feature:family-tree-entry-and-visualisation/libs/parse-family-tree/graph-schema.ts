@@ -68,11 +68,11 @@ export type TreeMale = TreeMaleBase & {
 export type TreeFemale = TreeFemaleBase & {
     marriages: TreeMarriage[]
 };
-export type TreeMarriage = {
+export interface TreeMarriage {
     groom: TreeMaleBase,
     bride: TreeFemaleBase,
-    progeny: Array<TreeMale | TreeFemale>,
-    adoptedProgeny: Array<TreeMale | TreeFemale>,
+    progeny: (TreeMale | TreeFemale)[],
+    adoptedProgeny: (TreeMale | TreeFemale)[],
     expanded?: boolean
 }
 

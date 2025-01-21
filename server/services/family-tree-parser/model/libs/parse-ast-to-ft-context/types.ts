@@ -15,14 +15,19 @@ type Relationship<
 };
 
 // Nodes:
+export type NPersonAttributes = {
+  redacted?: boolean;
+}
 
 export type NMale = Node<"Male"> & {
   title: string;
   text: string[];
+  attributes?: NPersonAttributes
 };
 export type NFemale = Node<"Female"> & {
   title: string;
   text: string[];
+  attributes?: NPersonAttributes
 };
 export type NMarriage = Node<"Marriage"> & {
   text: string[];

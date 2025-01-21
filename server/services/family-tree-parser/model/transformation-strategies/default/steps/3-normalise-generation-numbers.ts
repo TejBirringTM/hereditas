@@ -53,6 +53,7 @@ export default declareTransformationStep(
       }
     });
 
+    // ensure adopted children use the lowest possible generation number of all adoptees (i.e. in the case of generations elder than parents adopting child)
     input.nodes.persons.all.forEach((node) => {
       const adoptedChildrenIdentities = input.adjacencies.byPerson.multiple
         .adoptedChildren.get(node.identity);

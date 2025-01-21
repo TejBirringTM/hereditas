@@ -24,7 +24,11 @@ export default declareTransformationStep(
       text: string[],
       gender: "Female",
       marriages: TreeNodeMarriage[],
-      generationInClan?: number
+      generationInClan?: number,
+      generationInTree?: number,
+      attributes?: {
+        redacted?: boolean,
+      }
     };
     type TreeNodeMale = {
       identity: NMale["identity"],
@@ -32,7 +36,11 @@ export default declareTransformationStep(
       text: string[],
       gender: "Male",
       marriages: TreeNodeMarriage[];
-      generationInClan?: number
+      generationInClan?: number,
+      generationInTree?: number,
+      attributes?: {
+        redacted?: boolean,
+      }
     };
     type TreeNodeMarriage = NMarriage & {
       progeny: (TreeNodeFemale | TreeNodeMale)[];
@@ -48,6 +56,8 @@ export default declareTransformationStep(
       gender: "Male",
       marriages: [],
       generationInClan: male.generationInClan,
+      generationInTree: male.generationInTree,
+      attributes: male.attributes,
     });
 
     const femaleToTreeNode = (female: Input["nodes"]["persons"]["female"]["all"][0]): TreeNodeFemale => ({
@@ -56,7 +66,9 @@ export default declareTransformationStep(
       text: female.text,
       gender: "Female",
       marriages: [],
-      generationInClan: female.generationInClan
+      generationInClan: female.generationInClan,
+      generationInTree: female.generationInTree,
+      attributes: female.attributes,
     });
 
     const males = input.nodes.persons.male.all.map((male) =>

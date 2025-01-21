@@ -89,23 +89,24 @@ export function recursivelyFindFirstOfType<
   if (includeSelf && token.type === type) {
     return token;
   }
+  let result: IToken | undefined;
   function _recursivelyFindFirstOfType(token: IToken) {
     for (const _token of token.children) {
       if (_token.type === type) {
-        return _token;
+        result = _token;
       } else {
         _recursivelyFindFirstOfType(_token);
       }
     }
   }
-  const result = _recursivelyFindFirstOfType(token);
+  _recursivelyFindFirstOfType(token);
   if (throwError && !result) {
     throw InvalidInputError.create(
       `could not find ${type} when parsing ${token.type}`,
     );
   }
-  return result as ThrowError extends true ? Exclude<typeof result, undefined>
-    : typeof result;
+  return result as (ThrowError extends true ? Exclude<typeof result, undefined>
+    : typeof result);
 }
 
 export function shallowFindOfType(token: IToken, type: string) {

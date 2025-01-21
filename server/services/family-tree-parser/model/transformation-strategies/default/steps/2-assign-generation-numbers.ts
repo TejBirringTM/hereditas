@@ -27,6 +27,9 @@ type Input = TransformationStepOutput<typeof DevelopContext>;
 
 // setters
 const assignGeneration = (node: NPerson, generation?: number) => {
+  debugOnly(()=>{
+    console.debug(`Assigning tree generation of ${generation} to ${node.identity}`);
+  })
   if (!node.generationInTree && typeof generation === "number") {
     node.generationInTree = generation;
   }
@@ -94,9 +97,12 @@ export default declareTransformationStep(
 
     // the primary root is the male that is asserted as root of the tree
     const primaryRoot = input.nodes.persons.male.designatedRootAncestor;
+    const primaryRootMarriages = input.nodes.marriages.$many(...input.adjacencies.byPerson.multiple.marriages.get(primaryRoot.identity));
+    const primaryRootWives = input.nodes.persons.$many(...primaryRootMarriages.map((mrg)=>input.adjacencies.byMarriage.single.bride.get(mrg.identity)));
 
     // assert for the primary root a generation number of 1
     primaryRoot.generationInTree = 1;
+    primaryRootWives.forEach((wife)=>wife.generationInTree = 1);
 
     // initial traversal to assign generation numbers from primary root
     traverseGraphBreadthFirst(

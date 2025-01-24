@@ -3,6 +3,7 @@ import { airtableRecords } from "../airtable/main.ts";
 import { FieldSet, SelectOptions } from "airtable";
 import debugOnly from "../framework/debug-only.ts";
 import { ReadonlyDeep } from "type-fest";
+import { Nullable } from "../../types.ts";
 
 interface TableSyncOptions {
   selectOptions?: SelectOptions<FieldSet>;
@@ -22,7 +23,7 @@ export class AirtableSync<
   private readonly transform: (
     input: v.InferOutput<typeof this.schema>,
   ) => TOut;
-  private _records: TOut[];
+  private _records: Nullable<TOut[]>;
   private lastFetchTimestamp: number;
 
   constructor(
@@ -41,7 +42,7 @@ export class AirtableSync<
     this.ttl = options.ttlInMilliseconds;
     this.schema = schema;
     this.lastFetchTimestamp = 0;
-    this._records = [];
+    this._records = null as Nullable<TOut[]>;
   }
 
   private async fetch() {
@@ -68,10 +69,15 @@ export class AirtableSync<
   }
 
   async records() {
-    if (Date.now() - this.lastFetchTimestamp > this.ttl) {
+    if ((Date.now() - this.lastFetchTimestamp > this.ttl) && (!this._records)) {
+      this._records = []; // ensure the condition on the above line fails on a concurrent attempt, otherwise we may see duplicate data due to async fetch
       await this.fetch();
+    } else {
+      debugOnly(()=>{
+        console.debug(`Skipped syncing 'airtable:${this.baseId}:${this.tableId}', a sync is already in progress.`);
+      })
     }
-    return Object.freeze(this._records) as ReadonlyDeep<typeof this._records>;
+    return Object.freeze(this._records) as ReadonlyDeep<TOut[]>;
   }
 
   get lastFetch() {

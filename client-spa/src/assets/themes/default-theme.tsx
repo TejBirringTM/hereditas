@@ -42,7 +42,13 @@ const defaultTheme = createTheme({
     // border radius
     defaultRadius: "lg",
 
-    
+    breakpoints: {
+        xs: '360px', // small phone
+        sm: '768px', // tablet
+        md: '1024px', // landscape tablet / XGA monitor
+        lg: '1680px', // Wide Super XGA monitor
+        xl: '2560px', // Wide Ultra XGA monitor
+    }
 });
 
 export default defaultTheme;

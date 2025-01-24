@@ -20,9 +20,7 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
             <Text fz="lg" fw="bold" lh="1.25" mb="xs">
                 {node.title && node.title.length > 0 ? node.title : "(No name recorded)"}
             </Text>
-            {
-                node.attributes?.redacted && <Text size="sm" fw="bold">Redacted for brevity (out of scope).</Text>
-            }
+
             <div>
                 {
                     node.patrilineage && node.patrilineage.nodes.length > 0 &&
@@ -38,6 +36,10 @@ export default function FamilyTreeGraphPopup({node, top, left}: FamilyTreeGraphP
                 }
             </div>
             
+            {
+                node.attributes?.redacted && <Text size="sm" fw="bold" my="xs">Redacted for brevity (out of scope)</Text>
+            }
+
             {
                 (node.text.length > 0) &&
                 <Box mt="xs">

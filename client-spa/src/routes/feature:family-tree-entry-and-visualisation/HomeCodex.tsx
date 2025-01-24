@@ -1,6 +1,4 @@
 import { Anchor, Box, Button, Flex, rem, Tabs, Text, Textarea } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../store";
 import { setCodex, processCodex, initialiseFamilyTreeEntry} from "./slice";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
@@ -14,23 +12,25 @@ import ResetMenu from "./components/ResetMenu";
 import { usePostHog } from "posthog-js/react";
 import defaultTheme from "../../assets/themes/default-theme";
 import FamilyTreeEntryTree from "./components/family-tree-tree/FamilyTreeTree";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { setActiveContent } from "../feature:content/slice";
 
 export default function Codex() {
-   const dispatch = useDispatch<AppDispatch>();
+   const dispatch = useAppDispatch();
 
-   const codex = useSelector((state: RootState)=>{
+   const codex = useAppSelector((state)=>{
       return state.familyTreeEntry.codex;
    });
 
-   const graph = useSelector((state: RootState)=>{
+   const graph = useAppSelector((state)=>{
     return state.familyTreeEntry.graph;
    });
 
-   const state = useSelector((state: RootState)=>{
+   const state = useAppSelector((state)=>{
     return state.familyTreeEntry.state;
    });
 
-   const errorMessage = useSelector((state: RootState)=>{
+   const errorMessage = useAppSelector((state)=>{
     return state.familyTreeEntry.errorMessage;
    });
 
@@ -55,6 +55,8 @@ export default function Codex() {
         if (state === "start") {
             posthog.capture("navigate to home page");
             void dispatch(initialiseFamilyTreeEntry());
+        } else if (state === "editing") {
+            void dispatch(setActiveContent({contentRecord: null}));
         }
    })
 
@@ -74,7 +76,7 @@ export default function Codex() {
          <Flex direction="column" gap="lg">
             <Textarea ref={refTextArea} autosize onChange={updateTextEntry} value={codex} disabled={state === "drawn"} fw={500} styles={{input: {fontFamily: defaultTheme.fontFamilyMonospace, fontSize: "1.05rem", lineHeight: 1.35, paddingTop: "0.85rem", paddingBottom: "0.85rem"}}} />
             
-            <Flex direction={{base: "column-reverse", sm: "row"}} justify="end" gap="md">
+            <Flex direction={{base: "column-reverse", sm: "row"}} justify="end"  mb="md" gap="lg">
                 <ResetMenu />
 
                 {/*  */}

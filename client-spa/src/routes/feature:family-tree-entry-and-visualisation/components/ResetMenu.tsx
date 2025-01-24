@@ -1,29 +1,28 @@
 import { Button, Menu, rem } from "@mantine/core";
 import UndoIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-undo.svg?react"
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../store";
 import { resetFamilyTreeEntry } from "../slice";
 import { usePostHog } from "posthog-js/react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 interface ResetMenuProps {
     resetPanAndZoom?: (()=>void) | undefined
 }
 
 export default function ResetMenu({resetPanAndZoom}: ResetMenuProps) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const posthog = usePostHog();
     const navigate = useNavigate();
 
-    const acta = useSelector((state: RootState)=>{
+    const acta = useAppSelector((state)=>{
       return state.familyTreeEntry.acta;
    });
 
-    const codex = useSelector((state: RootState)=>{
+    const codex = useAppSelector((state)=>{
        return state.familyTreeEntry.codex;
     });
  
-    const state = useSelector((state: RootState)=>{
+    const state = useAppSelector((state)=>{
      return state.familyTreeEntry.state;
     });
  

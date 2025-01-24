@@ -1,6 +1,4 @@
 import { Anchor, Box, Button, Flex, rem, Text, Textarea } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../store";
 import { setActa, processActa, initialiseFamilyTreeEntry} from "./slice";
 import { Alert } from '@mantine/core';
 import ErrorIcon from "../../assets/icons/uicons-thin-straight/fi-ts-octagon-xmark.svg?react"
@@ -14,23 +12,24 @@ import ShareModal from "./components/ShareModal";
 import ResetMenu from "./components/ResetMenu";
 import { usePostHog } from "posthog-js/react";
 import defaultTheme from "../../assets/themes/default-theme";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 
 export default function Acta() {
-   const dispatch = useDispatch<AppDispatch>();
+   const dispatch = useAppDispatch();
 
-   const acta = useSelector((state: RootState)=>{
+   const acta = useAppSelector((state)=>{
       return state.familyTreeEntry.acta;
    });
 
-   const graph = useSelector((state: RootState)=>{
+   const graph = useAppSelector((state)=>{
     return state.familyTreeEntry.graph;
    });
 
-   const state = useSelector((state: RootState)=>{
+   const state = useAppSelector((state)=>{
     return state.familyTreeEntry.state;
    });
 
-   const errorMessage = useSelector((state: RootState)=>{
+   const errorMessage = useAppSelector((state)=>{
     return state.familyTreeEntry.errorMessage;
    });
 

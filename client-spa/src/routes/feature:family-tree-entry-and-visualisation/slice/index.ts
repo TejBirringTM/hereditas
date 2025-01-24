@@ -2,8 +2,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import {type Graph, parseFamilyTree} from '../libs/parse-family-tree';
 import {scribeFamilyTree} from '../libs/scribe-family-tree';
-import type { RootState } from '../../../store';
 import { detokeniseString, tokeniseString } from '../../../libs/tokenise';
+import type { RootState } from '../../../store';
 
 export const localStorageKey_codex = "family-tree-user-entry-codex";
 export const localStorageKey_acta = "family-tree-user-entry-acta";
@@ -44,6 +44,7 @@ const familyTreeEntrySlice = createSlice({
       state.errorMessage = "";
       state.state = "start";
       if (action.payload.clearTextEntry) {
+        // state.state = "start";
         state.acta = "";
         state.codex = "";
         localStorage.removeItem(localStorageKey_acta);

@@ -1,18 +1,16 @@
 import '@mantine/core/styles.css';
 import '@mantine/carousel/styles.css';
-import { Flex, MantineProvider } from '@mantine/core';
+import { Flex } from '@mantine/core';
 import { AppShell, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet } from "react-router-dom";
 import TheHeaderLogo from '../components/TheHeaderLogo';
-import defaultTheme from '../assets/themes/default-theme';
 import TheMenuMain from '../components/TheMainMenu';
 
 export default function Root() {
     const [menuOpened, { toggle: toggleMenu }] = useDisclosure();
 
     return (
-        <MantineProvider theme={defaultTheme}>
         <AppShell
           header={{ height: 60 }}
           navbar={{
@@ -48,6 +46,5 @@ export default function Root() {
             <Outlet />
           </AppShell.Main>
         </AppShell>
-      </MantineProvider>
     )
 }

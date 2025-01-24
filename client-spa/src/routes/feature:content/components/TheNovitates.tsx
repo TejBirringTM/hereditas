@@ -1,22 +1,21 @@
 import { AspectRatio, Box, Button, Card, Flex, Grid, Image, Menu, rem, Skeleton, Text } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { fetchContent } from "../content/slice";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../store";
+import { fetchContent } from "../slice";
 import { useEffect } from "react";
-import ImagesIcon from "../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
-import DownloadsIcon from "../assets/icons/uicons-solid-straight/fi-ss-file-download.svg?react";
-import CalendarIcon from "../assets/icons/uicons-solid-straight/fi-ss-calendar-day.svg?react";
-import DownCaretIcon from "../assets/icons/uicons-solid-straight/fi-ss-caret-down.svg?react";
-import PageTitle from "./PageTitle";
+import ImagesIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
+import DownloadsIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-file-download.svg?react";
+import CalendarIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-calendar-day.svg?react";
+import DownCaretIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-caret-down.svg?react";
+import PageTitle from "../../../components/PageTitle";
 import { useNavigate } from "react-router-dom";
-import { downloadFile } from "../libs/download-file";
+import { downloadFile } from "../../../libs/download-file";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 export default function TheNovitates() {
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const records = useSelector((state: RootState)=>{
+    const records = useAppSelector((state)=>{
         return state.content.content;
      });
 
@@ -41,7 +40,7 @@ export default function TheNovitates() {
             {
                 (!records || records.length === 0) && (
                     Array.from({length: 6}).map((_, idx)=>(
-                        <Grid.Col span={{base: 12, md: 6, xl: 4}} key={`novitas-sk-#${idx}`}>
+                        <Grid.Col span={{base: 12, sm: 12, md: 6, lg: 5, xl: 3}} key={`novitas-sk-#${idx}`}>
                             <Skeleton h={300} w={"100%"} />
                         </Grid.Col>
                     ))
@@ -49,7 +48,7 @@ export default function TheNovitates() {
             }                
             {
                 records?.map((r)=>(
-                    <Grid.Col span={{base: 12, md: 6, xl: 4}} key={r.id}>
+                    <Grid.Col span={{base: 12, sm: 12, md: 6, lg: 5, xl: 3}} key={r.id}>
 
                     <Card shadow="sm" bg="gray.1">
                         {

@@ -5,13 +5,13 @@ import {
 import Root from "./routes/Root";
 import ErrorElement from "./routes/Error";
 import Home from "./routes/Home";
-import store from "./store";
-import { fetchContent } from "./content/slice";
+import { fetchContent } from "./routes/feature:content/slice";
 import type { JSXElementConstructor} from "react";
 import { lazy, Suspense } from "react";
 import MarkdownPageLayout from "./components/feature:markdown-content/MarkdownPageLayout";
 import { type RenderComponentMap, renderComponentMap } from "./components/feature:markdown-content/render-component-mapping";
 import InfiniteProgressBar from "./components/InfiniteProgressBar";
+import store from "./store";
 
 const lazyLoad = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
       // Novitates -> Novitas
       {
         path: "novitas/:recordId",
-        element: lazyLoad(lazy(()=>import('./routes/Novitas')))(),
+        element: lazyLoad(lazy(()=>import('./routes/feature:content/Novitas')))(),
         async loader({params}) {
           await store.dispatch(fetchContent());
           const state = store.getState();
@@ -97,7 +97,7 @@ const router = createBrowserRouter([
       // Atrium Familiarum
       {
         path: "atrium",
-        element: lazyLoad(lazy(()=>import('./routes/feature:family-tree-directory/HomeAtrium')))()
+        element: lazyLoad(lazy(()=>import('./routes/feature:content/HomeAtrium')))()
       },
       // About Us
       {

@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Router from './Router'
+import { default as RouterProvider } from './Router'
 import { isDebugMode } from './libs/debug'
 
 import { Provider as StateProvider } from 'react-redux'
@@ -8,6 +8,8 @@ import store from './store'
 
 import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
+import { MantineProvider } from '@mantine/core'
+import defaultTheme from './assets/themes/default-theme'
 const posthogApiKey = import.meta.env.VITE_POSTHOG_PUBLIC_API_KEY as string;
 const posthogHostUrl = import.meta.env.VITE_POSTHOG_HOST_URL as string;
 posthog.init(
@@ -27,10 +29,12 @@ posthog.init(
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PostHogProvider client={posthog} >
-      <StateProvider store={store}>
-        <Router />
-      </StateProvider>
-    </PostHogProvider>
+    <MantineProvider theme={defaultTheme}>
+      <PostHogProvider client={posthog} >
+        <StateProvider store={store}>
+          <RouterProvider />
+        </StateProvider>
+      </PostHogProvider>
+    </MantineProvider>
   </StrictMode>,
 );

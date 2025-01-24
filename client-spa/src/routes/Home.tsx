@@ -1,5 +1,5 @@
-import { Box, Divider, Flex, Grid, Highlight, rem, Text, Title } from "@mantine/core";
-import TheNovitates from "../components/TheNovitates";
+import { Box, Divider, Flex, Highlight, rem, Text, Title } from "@mantine/core";
+import TheNovitates from "./feature:content/components/TheNovitates";
 import Feature from "../components/Feature";
 import CodexFeatureImage from "../assets/feature-images/codex-feature.jpg"
 import CodexFeatureHighlightedImage from "../assets/feature-images/codex-feature-selected.jpg"
@@ -10,7 +10,7 @@ import Symbol from "../assets/images/hereditas.svg?react";
 export default function Home(){
     return (
         <Box px={{base: 0, sm:"1rem"}}>
-            <Flex direction={{base: "column", sm: "row"}} align="center" mt="md" mb="xl">
+            <Flex direction={{base: "column", sm: "row"}} align="center" mt="md" mb={{base: "lg", lg: "xl"}}>
                 <Box mr={{base: "xs"}}>
                     <Symbol height="3.8rem" width="3.8rem" />
                 </Box>
@@ -25,9 +25,8 @@ export default function Home(){
                 </Box>
             </Flex>
 
-            <Grid>
-                <Grid.Col span={{base: 12, lg: 6}}>
-                    <Feature image={CodexFeatureImage} highlightImage={CodexFeatureHighlightedImage} to="/codex">
+            <Flex gap="lg" direction={{base: "column", md: "row"}} align={{base: "center"}}>
+                <Feature image={CodexFeatureImage} highlightImage={CodexFeatureHighlightedImage} to="/codex">
                         <Flex direction="column" align="center">
                             <Title size="3rem" c="navy.9" style={{fontVariant: "small-caps"}}>
                                 Compile
@@ -39,8 +38,7 @@ export default function Home(){
                             </Box>
                         </Flex>
                     </Feature>
-                </Grid.Col>
-                <Grid.Col span={{base: 12, lg: 6}}>
+
                     <Feature image={AtriumFeatureImage} highlightImage={AtriumFeatureHighlightedImage} to="/atrium">
                         
                     <Flex direction="column" align="center">
@@ -54,9 +52,8 @@ export default function Home(){
                             </Box>
                         </Flex>  
                     </Feature>
-                  
-                </Grid.Col>
-            </Grid>
+                </Flex>
+                
             <Divider my="xl" />
             <TheNovitates />
         </Box>

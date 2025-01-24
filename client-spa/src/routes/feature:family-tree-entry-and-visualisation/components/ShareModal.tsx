@@ -1,13 +1,10 @@
 import { Button, Flex, Modal, rem, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import ShareIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-share-square.svg?react"
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../../store';
 import { useEffect, useRef, useState } from 'react';
-
 import { usePostHog } from 'posthog-js/react';
-import { codexShareLink } from '../libs/codex-share-link';
-
+import { shareLink as _shareLink } from '../libs/share-link';
+import { useAppSelector } from '../../../hooks';
 
 interface ShareModalProps {
     disabled?: boolean
@@ -15,13 +12,20 @@ interface ShareModalProps {
 
 export default function ShareModal({disabled}: ShareModalProps) {
     const [opened, {open, close}] = useDisclosure();
-    const [tokenCopied, setTokenCopied] = useState(false);
+    const [urlCopied, setCopiedUrl] = useState(false);
     
     const textInputRef = useRef<HTMLInputElement>(null);
 
-    const shareLink = useSelector((state: RootState)=>{
+    const shareLink = useAppSelector((state)=>{
+        const activeContent = state.content.activeContent;
         const token = state.familyTreeEntry.token;
-        return codexShareLink(token);
+        return _shareLink(
+            {
+                token,
+                recordId: activeContent?.id
+            },
+            false
+        );
     });
 
     const posthog = usePostHog();
@@ -30,12 +34,12 @@ export default function ShareModal({disabled}: ShareModalProps) {
         if (opened) {
             void navigator.clipboard.writeText(shareLink)
             .then(()=>{
-                setTokenCopied(true);
+                setCopiedUrl(true);
                 console.debug("Share link copied to clipboard.");
                 posthog.capture("share link copied to clipboard");
             });
         } else {
-            setTokenCopied(false);
+            setCopiedUrl(false);
         }
     }, [opened, shareLink, posthog])
 
@@ -50,7 +54,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
         <Modal opened={opened} onClose={close} title="Share">
             <Text>Use the link below to share the current view.</Text>
             {
-                tokenCopied && <Text fs="italic" fw="600">The share link has been copied to your clipboard.</Text>
+                urlCopied && <Text fs="italic" fw="600">The share link has been copied to your clipboard.</Text>
             }
             <TextInput value={shareLink} mt="xs" mb="lg" readOnly ref={textInputRef} />
             <Flex justify="flex-end">

@@ -22,6 +22,9 @@ export const recordSchema_content = v.object({
   "Published": v.optional(v.boolean()),
   Codex: v.optional(v.string()),
   "Author Names": v.optional(v.array(v.string())),
+  Footnotes: v.optional(v.string()),
+  References: v.optional(v.string()),
+  Acknowledgements: v.optional(v.string()),
 });
 
 export const tableContent = new AirtableSync(

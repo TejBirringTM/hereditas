@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useRemark } from 'react-remark';
-import { Box } from '@mantine/core';
+import { Box, type BoxComponentProps } from '@mantine/core';
 
-interface MarkdownContentProps {
-    content: string | Promise<{default: string}>
-}
+type MarkdownContentProps = {
+    content: string | Promise<{default: string}>,
+} & BoxComponentProps;
 
-export default function MarkdownContent({content}: MarkdownContentProps) {
+export default function MarkdownContent({content, ...props}: MarkdownContentProps) {
     const [reactContent, setMarkdownSource] = useRemark();
       
     useEffect(() => {
@@ -19,7 +19,7 @@ export default function MarkdownContent({content}: MarkdownContentProps) {
       }
     }, [content, setMarkdownSource]);
   
-    return <Box>
+    return <Box {...props}>
         {reactContent}
     </Box>;
 }

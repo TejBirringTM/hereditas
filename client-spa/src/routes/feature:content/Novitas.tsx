@@ -5,7 +5,7 @@ import MarkdownContent from "../../components/feature:markdown-content/MarkdownC
 import DownloadsIcon from "../../assets/icons/uicons-solid-straight/fi-ss-file-download.svg?react";
 import UserIcon from "../../assets/icons/uicons-solid-straight/fi-ss-user.svg?react";
 // import ImagesIcon from "../assets/icons/uicons-solid-straight/fi-ss-images.svg?react";
-import DownCaretIcon from "../../assets/icons/uicons-solid-straight/fi-ss-00s-music-disc.svg?react";
+import DownCaretIcon from "../../assets/icons/uicons-solid-straight/fi-ss-caret-down.svg?react";
 import CalendarIcon from "../../assets/icons/uicons-solid-straight/fi-ss-calendar-day.svg?react";
 import { Carousel } from "@mantine/carousel";
 import { downloadFile } from "../../libs/download-file";
@@ -70,7 +70,7 @@ export default function Novitate() {
             </>}
         />
         
-        <Flex direction="row" gap="md" mb="lg" mt="md">
+        {/* <Flex direction="row" gap="md" mb="lg" mt="md">
             { 
                 // record.Images && record.Images.length > 0 &&
                 // <Flex direction="row" align="center" gap="0.3rem" c="navy.7" opacity={0.8}>
@@ -112,7 +112,7 @@ export default function Novitate() {
                     </Button>
                 )   
             }
-        </Flex>
+        </Flex> */}
 
         <Grid gutter="lg" mb="lg"> 
 
@@ -134,33 +134,6 @@ export default function Novitate() {
                         </Card.Section>
                         <Box px={{base: "0", sm: "sm", lg: "lg"}} py={{base: "0.3rem", lg: "sm"}}>
                             <MarkdownContent content={record.Content}/>
-                            <Flex direction={{base: "column", sm: "row"}} justify="end" mt="xl" mb="xs" gap="xl">
-                                {
-                                    record.Downloads && record.Downloads.length > 0 &&
-                                    <Menu shadow="md" width={250}>
-                                        <Menu.Target>
-                                            <Button size="xl" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} rightSection={<DownCaretIcon width={14} style={{fill: "white"}} />}>
-                                                Downloads ({record.Downloads.length})
-                                            </Button>
-                                        </Menu.Target>
-                                        <Menu.Dropdown>
-                                            {
-                                                record.Downloads?.map((download, idx)=>(
-                                                    <Menu.Item leftSection={<DownloadsIcon style={{ width: rem(14), height: rem(14) }} fill="currentColor" />} onClick={()=>downloadFile(download.url, {filename: download.filename, newTab: true})} key={`${record.id}-dload#${idx+1}`} lh={1.15} >
-                                                        {download.filename}
-                                                    </Menu.Item>   
-                                                ))
-                                            }
-                                        </Menu.Dropdown>
-                                    </Menu>   
-                                }
-                                {
-                                    record.Codex &&
-                                    <Button size="xl" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} onClick={()=>void visualiseCodex(record.id, record.Codex ?? "")}>
-                                        View Lineage
-                                    </Button>
-                                }                                
-                            </Flex>
                         </Box>
                     </Card>
                 }
@@ -185,6 +158,33 @@ export default function Novitate() {
                     </Flex>
                 </Box> */}
                 <Flex direction="column" gap="lg">
+                    <Flex direction={{base: "column", md: "row"}} gap="xl">
+                        {
+                            record.Codex &&
+                            <Button size="xl" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} onClick={()=>void visualiseCodex(record.id, record.Codex ?? "")}>
+                                View Lineage
+                            </Button>
+                        }         
+                        {
+                            record.Downloads && record.Downloads.length > 0 &&
+                            <Menu shadow="md" width={250}>
+                                <Menu.Target>
+                                    <Button size="xl" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} rightSection={<DownCaretIcon width={14} style={{fill: "white"}} />}>
+                                        Downloads ({record.Downloads.length})
+                                    </Button>
+                                </Menu.Target>
+                                <Menu.Dropdown>
+                                    {
+                                        record.Downloads?.map((download, idx)=>(
+                                            <Menu.Item leftSection={<DownloadsIcon style={{ width: rem(14), height: rem(14) }} fill="currentColor" />} onClick={()=>downloadFile(download.url, {filename: download.filename, newTab: true})} key={`${record.id}-dload#${idx+1}`} lh={1.15} >
+                                                {download.filename}
+                                            </Menu.Item>   
+                                        ))
+                                    }
+                                </Menu.Dropdown>
+                            </Menu>   
+                        }                                               
+                        </Flex>
                 {
                     record.Images && record.Images.length > 0 &&
                         <Card style={{borderRadius: "var(--mantine-radius-default)"}} withBorder shadow="sm" maw={{xl: "60rem"}}>

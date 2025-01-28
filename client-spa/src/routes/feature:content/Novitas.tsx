@@ -14,6 +14,7 @@ import posthog from "posthog-js";
 import { useEffect } from "react";
 import { type ContentRecord, setActiveContent } from "./slice";
 import { useAppDispatch } from "../../hooks";
+import ShareModal from "../feature:family-tree-entry-and-visualisation/components/ShareModal";
 
 interface NovitasProps {
     record: NonNullable<ContentRecord>
@@ -158,7 +159,8 @@ export default function Novitate() {
                     </Flex>
                 </Box> */}
                 <Flex direction="column" gap="lg">
-                    <Flex direction={{base: "column", md: "row"}} gap="xl">
+                    <Flex direction={{base: "column", md: "row"}} gap="lg">
+                        <ShareModal buttonSize="xl" />
                         {
                             record.Codex &&
                             <Button size="xl" variant="filled" bg="softer-warm.9" style={{flexShrink: 0}} onClick={()=>void visualiseCodex(record.id, record.Codex ?? "")}>

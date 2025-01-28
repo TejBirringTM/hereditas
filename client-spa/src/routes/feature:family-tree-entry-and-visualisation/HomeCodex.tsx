@@ -80,7 +80,7 @@ export default function Codex() {
                 <ResetMenu />
 
                 {/*  */}
-                <ShareModal disabled={state !== "drawn"} />
+                <ShareModal disabled={state !== "drawn"} buttonSize="lg" />
 
                 {/*  */}
                 <Button 

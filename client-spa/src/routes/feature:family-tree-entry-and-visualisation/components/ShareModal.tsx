@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, rem, Text, TextInput } from '@mantine/core';
+import { Button, ButtonProps, Flex, Modal, rem, Text, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import ShareIcon from "../../../assets/icons/uicons-solid-straight/fi-ss-share-square.svg?react"
 import { useEffect, useRef, useState } from 'react';
@@ -7,10 +7,11 @@ import { shareLink as _shareLink } from '../libs/share-link';
 import { useAppSelector } from '../../../hooks';
 
 interface ShareModalProps {
-    disabled?: boolean
+    disabled?: boolean,
+    buttonSize?: ButtonProps["size"]
 }
 
-export default function ShareModal({disabled}: ShareModalProps) {
+export default function ShareModal({disabled, buttonSize}: ShareModalProps) {
     const [opened, {open, close}] = useDisclosure();
     const [urlCopied, setCopiedUrl] = useState(false);
     
@@ -63,7 +64,7 @@ export default function ShareModal({disabled}: ShareModalProps) {
         </Modal> 
 
         <Button
-            size="lg" 
+            size={buttonSize}
             disabled={disabled} 
             leftSection={<ShareIcon style={{ width: "fit-content", height: rem(16), fill: "currentColor"}} />}
             onClick={open} 

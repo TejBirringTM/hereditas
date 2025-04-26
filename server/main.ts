@@ -17,9 +17,10 @@ services.forEach((service) => {
 });
 
 app.addEventListener("listen", (ev) => {
-  console.log(`Listening on ${ev.hostname}:${ev.port}`);
+  console.log(`Listening on http://${config.host}:${ev.port}`);
 });
 
 app.listen({
   port: config.port,
+  hostname: config.host
 });

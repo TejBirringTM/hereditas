@@ -1,4 +1,5 @@
 const config = {
+  host: Deno.env.get("HOST") ?? "127.0.0.1",
   port: parseInt(Deno.env.get("PORT") ?? "8080"),
   cors: {
     origin: Deno.env.get("CORS_ORIGIN") ?? "*",

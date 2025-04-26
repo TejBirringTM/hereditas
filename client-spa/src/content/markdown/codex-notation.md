@@ -15,7 +15,7 @@
 
 ## Introduction
 
-The Codex Notation is Hereditas' precise language for recording family relationships. It combines mathematical rigor with intuitive readability, allowing complex family trees to be documented with accuracy while remaining accessible.
+The Codex Notation is Hereditas' precise language for recording family relationships. It combines mathematical rigor with intuitive readability, allowing complex family trees to be documented with precision while ensuring they remain accessible as a single document or encoded link.
 
 ### Key Features
 
